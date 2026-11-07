@@ -162,6 +162,27 @@ cd tests/interop && npm run check-ws
 cd tests/interop && npm run check-client   # .NET client against the JS y-websocket server
 ```
 
+## Benchmarks
+
+[`benchmarks/DotYjs.Benchmarks`](benchmarks/DotYjs.Benchmarks) measures the hot paths with
+[BenchmarkDotNet](https://benchmarkdotnet.org), including allocations (`MemoryDiagnoser`):
+
+- `TextEditingBenchmarks`: typing into a `YText` (append, prepend, random positions, deletes, formatting), one transaction per edit
+- `CollectionBenchmarks`: `YArray` push and insert, `YMap` set
+- `EncodingBenchmarks`: encoding a document edited by two clients as a v1/v2 update, loading it, applying incremental
+  updates, `MergeUpdates`, `DiffUpdate` and v1 to v2 conversion
+- `SyncProtocolBenchmarks`: the sync step 1 / step 2 handshake of a new client
+- `Lib0Benchmarks`: the lib0 varint, string and any encoding
+
+```bash
+dotnet run -c Release --project benchmarks/DotYjs.Benchmarks -- --filter '*'             # everything
+dotnet run -c Release --project benchmarks/DotYjs.Benchmarks -- --filter '*Encoding*'    # one class
+dotnet run -c Release --project benchmarks/DotYjs.Benchmarks -- --filter '*' --job short # quicker, less precise
+```
+
+Results are written to `BenchmarkDotNet.Artifacts/results`. CI runs every benchmark once (`--job dry`) to check
+that they still work; those numbers are not meaningful.
+
 ## Code quality
 
 - Analyzers are enabled in [`Directory.Build.props`](Directory.Build.props) and configured in [`.editorconfig`](.editorconfig):

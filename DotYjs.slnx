@@ -6,6 +6,9 @@
     <Project Path="src/DotYjs.EntityFrameworkCore/DotYjs.EntityFrameworkCore.csproj" />
     <Project Path="src/DotYjs.Dapper/DotYjs.Dapper.csproj" />
   </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/DotYjs.Benchmarks/DotYjs.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/YjsServer/YjsServer.csproj" />
     <Project Path="samples/YjsClient/YjsClient.csproj" />

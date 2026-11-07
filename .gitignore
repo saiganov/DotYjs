@@ -10,3 +10,4 @@ tests/interop/fixtures/dotnet-protocol-fixtures.json
 packages/
 TestResults/
 coveragereport/
+BenchmarkDotNet.Artifacts/
