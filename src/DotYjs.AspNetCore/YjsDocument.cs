@@ -32,7 +32,7 @@ public sealed class YjsDocument
 
     /// <summary>The document name (the room name of y-websocket).</summary>
     public string Name { get; }
-    /// <summary>The shared document. Lock on it when you change it from your own code, or use <see cref="Doc.Transact"/> under the same lock.</summary>
+    /// <summary>The shared document. It is not thread-safe: use <see cref="Transact"/> and <see cref="Read{T}"/>, or hold <see cref="SyncRoot"/> while you access it, because incoming updates are applied under that lock.</summary>
     public Doc Doc { get; }
     /// <summary>The awareness (cursors, user names) of the clients connected to this document.</summary>
     public Awareness Awareness { get; }

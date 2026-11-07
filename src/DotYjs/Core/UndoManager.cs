@@ -139,7 +139,7 @@ public sealed class UndoManager : IDisposable
     public Doc Doc { get; }
     /// <summary>The tracked types (or the document, when it tracks all root types).</summary>
     public List<object> Scope { get; } = new();
-    /// <summary>Deleted items for which this returns false are not restored on undo.</summary>
+    /// <summary>If this returns false for an item, the item won't be deleted by undo/redo even if it is in scope.</summary>
     public Func<Item, bool> DeleteFilter { get; }
     /// <summary>Only transactions with one of these origins are captured (null means local changes without an origin).</summary>
     public HashSet<object?> TrackedOrigins { get; }
