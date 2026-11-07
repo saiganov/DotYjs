@@ -232,7 +232,13 @@ public static class Updates
         decoderFactory ??= V2Decoder;
         encoderFactory ??= V2Encoder;
         var updateDecoders = updates.Select(u => decoderFactory(new Decoder(u))).ToList();
-        var lazyStructDecoders = updateDecoders.Select(d => new LazyStructReader(d, true)).ToList();
+        // Decoders without content are dropped; the rest is sorted like yjs does it on every iteration:
+        // higher clients first, then by clock (a stable sort, like Array.prototype.sort).
+        var lazyStructDecoders = updateDecoders
+            .Select(d => new LazyStructReader(d, true))
+            .Where(d => d.Curr != null)
+            .OrderBy(d => d, LazyStructReaderComparer.Instance)
+            .ToList();
 
         // Note: We need to ensure that all lazyStructDecoders are fully consumed
         // Note: Should merge document updates whenever possible - even from different updates
@@ -246,28 +252,20 @@ public static class Updates
 
         // Note: we don't need to filter smaller clients because we are only interested in the sorting order.
         // Note: this is the same as the lazy encoder
+        LazyStructReader? advanced = null;
         while (true)
         {
-            // Write higher clients first ⇒ sort by clientID & clock and remove decoders without content
-            lazyStructDecoders = lazyStructDecoders.Where(dec => dec.Curr != null).ToList();
-            lazyStructDecoders.Sort((dec1, dec2) =>
+            // yjs filters and re-sorts all decoders here on every iteration, which is quadratic in the number of updates.
+            // Only the decoder used in the previous iteration (always the first one) has moved, so it is enough to
+            // remove it and insert it again where a stable sort would put it.
+            if (advanced != null)
             {
-                if (dec1.Curr!.Id.Client == dec2.Curr!.Id.Client)
-                {
-                    long clockDiff = dec1.Curr.Id.Clock - dec2.Curr.Id.Clock;
-                    if (clockDiff == 0)
-                    {
-                        // @todo remove references to skip since the structDecoders must filter Skips.
-                        return dec1.Curr.GetType() == dec2.Curr.GetType()
-                            ? 0
-                            : dec1.Curr is Skip ? 1 : -1; // we are filtering skips anyway.
-                    }
-                    return clockDiff < 0 ? -1 : 1;
-                }
-                return dec2.Curr.Id.Client.CompareTo(dec1.Curr.Id.Client);
-            });
+                lazyStructDecoders.RemoveAt(0);
+                if (advanced.Curr != null) lazyStructDecoders.Insert(LowerBound(lazyStructDecoders, advanced), advanced);
+            }
             if (lazyStructDecoders.Count == 0) break;
             var currDecoder = lazyStructDecoders[0];
+            advanced = currDecoder;
             // write from currDecoder until the next operation is from another client or if filler-struct
             // then we need to reorder the decoders and find the next operation to write
             long firstClient = currDecoder.Curr!.Id.Client;
@@ -368,6 +366,44 @@ public static class Updates
         var ds = DeleteSet.Merge(dss);
         DeleteSet.Write(updateEncoder, ds);
         return updateEncoder.ToArray();
+    }
+
+    /// <summary>The first index whose decoder does not sort before <paramref name="decoder"/> (where a stable sort places it).</summary>
+    private static int LowerBound(List<LazyStructReader> decoders, LazyStructReader decoder)
+    {
+        int lo = 0, hi = decoders.Count;
+        while (lo < hi)
+        {
+            int mid = lo + ((hi - lo) / 2);
+            if (LazyStructReaderComparer.Instance.Compare(decoders[mid], decoder) < 0) lo = mid + 1;
+            else hi = mid;
+        }
+        return lo;
+    }
+
+    /// <summary>The order of <c>mergeUpdatesV2</c> in yjs: higher clients first, then lower clocks, Skips last.</summary>
+    private sealed class LazyStructReaderComparer : IComparer<LazyStructReader>
+    {
+        public static readonly LazyStructReaderComparer Instance = new();
+
+        public int Compare(LazyStructReader? x, LazyStructReader? y)
+        {
+            var a = x!.Curr!;
+            var b = y!.Curr!;
+            if (a.Id.Client == b.Id.Client)
+            {
+                long clockDiff = a.Id.Clock - b.Id.Clock;
+                if (clockDiff == 0)
+                {
+                    // @todo remove references to skip since the structDecoders must filter Skips.
+                    return a.GetType() == b.GetType()
+                        ? 0
+                        : a is Skip ? 1 : -1; // we are filtering skips anyway.
+                }
+                return clockDiff < 0 ? -1 : 1;
+            }
+            return b.Id.Client.CompareTo(a.Id.Client);
+        }
     }
 
     /// <summary>Computes the part of <paramref name="update"/> that is not covered by the state vector <paramref name="sv"/>.</summary>

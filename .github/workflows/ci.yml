@@ -56,6 +56,10 @@ jobs:
         with:
           header: coverage
           path: coveragereport/SummaryGithub.md
+      - name: Benchmarks (smoke run, one iteration each; the numbers are not representative)
+        run: |
+          dotnet run --project benchmarks/DotYjs.Benchmarks --configuration Release --no-build -- --filter '*' --job dry --artifacts BenchmarkDotNet.Artifacts
+          { echo '## Benchmarks (dry run)'; cat BenchmarkDotNet.Artifacts/results/*-report-github.md; } >> "$GITHUB_STEP_SUMMARY"
       - name: Pack (verify packages build)
         run: dotnet pack --configuration Release --no-build -o packages
       - name: Verify .NET-generated updates and protocol messages with JS yjs / y-protocols
