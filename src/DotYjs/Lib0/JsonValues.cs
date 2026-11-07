@@ -14,6 +14,19 @@ namespace DotYjs.Lib0;
 /// </summary>
 public static class JsonValues
 {
+    /// <summary>Parses JSON that is part of binary data (an update or an awareness message); invalid JSON is reported as <see cref="InvalidDataException"/>.</summary>
+    internal static object? ParseEncoded(string json)
+    {
+        try
+        {
+            return Parse(json);
+        }
+        catch (JsonException e)
+        {
+            throw new InvalidDataException("Invalid JSON: " + e.Message, e);
+        }
+    }
+
     /// <summary>Parses JSON into the plain value model.</summary>
     public static object? Parse(string json)
     {

@@ -36,7 +36,7 @@ internal sealed class LazyStructReader : IDisposable
         {
             long numberOfStructs = decoder.RestDecoder.ReadVarUint();
             // decoder.readClient() must be called before
-            long client = decoder.ReadClient();
+            long client = UpdateCodec.CheckClient(decoder.ReadClient());
             long clock = decoder.RestDecoder.ReadVarUint();
             for (long j = 0; j < numberOfStructs; j++)
             {
@@ -44,21 +44,21 @@ internal sealed class LazyStructReader : IDisposable
                 // @todo use switch instead of ifs
                 if (info == 10)
                 {
-                    long len = decoder.RestDecoder.ReadVarUint();
+                    long len = UpdateCodec.CheckLength(decoder.RestDecoder.ReadVarUint());
                     yield return new Skip(new ID(client, clock), len);
-                    clock += len;
+                    clock = UpdateCodec.CheckClock(clock + len);
                 }
                 else if ((info & 0x1f) != 0)
                 {
                     var s = UpdateCodec.ReadItem(decoder, client, clock, info, null);
                     yield return s;
-                    clock += s.Length;
+                    clock = UpdateCodec.CheckClock(clock + s.Length);
                 }
                 else
                 {
-                    long len = decoder.ReadLen();
+                    long len = UpdateCodec.CheckLength(decoder.ReadLen());
                     yield return new GC(new ID(client, clock), len);
-                    clock += len;
+                    clock = UpdateCodec.CheckClock(clock + len);
                 }
             }
         }

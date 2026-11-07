@@ -76,7 +76,8 @@ public sealed class ContentAny : AbstractContent
     internal static ContentAny Read(IUpdateDecoder decoder)
     {
         long len = decoder.ReadLen();
-        var cs = new List<object?>((int)len);
+        // every value takes at least one byte of the rest decoder, which bounds the capacity for corrupt lengths
+        var cs = new List<object?>((int)Math.Min(len, decoder.RestDecoder.Remaining));
         for (long i = 0; i < len; i++) cs.Add(decoder.ReadAny());
         return new ContentAny(cs);
     }
@@ -319,11 +320,11 @@ public sealed class ContentJSON : AbstractContent
     internal static ContentJSON Read(IUpdateDecoder decoder)
     {
         long len = decoder.ReadLen();
-        var cs = new List<object?>((int)len);
+        var cs = new List<object?>((int)Math.Min(len, 1024));
         for (long i = 0; i < len; i++)
         {
             var c = decoder.ReadString();
-            cs.Add(c == "undefined" ? Undefined.Value : JsonValues.Parse(c));
+            cs.Add(c == "undefined" ? Undefined.Value : JsonValues.ParseEncoded(c));
         }
         return new ContentJSON(cs);
     }

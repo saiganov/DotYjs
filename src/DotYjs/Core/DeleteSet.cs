@@ -187,7 +187,10 @@ public sealed class DeleteSet
                 for (long j = 0; j < numberOfDeletes; j++)
                 {
                     long clock = decoder.ReadDsClock();
-                    long len = decoder.ReadDsLen();
+                    long len = UpdateCodec.CheckLength(decoder.ReadDsLen());
+                    // encoded delete sets are sorted and merged; anything else cannot be re-encoded (v2 stores clock differences)
+                    if (dsField.Count > 0 && clock < dsField[^1].Clock + dsField[^1].Len) throw new InvalidDataException("Delete set is not sorted");
+                    UpdateCodec.CheckClock(clock + len);
                     dsField.Add(new DeleteItem(clock, len));
                 }
             }
@@ -199,6 +202,7 @@ public sealed class DeleteSet
     internal static byte[]? ReadAndApply(IDSDecoder decoder, Transaction transaction, StructStore store)
     {
         var unappliedDS = new DeleteSet();
+        var lastEnd = new Dictionary<long, long>();
         long numClients = decoder.RestDecoder.ReadVarUint();
         for (long i = 0; i < numClients; i++)
         {
@@ -210,7 +214,10 @@ public sealed class DeleteSet
             for (long j = 0; j < numberOfDeletes; j++)
             {
                 long clock = decoder.ReadDsClock();
-                long clockEnd = clock + decoder.ReadDsLen();
+                long clockEnd = UpdateCodec.CheckClock(clock + UpdateCodec.CheckLength(decoder.ReadDsLen()));
+                // encoded delete sets are sorted and merged (see Read)
+                if (clock < lastEnd.GetValueOrDefault(client)) throw new InvalidDataException("Delete set is not sorted");
+                lastEnd[client] = clockEnd;
                 if (clock < state)
                 {
                     if (state < clockEnd) unappliedDS.Add(client, state, clockEnd - state);

@@ -86,7 +86,7 @@ public sealed class UpdateDecoderV1 : DSDecoderV1, IUpdateDecoder
     /// <inheritdoc />
     public byte[] ReadBuf() => RestDecoder.ReadVarUint8Array();
     /// <inheritdoc />
-    public object? ReadJSON() => JsonValues.Parse(RestDecoder.ReadVarString());
+    public object? ReadJSON() => JsonValues.ParseEncoded(RestDecoder.ReadVarString());
     /// <inheritdoc />
     public string ReadKey() => RestDecoder.ReadVarString();
 }
@@ -147,7 +147,7 @@ public sealed class UpdateDecoderV2 : DSDecoderV2, IUpdateDecoder
         _lenDecoder = new UintOptRleDecoder(Sub(decoder));
     }
 
-    private static Decoder Sub(Decoder d) => d.ReadSubDecoder(checked((int)d.ReadVarUint()));
+    private static Decoder Sub(Decoder d) => d.ReadSubDecoder(d.ReadLength());
 
     /// <inheritdoc />
     public ID ReadLeftID() => new(_clientDecoder.Read(), _leftClockDecoder.Read());
@@ -176,6 +176,7 @@ public sealed class UpdateDecoderV2 : DSDecoderV2, IUpdateDecoder
     public string ReadKey()
     {
         long keyClock = _keyClockDecoder.Read();
+        if (keyClock < 0) throw new InvalidDataException("Invalid key reference");
         if (keyClock < _keys.Count) return _keys[(int)keyClock];
         var key = _stringDecoder.Read();
         _keys.Add(key);
