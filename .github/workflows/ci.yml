@@ -12,6 +12,10 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # coverage comment on PRs
+      id-token: write # Codecov upload via OIDC, no token stored in the repository
     services:
       redis:
         image: redis:7
@@ -49,6 +53,14 @@ jobs:
         with:
           name: coverage-report
           path: coveragereport
+      - name: Upload coverage to Codecov (README badge)
+        # OIDC tokens are not issued to PRs from forks, so the upload only runs for this repository's own pushes and PRs
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+        with:
+          files: coveragereport/Cobertura.xml
+          use_oidc: true
+          fail_ci_if_error: false
       - name: Coverage comment on the PR
         # the token of a PR from a fork is read-only, so commenting would fail there; the summary and artifact still exist
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository

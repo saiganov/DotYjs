@@ -1,0 +1,35 @@
+# Weekly dependency updates. Actions are pinned to commit SHAs, so they only move through these PRs.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      analyzers:
+        patterns: ["Meziantou.*", "Roslynator.*", "SonarAnalyzer.*", "IDisposableAnalyzers", "Microsoft.VisualStudio.Threading.Analyzers", "Microsoft.CodeAnalysis.*"]
+      test:
+        patterns: ["xunit*", "Microsoft.NET.Test.Sdk", "coverlet.*"]
+    ignore:
+      # net8.0 builds use the 8.0 line of these packages on purpose (see the conditional references)
+      - dependency-name: "Microsoft.EntityFrameworkCore*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.AspNetCore.TestHost"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: npm
+    directory: /tests/interop
+    schedule:
+      interval: weekly
+    ignore:
+      # the interop tests target yjs 13.6 / y-websocket 2.x on purpose
+      - dependency-name: yjs
+        update-types: ["version-update:semver-major"]
+      - dependency-name: y-websocket
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

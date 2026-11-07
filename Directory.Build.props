@@ -2,7 +2,7 @@
 
   <!-- Shared NuGet metadata for the DotYjs packages (src/*). Version is overridden by the release workflow from the git tag. -->
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.1.0-preview.1</Version>
     <Authors>saiganov</Authors>
     <Company>saiganov</Company>
     <RepositoryUrl>https://github.com/saiganov/DotYjs</RepositoryUrl>
@@ -10,6 +10,8 @@
     <PackageProjectUrl>https://github.com/saiganov/DotYjs</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReleaseNotes>https://github.com/saiganov/DotYjs/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <PackageTags>yjs;crdt;collaboration;realtime;websocket;aspnetcore</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -29,9 +31,20 @@
     <NuGetAuditLevel>low</NuGetAuditLevel>
   </PropertyGroup>
 
+  <!--
+    Package validation checks that the package is consistent across target frameworks. After the first release, set
+    PackageValidationBaselineVersion to the last published version: the build then fails on breaking changes against it.
+  -->
+  <PropertyGroup Condition="'$(IsPackable)' != 'false'">
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <!-- <PackageValidationBaselineVersion>0.1.0-preview.1</PackageValidationBaselineVersion> -->
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(IsPackable)' != 'false'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.403" PrivateAssets="All" />
-    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="/" />
+    <!-- every package has its own short README next to its csproj -->
+    <None Include="README.md" Pack="true" PackagePath="/" />
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <!-- Third-party analyzers for the library code (compile-time only, not shipped with the packages) -->

@@ -1,5 +1,10 @@
 # DotYjs
 
+[![CI](https://github.com/saiganov/DotYjs/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/saiganov/DotYjs/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/vpre/DotYjs?label=NuGet)](https://www.nuget.org/packages/DotYjs)
+[![codecov](https://codecov.io/gh/saiganov/DotYjs/graph/badge.svg)](https://codecov.io/gh/saiganov/DotYjs)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A pure .NET port of [Yjs](https://github.com/yjs/yjs) 13.6 (a CRDT for collaborative editing) that is
 binary-compatible with JavaScript `yjs` clients. No native dependencies; use it from ASP.NET Core or any
 other .NET application (net8.0 / net10.0).
@@ -216,6 +221,15 @@ NuGet.org authentication uses [Trusted Publishing](https://learn.microsoft.com/n
 so no API key is stored in the repository. It needs a Trusted Publishing policy on nuget.org (repository owner
 `saiganov`, repository `DotYjs`, workflow file `release.yml`) and the repository variable `NUGET_USER` with the
 nuget.org profile name that owns the policy. License: [MIT](LICENSE).
+
+Package validation (`EnablePackageValidation`) runs on every `dotnet pack`. After the first release, set
+`PackageValidationBaselineVersion` in [`Directory.Build.props`](Directory.Build.props) to the released version so that
+later packages are also checked for breaking changes against it. Release notes live in [CHANGELOG.md](CHANGELOG.md).
+
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build and test. Please report vulnerabilities privately as described
+in [SECURITY.md](SECURITY.md), not in public issues.
 
 ## Roadmap
 
