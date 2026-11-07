@@ -6,6 +6,11 @@ minor versions.
 
 ## [Unreleased]
 
+### Added
+
+- Samples: `GettingStarted` (core API tour), `CollaborativeEditor` (browser editor with presence),
+  `PersistentServer` (EF Core / Dapper storage and authorization) and `ScaleOut` (Redis backplane).
+
 ## [0.1.0-preview.1]
 
 First public preview.

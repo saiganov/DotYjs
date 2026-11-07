@@ -12,6 +12,10 @@
   <Folder Name="/samples/">
     <Project Path="samples/YjsServer/YjsServer.csproj" />
     <Project Path="samples/YjsClient/YjsClient.csproj" />
+    <Project Path="samples/GettingStarted/GettingStarted.csproj" />
+    <Project Path="samples/CollaborativeEditor/CollaborativeEditor.csproj" />
+    <Project Path="samples/PersistentServer/PersistentServer.csproj" />
+    <Project Path="samples/ScaleOut/ScaleOut.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/DotYjs.Tests/DotYjs.Tests.csproj" />

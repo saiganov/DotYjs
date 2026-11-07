@@ -120,7 +120,7 @@ builder.Services.AddYjsRedisBackplane("localhost:6379");   // package DotYjs.Asp
 Nodes exchange document updates and awareness through one pub/sub channel per document;
 a node that loads a document later requests the missing state from the others.
 
-Sample application: [`samples/YjsServer`](samples/YjsServer). Undo/redo and cursor positions:
+Runnable samples are listed in [Samples](#samples). Undo/redo and cursor positions:
 
 ```csharp
 var um = new UndoManager(text);          // tracks transactions with origin == null (or from TrackedOrigins)
@@ -208,6 +208,24 @@ that they still work; those numbers are not meaningful.
 ```bash
 dotnet test --collect:"XPlat Code Coverage" --settings tests/coverlet.runsettings   # coverage locally
 ```
+
+## Samples
+
+| Sample | What it shows |
+| --- | --- |
+| [`GettingStarted`](samples/GettingStarted) | Console tour of the core API: shared types, observers, syncing two documents, offline edits with state vectors, relative positions, undo/redo |
+| [`CollaborativeEditor`](samples/CollaborativeEditor) | A browser editor (JS `yjs` + `y-websocket`) served by a DotYjs server, with presence and server-side edits |
+| [`PersistentServer`](samples/PersistentServer) | Documents stored in SQLite through EF Core or Dapper, token-based `Authorize`, unloading idle documents |
+| [`ScaleOut`](samples/ScaleOut) | Several server nodes sharing documents through the Redis backplane |
+| [`YjsServer`](samples/YjsServer) | Minimal server with REST endpoints; used by the interop checks |
+| [`YjsClient`](samples/YjsClient) | .NET `y-websocket` client; used by the interop checks |
+
+```bash
+dotnet run --project samples/GettingStarted
+dotnet run --project samples/CollaborativeEditor --urls http://localhost:5000   # open it in two windows
+```
+
+Each sample's `Program.cs` starts with the commands to run it.
 
 ## Publishing
 
