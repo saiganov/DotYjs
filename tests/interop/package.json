@@ -11,6 +11,6 @@
   "dependencies": {
     "y-protocols": "1.0.6",
     "y-websocket": "2.0.4",
-    "yjs": "13.6.27"
+    "yjs": "13.6.33"
   }
 }
