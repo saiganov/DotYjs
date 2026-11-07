@@ -3,13 +3,16 @@ using DotYjs.Lib0;
 
 namespace DotYjs;
 
+/// <summary>Event describing the changes of a <see cref="YMap"/> in a transaction.</summary>
 public sealed class YMapEvent : YEvent
 {
+    /// <summary>Creates the event.</summary>
     public YMapEvent(YMap target, Transaction transaction, HashSet<string?> subs) : base(target, transaction)
     {
         KeysChanged = subs;
     }
 
+    /// <summary>The keys that changed.</summary>
     public HashSet<string?> KeysChanged { get; }
 }
 
@@ -18,8 +21,10 @@ public class YMap : AbstractType, IEnumerable<KeyValuePair<string, object?>>
 {
     private Dictionary<string, object?>? _prelimContent;
 
+    /// <summary>Creates an empty map that is not yet part of a document; insert it into a document type to use it.</summary>
     public YMap() : this(null) { }
 
+    /// <summary>Creates a map with the given entries that is not yet part of a document; insert it into a document type to use it.</summary>
     public YMap(IEnumerable<KeyValuePair<string, object?>>? entries)
     {
         _prelimContent = entries == null ? new Dictionary<string, object?>() : new Dictionary<string, object?>(entries);
@@ -35,6 +40,7 @@ public class YMap : AbstractType, IEnumerable<KeyValuePair<string, object?>>
 
     internal override AbstractType InternalCopy() => new YMap();
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var map = new YMap();
@@ -64,8 +70,10 @@ public class YMap : AbstractType, IEnumerable<KeyValuePair<string, object?>>
     /// <summary>Returns the number of stored elements.</summary>
     public int Size => _prelimContent?.Count ?? Map.Count(kv => !kv.Value.Deleted);
 
+    /// <summary>The keys of the stored elements.</summary>
     public IEnumerable<string> Keys => this.Select(kv => kv.Key);
 
+    /// <summary>The values of the stored elements.</summary>
     public IEnumerable<object?> Values => this.Select(kv => kv.Value);
 
     /// <summary>Remove a specified element from this YMap.</summary>
@@ -86,12 +94,14 @@ public class YMap : AbstractType, IEnumerable<KeyValuePair<string, object?>>
     /// <summary>Returns the value for <paramref name="key"/>, or null if the key does not exist.</summary>
     public object? Get(string key) => TryGet(key, out var v) ? v : null;
 
+    /// <summary>Gets the value for a key (null if it does not exist) or sets it.</summary>
     public object? this[string key]
     {
         get => Get(key);
         set => Set(key, value);
     }
 
+    /// <summary>Gets the value for a key, if it exists.</summary>
     public bool TryGet(string key, out object? value)
     {
         if (_prelimContent != null) return _prelimContent.TryGetValue(key, out value);
@@ -124,6 +134,7 @@ public class YMap : AbstractType, IEnumerable<KeyValuePair<string, object?>>
         }
     }
 
+    /// <summary>Enumerates the stored elements.</summary>
     public IEnumerator<KeyValuePair<string, object?>> GetEnumerator()
     {
         if (_prelimContent != null)

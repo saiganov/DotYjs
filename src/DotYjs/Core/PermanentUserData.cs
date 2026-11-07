@@ -12,6 +12,7 @@ public sealed class PermanentUserData
     private readonly Dictionary<long, string> _clients = new();
     private readonly Dictionary<string, DeleteSet> _dss = new();
 
+    /// <summary>Creates the user data mapping, stored in <paramref name="storeType"/> or in the root map "users" of the document.</summary>
     public PermanentUserData(Doc doc, YMap? storeType = null)
     {
         Doc = doc;
@@ -29,6 +30,7 @@ public sealed class PermanentUserData
         }
     }
 
+    /// <summary>The document this mapping belongs to.</summary>
     public Doc Doc { get; }
 
     /// <summary>The shared map holding the user data (<c>users</c> root type by default).</summary>

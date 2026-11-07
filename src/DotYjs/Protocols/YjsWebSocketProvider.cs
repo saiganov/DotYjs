@@ -3,10 +3,14 @@ using DotYjs.Lib0;
 
 namespace DotYjs.Protocols;
 
+/// <summary>The connection state of a <see cref="YjsWebSocketProvider"/>.</summary>
 public enum YjsConnectionStatus
 {
+    /// <summary>Not connected; the provider may be waiting to reconnect.</summary>
     Disconnected,
+    /// <summary>A connection attempt is in progress.</summary>
     Connecting,
+    /// <summary>Connected to the server.</summary>
     Connected
 }
 
@@ -113,12 +117,18 @@ public sealed class YjsWebSocketProvider : IAsyncDisposable
         if (_options.Connect) Connect();
     }
 
+    /// <summary>The document synced with the server.</summary>
     public Doc Doc { get; }
+    /// <summary>The awareness (cursors, user names) shared with the other clients.</summary>
     public Awareness Awareness { get; }
+    /// <summary>The server URL passed to the constructor.</summary>
     public string ServerUrl { get; }
+    /// <summary>The room (document) name.</summary>
     public string RoomName { get; }
+    /// <summary>The full WebSocket URL: server URL, room name and query parameters.</summary>
     public Uri Url { get; }
 
+    /// <summary>The current connection state.</summary>
     public YjsConnectionStatus Status { get; private set; } = YjsConnectionStatus.Disconnected;
 
     /// <summary>True after the server's sync step 2 was received for the current connection.</summary>
@@ -138,7 +148,9 @@ public sealed class YjsWebSocketProvider : IAsyncDisposable
     /// <summary>Completes when the document is synced with the server (renewed after a reconnect).</summary>
     public Task WhenSynced => _whenSynced.Task;
 
+    /// <summary>Raised when <see cref="Status"/> changes.</summary>
     public event Action<YjsConnectionStatus>? StatusChanged;
+    /// <summary>Raised when the document becomes synced with the server (true) or loses sync (false).</summary>
     public event Action<bool>? SyncedChanged;
 
     /// <summary>Raised when the server denied access (y-protocols auth message) with the reason it sent.</summary>

@@ -3,27 +3,35 @@ namespace DotYjs;
 /// <summary>One entry of the undo/redo stack.</summary>
 public sealed class StackItem
 {
+    /// <summary>Creates a stack item from the deletions and insertions of the captured transactions.</summary>
     public StackItem(DeleteSet deletions, DeleteSet insertions)
     {
         Deletions = deletions;
         Insertions = insertions;
     }
 
+    /// <summary>The elements deleted by the captured changes (restored on undo).</summary>
     public DeleteSet Deletions { get; internal set; }
+    /// <summary>The elements inserted by the captured changes (deleted on undo).</summary>
     public DeleteSet Insertions { get; internal set; }
 
     /// <summary>Use this to save and restore metadata like selection range.</summary>
     public Dictionary<object, object?> Meta { get; } = new();
 }
 
+/// <summary>Whether a stack item belongs to the undo or the redo stack.</summary>
 public enum UndoRedoType
 {
+    /// <summary>The undo stack.</summary>
     Undo,
+    /// <summary>The redo stack.</summary>
     Redo
 }
 
+/// <summary>Arguments of the stack item events of <see cref="UndoManager"/>.</summary>
 public sealed class StackItemEvent
 {
+    /// <summary>Creates the event arguments.</summary>
     public StackItemEvent(StackItem stackItem, object? origin, UndoRedoType type, OrderedMap<AbstractType, List<YEvent>> changedParentTypes)
     {
         StackItem = stackItem;
@@ -32,24 +40,33 @@ public sealed class StackItemEvent
         ChangedParentTypes = changedParentTypes;
     }
 
+    /// <summary>The stack item that was added, updated or popped.</summary>
     public StackItem StackItem { get; }
+    /// <summary>The origin of the transaction that caused the event.</summary>
     public object? Origin { get; }
+    /// <summary>Whether the item belongs to the undo or the redo stack.</summary>
     public UndoRedoType Type { get; }
+    /// <summary>The changed types and their events in the transaction that caused the event.</summary>
     public OrderedMap<AbstractType, List<YEvent>> ChangedParentTypes { get; }
 }
 
+/// <summary>Arguments of <see cref="UndoManager.StackCleared"/>.</summary>
 public sealed class StackClearedEvent
 {
+    /// <summary>Creates the event arguments.</summary>
     public StackClearedEvent(bool undoStackCleared, bool redoStackCleared)
     {
         UndoStackCleared = undoStackCleared;
         RedoStackCleared = redoStackCleared;
     }
 
+    /// <summary>Whether the undo stack was cleared.</summary>
     public bool UndoStackCleared { get; }
+    /// <summary>Whether the redo stack was cleared.</summary>
     public bool RedoStackCleared { get; }
 }
 
+/// <summary>Options of <see cref="UndoManager"/>.</summary>
 public sealed class UndoManagerOptions
 {
     /// <summary>Changes within this many milliseconds are merged into one stack item.</summary>
@@ -85,8 +102,11 @@ public sealed class UndoManager : IDisposable
     private readonly Action<Doc> _destroyHandler;
     private long _lastChange;
 
+    /// <summary>Creates an undo manager that tracks all root types of <paramref name="doc"/>.</summary>
     public UndoManager(Doc doc, UndoManagerOptions? options = null) : this(new object[] { doc }, options) { }
+    /// <summary>Creates an undo manager that tracks changes of <paramref name="type"/>.</summary>
     public UndoManager(AbstractType type, UndoManagerOptions? options = null) : this(new object[] { type }, options) { }
+    /// <summary>Creates an undo manager that tracks changes of <paramref name="types"/>; they must belong to the same document.</summary>
     public UndoManager(IEnumerable<AbstractType> types, UndoManagerOptions? options = null) : this(types.Cast<object>().ToArray(), options) { }
 
     /// <summary>Creates an undo manager for the given scope.</summary>
@@ -115,26 +135,40 @@ public sealed class UndoManager : IDisposable
         Doc.Destroyed += _destroyHandler;
     }
 
+    /// <summary>The document of the tracked types.</summary>
     public Doc Doc { get; }
+    /// <summary>The tracked types (or the document, when it tracks all root types).</summary>
     public List<object> Scope { get; } = new();
+    /// <summary>If this returns false for an item, the item won't be deleted by undo/redo even if it is in scope.</summary>
     public Func<Item, bool> DeleteFilter { get; }
+    /// <summary>Only transactions with one of these origins are captured (null means local changes without an origin).</summary>
     public HashSet<object?> TrackedOrigins { get; }
+    /// <summary>Changes of a transaction are captured only if this returns true.</summary>
     public Func<Transaction, bool> CaptureTransaction { get; }
+    /// <summary>The undo stack; the last item is undone first.</summary>
     public List<StackItem> UndoStack { get; private set; } = new();
+    /// <summary>The redo stack; the last item is redone first.</summary>
     public List<StackItem> RedoStack { get; private set; } = new();
 
     /// <summary>Whether the client is currently undoing.</summary>
     public bool Undoing { get; private set; }
+    /// <summary>Whether the client is currently redoing.</summary>
     public bool Redoing { get; private set; }
 
     /// <summary>The currently popped stack item while undoing or redoing.</summary>
     public StackItem? CurrStackItem { get; private set; }
+    /// <summary>Whether undo ignores map changes made by remote clients, instead of overwriting them.</summary>
     public bool IgnoreRemoteMapChanges { get; }
+    /// <summary>Changes within this many milliseconds are merged into one stack item.</summary>
     public int CaptureTimeout { get; set; }
 
+    /// <summary>Raised when a stack item is added to the undo or redo stack.</summary>
     public event Action<StackItemEvent, UndoManager>? StackItemAdded;
+    /// <summary>Raised when changes are merged into the last stack item.</summary>
     public event Action<StackItemEvent, UndoManager>? StackItemUpdated;
+    /// <summary>Raised when a stack item is popped by undo or redo.</summary>
     public event Action<StackItemEvent, UndoManager>? StackItemPopped;
+    /// <summary>Raised when the undo or redo stack is cleared.</summary>
     public event Action<StackClearedEvent, UndoManager>? StackCleared;
 
     private static long Now() => Environment.TickCount64;
@@ -222,11 +256,15 @@ public sealed class UndoManager : IDisposable
         }
     }
 
+    /// <summary>Starts tracking changes of <paramref name="type"/>.</summary>
     public void AddToScope(AbstractType type) => AddToScope(new object[] { type });
 
+    /// <summary>Also captures transactions with the given origin.</summary>
     public void AddTrackedOrigin(object? origin) => TrackedOrigins.Add(origin);
+    /// <summary>Stops capturing transactions with the given origin.</summary>
     public void RemoveTrackedOrigin(object? origin) => TrackedOrigins.Remove(origin);
 
+    /// <summary>Clears the undo and/or the redo stack; cleared changes can no longer be undone.</summary>
     public void Clear(bool clearUndoStack = true, bool clearRedoStack = true)
     {
         if ((clearUndoStack && CanUndo) || (clearRedoStack && CanRedo))
@@ -290,7 +328,9 @@ public sealed class UndoManager : IDisposable
         }
     }
 
+    /// <summary>Whether there is something to undo.</summary>
     public bool CanUndo => UndoStack.Count > 0;
+    /// <summary>Whether there is something to redo.</summary>
     public bool CanRedo => RedoStack.Count > 0;
 
     private StackItem? PopStackItem(List<StackItem> stack, UndoRedoType eventType)
@@ -375,5 +415,6 @@ public sealed class UndoManager : IDisposable
         StackCleared = null;
     }
 
+    /// <summary>Same as <see cref="Destroy"/>.</summary>
     public void Dispose() => Destroy();
 }

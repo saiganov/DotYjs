@@ -11,6 +11,7 @@ public sealed class InMemoryYjsBackplane : IYjsBackplane
 {
     private readonly ConcurrentDictionary<string, ConcurrentDictionary<Subscription, byte>> _subscriptions = new();
 
+    /// <inheritdoc />
     public Task PublishAsync(string docName, YjsBackplaneMessage message, CancellationToken cancellationToken = default)
     {
         if (!_subscriptions.TryGetValue(docName, out var subs)) return Task.CompletedTask;
@@ -18,6 +19,7 @@ public sealed class InMemoryYjsBackplane : IYjsBackplane
         return Task.WhenAll(tasks);
     }
 
+    /// <inheritdoc />
     public Task<IAsyncDisposable> SubscribeAsync(string docName, Func<YjsBackplaneMessage, Task> handler, CancellationToken cancellationToken = default)
     {
         var subs = _subscriptions.GetOrAdd(docName, _ => new ConcurrentDictionary<Subscription, byte>());

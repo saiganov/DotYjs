@@ -345,6 +345,7 @@ public static class UpdateCodec
         }, transactionOrigin, false);
     }
 
+    /// <summary>Reads a v1 update from <paramref name="decoder"/> and applies it to <paramref name="ydoc"/>.</summary>
     public static void ReadUpdate(Decoder decoder, Doc ydoc, object? transactionOrigin = null)
         => ReadUpdateV2(decoder, ydoc, transactionOrigin, new UpdateDecoderV1(decoder));
 
@@ -391,6 +392,7 @@ public static class UpdateCodec
         return updates[0];
     }
 
+    /// <summary>Encodes the document as a v1 update: everything, or only what a client with the given state vector is missing (yjs encodeStateAsUpdate).</summary>
     public static byte[] EncodeStateAsUpdate(Doc doc, byte[]? encodedTargetStateVector = null)
         => EncodeStateAsUpdateV2(doc, encodedTargetStateVector, new UpdateEncoderV1());
 
@@ -432,6 +434,7 @@ public static class UpdateCodec
         return encoder.ToArray();
     }
 
+    /// <summary>Encodes a state vector with the given encoder (v2 by default).</summary>
     public static byte[] EncodeStateVectorV2(Dictionary<long, long> sv, IDSEncoder? encoder = null)
     {
         encoder ??= new DSEncoderV2();
@@ -439,7 +442,9 @@ public static class UpdateCodec
         return encoder.ToArray();
     }
 
+    /// <summary>Encodes the state vector of the document (yjs encodeStateVector).</summary>
     public static byte[] EncodeStateVector(Doc doc) => EncodeStateVectorV2(doc, new DSEncoderV1());
 
+    /// <summary>Encodes a state vector (client id to next clock) in the v1 format.</summary>
     public static byte[] EncodeStateVector(Dictionary<long, long> sv) => EncodeStateVectorV2(sv, new DSEncoderV1());
 }

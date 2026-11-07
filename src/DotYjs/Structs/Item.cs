@@ -12,6 +12,7 @@ public sealed class Item : AbstractStruct
 
     private int _info;
 
+    /// <summary>Creates an item; it becomes part of the document when it is integrated by a transaction.</summary>
     public Item(ID id, Item? left, ID? origin, Item? right, ID? rightOrigin, object? parent, string? parentSub, AbstractContent content)
         : base(id, content.GetLength())
     {
@@ -29,7 +30,9 @@ public sealed class Item : AbstractStruct
     /// <summary>Origin is the ID of the item that was to the left when this item was created.</summary>
     public ID? Origin { get; internal set; }
 
+    /// <summary>The item to the left (null at the start of the parent).</summary>
     public Item? Left { get; internal set; }
+    /// <summary>The item to the right (null at the end of the parent).</summary>
     public Item? Right { get; internal set; }
 
     /// <summary>The ID of the item that was to the right when this item was created.</summary>
@@ -44,6 +47,7 @@ public sealed class Item : AbstractStruct
     /// <summary>If this item was redone by the UndoManager, the ID of the new item.</summary>
     public ID? Redone { get; internal set; }
 
+    /// <summary>The content of this item.</summary>
     public AbstractContent Content { get; internal set; }
 
     internal bool Marker
@@ -59,8 +63,10 @@ public sealed class Item : AbstractStruct
         internal set { if (Keep != value) _info ^= BitKeep; }
     }
 
+    /// <summary>Whether the content counts towards the length of the parent type.</summary>
     public bool Countable => (_info & BitCountable) > 0;
 
+    /// <inheritdoc />
     public override bool Deleted => (_info & BitDeleted) > 0;
 
     internal void SetDeleted(bool value)
@@ -575,5 +581,6 @@ public sealed class Item : AbstractStruct
         return redoneItem;
     }
 
+    /// <inheritdoc />
     public override string ToString() => $"Item{Id} {Content.GetType().Name}";
 }

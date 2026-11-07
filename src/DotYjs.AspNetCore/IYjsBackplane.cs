@@ -1,5 +1,6 @@
 namespace DotYjs.AspNetCore;
 
+/// <summary>The kind of a <see cref="YjsBackplaneMessage"/>.</summary>
 public enum YjsBackplaneMessageKind
 {
     /// <summary>Payload is a Yjs document update (v1).</summary>
@@ -24,6 +25,7 @@ public enum YjsBackplaneMessageKind
 /// <summary>A message exchanged between server nodes hosting the same document.</summary>
 public sealed class YjsBackplaneMessage
 {
+    /// <summary>Creates a backplane message.</summary>
     public YjsBackplaneMessage(YjsBackplaneMessageKind kind, byte[] payload, string nodeId)
     {
         Kind = kind;
@@ -31,7 +33,9 @@ public sealed class YjsBackplaneMessage
         NodeId = nodeId;
     }
 
+    /// <summary>The kind of the message, which defines the format of <see cref="Payload"/>.</summary>
     public YjsBackplaneMessageKind Kind { get; }
+    /// <summary>The message content (see <see cref="YjsBackplaneMessageKind"/>).</summary>
     public byte[] Payload { get; }
 
     /// <summary>Id of the node that produced the message (so a node can ignore its own messages).</summary>
@@ -47,6 +51,7 @@ public sealed class YjsBackplaneMessage
         return e.ToArray();
     }
 
+    /// <summary>Decodes a message produced by <see cref="Encode"/>.</summary>
     public static YjsBackplaneMessage Decode(byte[] data)
     {
         var d = new Lib0.Decoder(data);

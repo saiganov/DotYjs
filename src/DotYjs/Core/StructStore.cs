@@ -15,6 +15,7 @@ internal sealed class PendingStructs
 /// <summary>Stores all structs of a document, grouped per client and sorted by clock.</summary>
 public sealed class StructStore
 {
+    /// <summary>The structs of every client, sorted by clock.</summary>
     public Dictionary<long, List<AbstractStruct>> Clients { get; } = new();
 
     internal PendingStructs? PendingStructs { get; set; }
@@ -32,6 +33,7 @@ public sealed class StructStore
         return sm;
     }
 
+    /// <summary>The next clock of <paramref name="client"/>, which is the number of elements it has created (0 for an unknown client).</summary>
     public long GetState(long client)
     {
         if (!Clients.TryGetValue(client, out var structs)) return 0;
