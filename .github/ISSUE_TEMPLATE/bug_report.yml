@@ -1,0 +1,38 @@
+name: Bug report
+description: Something does not work or differs from JavaScript yjs
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: For security issues, please use private reporting instead (see SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal code, and for wire-format issues the update bytes (base64) and the JavaScript code that produced them.
+      render: csharp
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: DotYjs version and package
+      placeholder: DotYjs.AspNetCore 0.1.0-preview.1
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: .NET version and OS
+      placeholder: .NET 10, Linux
+  - type: input
+    id: js
+    attributes:
+      label: JavaScript yjs / y-websocket versions (if a JS client is involved)
