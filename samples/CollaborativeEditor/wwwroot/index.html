@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DotYjs collaborative editor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    header { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
+    #status { font-size: .9rem; color: #777; }
+    #users { display: flex; gap: .5rem; flex-wrap: wrap; margin: .75rem 0; }
+    .user { padding: .15rem .6rem; border-radius: 1rem; color: #fff; font-size: .85rem; }
+    textarea { width: 100%; height: 55vh; font: 15px/1.5 ui-monospace, monospace; padding: .75rem; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Collaborative note</h1>
+    <span id="status">connecting…</span>
+  </header>
+  <p>Room: <code id="room"></code>. Open this page in another window (or share the URL) and type in either one.</p>
+  <div id="users"></div>
+  <textarea id="editor" spellcheck="false" placeholder="Start typing…"></textarea>
+
+  <script type="module">
+    import * as Y from 'https://esm.sh/yjs@13.6.27'
+    import { WebsocketProvider } from 'https://esm.sh/y-websocket@2.0.4?deps=yjs@13.6.27'
+
+    const room = new URLSearchParams(location.search).get('room') || 'demo'
+    document.getElementById('room').textContent = room
+
+    const doc = new Y.Doc()
+    const ytext = doc.getText('note')
+    const wsUrl = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/collab`
+    const provider = new WebsocketProvider(wsUrl, room, doc)
+
+    provider.on('status', e => { document.getElementById('status').textContent = e.status })
+
+    // Awareness: who is online, with a random name and color per tab.
+    const names = ['Ada', 'Linus', 'Grace', 'Alan', 'Barbara', 'Ken', 'Margaret', 'Dennis']
+    const colors = ['#d9480f', '#2b8a3e', '#1971c2', '#9c36b5', '#e67700', '#0b7285']
+    provider.awareness.setLocalStateField('user', {
+      name: names[Math.floor(Math.random() * names.length)],
+      color: colors[Math.floor(Math.random() * colors.length)]
+    })
+    const renderUsers = () => {
+      const users = document.getElementById('users')
+      users.replaceChildren(...[...provider.awareness.getStates().entries()]
+        .filter(([, state]) => state.user)
+        .map(([clientId, state]) => {
+          const el = document.createElement('span')
+          el.className = 'user'
+          el.style.background = state.user.color
+          el.textContent = state.user.name + (clientId === doc.clientID ? ' (you)' : '')
+          return el
+        }))
+    }
+    provider.awareness.on('change', renderUsers)
+    renderUsers()
+
+    // A minimal textarea binding: local input becomes one delete + insert on the Y.Text; a remote change rewrites
+    // the textarea and moves the caret by the inserted/deleted text in front of it (event.delta).
+    const editor = document.getElementById('editor')
+    editor.value = ytext.toString()
+
+    const isHighSurrogate = c => c >= 0xd800 && c <= 0xdbff
+    const isLowSurrogate = c => c >= 0xdc00 && c <= 0xdfff
+
+    editor.addEventListener('input', () => {
+      const oldText = ytext.toString()
+      const newText = editor.value
+      let start = 0
+      while (start < oldText.length && start < newText.length && oldText[start] === newText[start]) start++
+      let oldEnd = oldText.length, newEnd = newText.length
+      while (oldEnd > start && newEnd > start && oldText[oldEnd - 1] === newText[newEnd - 1]) { oldEnd--; newEnd-- }
+      // never cut through a surrogate pair (emoji): replacing 😀 with 😁 changes only the low half
+      if (start > 0 && isHighSurrogate(oldText.charCodeAt(start - 1))) start--
+      if (oldEnd < oldText.length && isLowSurrogate(oldText.charCodeAt(oldEnd))) { oldEnd++; newEnd++ }
+      doc.transact(() => {
+        if (oldEnd > start) ytext.delete(start, oldEnd - start)
+        if (newEnd > start) ytext.insert(start, newText.slice(start, newEnd))
+      }, 'textarea')
+    })
+
+    // delta positions count characters of the old text: retain and delete move through it, insert does not
+    const transformIndex = (delta, index) => {
+      let pos = 0, result = index
+      for (const op of delta) {
+        if (pos > index) break
+        if (op.retain) pos += op.retain
+        else if (op.insert) result += typeof op.insert === 'string' ? op.insert.length : 1
+        else if (op.delete) { result -= Math.min(op.delete, index - pos); pos += op.delete }
+      }
+      return Math.max(0, result)
+    }
+
+    ytext.observe(event => {
+      if (event.transaction.origin === 'textarea') return
+      const focused = document.activeElement === editor
+      const start = transformIndex(event.delta, editor.selectionStart)
+      const end = transformIndex(event.delta, editor.selectionEnd)
+      editor.value = ytext.toString()
+      if (focused) editor.setSelectionRange(start, end)
+    })
+  </script>
+</body>
+</html>
