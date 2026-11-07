@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DotYjs.EntityFrameworkCore;
 
+/// <summary>Adds the DotYjs entities to an Entity Framework Core model.</summary>
 public static class YjsModelBuilderExtensions
 {
     /// <summary>
@@ -26,9 +27,12 @@ public static class YjsModelBuilderExtensions
 /// <summary>A ready-to-use context holding only the Yjs table, for applications without their own DbContext.</summary>
 public class YjsDbContext : DbContext
 {
+    /// <summary>Creates the context.</summary>
     public YjsDbContext(DbContextOptions<YjsDbContext> options) : base(options) { }
 
+    /// <summary>The stored document updates.</summary>
     public DbSet<YjsUpdateEntity> YjsUpdates => Set<YjsUpdateEntity>();
 
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.AddYjs();
 }

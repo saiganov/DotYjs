@@ -30,14 +30,19 @@ public sealed class YjsDocument
         Awareness.Update += OnAwarenessUpdate;
     }
 
+    /// <summary>The document name (the room name of y-websocket).</summary>
     public string Name { get; }
+    /// <summary>The shared document. Lock on it when you change it from your own code, or use <see cref="Doc.Transact"/> under the same lock.</summary>
     public Doc Doc { get; }
+    /// <summary>The awareness (cursors, user names) of the clients connected to this document.</summary>
     public Awareness Awareness { get; }
 
     /// <summary>Lock protecting <see cref="Doc"/>.</summary>
     public object SyncRoot { get; } = new();
 
+    /// <summary>The number of WebSocket clients connected to this document on this node.</summary>
     public int ConnectionCount => _connections.Count;
+    /// <summary>A snapshot of the WebSocket clients connected to this document on this node.</summary>
     public IReadOnlyCollection<YjsConnection> Connections => _connections.Keys.ToArray();
 
     /// <summary>True once the document was unloaded from the <see cref="YjsDocumentManager"/>; it must not be used anymore.</summary>
@@ -269,5 +274,6 @@ public sealed class YjsDocument
         Doc.Destroy();
     }
 
+    /// <inheritdoc />
     public override string ToString() => $"YjsDocument({Name}, {ConnectionCount} connections)";
 }

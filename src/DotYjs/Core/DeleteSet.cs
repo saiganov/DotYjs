@@ -1,16 +1,21 @@
 namespace DotYjs;
 
+/// <summary>A range of deleted elements of one client: <see cref="Len"/> elements starting at <see cref="Clock"/>.</summary>
 public sealed class DeleteItem
 {
+    /// <summary>Creates a deleted range.</summary>
     public DeleteItem(long clock, long len)
     {
         Clock = clock;
         Len = len;
     }
 
+    /// <summary>The clock of the first deleted element.</summary>
     public long Clock { get; }
+    /// <summary>The number of deleted elements.</summary>
     public long Len { get; internal set; }
 
+    /// <inheritdoc />
     public override string ToString() => $"[{Clock},{Len}]";
 }
 
@@ -20,6 +25,7 @@ public sealed class DeleteItem
 /// </summary>
 public sealed class DeleteSet
 {
+    /// <summary>Deleted ranges by client id, sorted by clock after the delete set is sorted and merged.</summary>
     public Dictionary<long, List<DeleteItem>> Clients { get; } = new();
 
     internal void Add(long client, long clock, long length)
@@ -71,6 +77,7 @@ public sealed class DeleteSet
         return null;
     }
 
+    /// <summary>Whether the element with the given id is in this delete set.</summary>
     public bool IsDeleted(ID id) => Clients.TryGetValue(id.Client, out var dis) && FindIndexDS(dis, id.Clock) != null;
 
     internal void SortAndMerge()

@@ -22,12 +22,14 @@ public sealed class RedisYjsBackplane : IYjsBackplane, IAsyncDisposable
     private readonly string _prefix;
     private readonly bool _ownsConnection;
 
+    /// <summary>Creates a backplane on an existing Redis connection; every document uses the channel <paramref name="channelPrefix"/> + document name.</summary>
     public RedisYjsBackplane(IConnectionMultiplexer connection, string channelPrefix = "dotyjs:")
     {
         _connection = new Lazy<Task<IConnectionMultiplexer>>(() => Task.FromResult(connection));
         _prefix = channelPrefix;
     }
 
+    /// <summary>Creates a backplane that connects to Redis with the given options.</summary>
     public RedisYjsBackplane(RedisYjsBackplaneOptions options)
     {
         if (string.IsNullOrEmpty(options.Configuration)) throw new ArgumentException("Redis configuration string is required", nameof(options));
@@ -38,12 +40,14 @@ public sealed class RedisYjsBackplane : IYjsBackplane, IAsyncDisposable
 
     private RedisChannel Channel(string docName) => RedisChannel.Literal(_prefix + docName);
 
+    /// <inheritdoc />
     public async Task PublishAsync(string docName, YjsBackplaneMessage message, CancellationToken cancellationToken = default)
     {
         var mux = await _connection.Value.ConfigureAwait(false);
         await mux.GetSubscriber().PublishAsync(Channel(docName), message.Encode()).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     public async Task<IAsyncDisposable> SubscribeAsync(string docName, Func<YjsBackplaneMessage, Task> handler, CancellationToken cancellationToken = default)
     {
         var mux = await _connection.Value.ConfigureAwait(false);
@@ -59,6 +63,7 @@ public sealed class RedisYjsBackplane : IYjsBackplane, IAsyncDisposable
         return new Subscription(queue);
     }
 
+    /// <summary>Closes the Redis connection if this instance created it (a connection passed to the constructor stays open).</summary>
     public async ValueTask DisposeAsync()
     {
         if (_ownsConnection && _connection.IsValueCreated)
@@ -76,6 +81,7 @@ public sealed class RedisYjsBackplane : IYjsBackplane, IAsyncDisposable
     }
 }
 
+/// <summary>Registers the Redis backplane in the service collection.</summary>
 public static class RedisYjsBackplaneServiceCollectionExtensions
 {
     /// <summary>Registers the Redis backplane using the given StackExchange.Redis configuration string.</summary>

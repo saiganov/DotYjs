@@ -18,6 +18,7 @@ public sealed class YjsDocumentManager
     private readonly IYjsBackplane? _backplane;
     private readonly ILogger<YjsDocumentManager> _logger;
 
+    /// <summary>Creates the manager; <paramref name="persistence"/> and <paramref name="backplane"/> are optional services.</summary>
     public YjsDocumentManager(IOptions<YjsOptions> options, ILogger<YjsDocumentManager> logger, IYjsPersistence? persistence = null, IYjsBackplane? backplane = null)
     {
         _options = options.Value;

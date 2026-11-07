@@ -16,6 +16,7 @@ public sealed class Transaction
         Local = local;
     }
 
+    /// <summary>The document of this transaction.</summary>
     public Doc Doc { get; }
 
     /// <summary>Describes the set of deleted items by ids.</summary>
@@ -38,6 +39,7 @@ public sealed class Transaction
 
     internal List<AbstractStruct> MergeStructs { get; } = new();
 
+    /// <summary>The origin passed to <see cref="Doc.Transact(Action{Transaction}, object?)"/> or to the function that applied an update.</summary>
     public object? Origin { get; }
 
     /// <summary>Stores meta information on the transaction.</summary>
@@ -46,8 +48,11 @@ public sealed class Transaction
     /// <summary>Whether this change originates from this doc.</summary>
     public bool Local { get; internal set; }
 
+    /// <summary>Subdocuments added in this transaction.</summary>
     public HashSet<Doc> SubdocsAdded { get; } = new();
+    /// <summary>Subdocuments removed in this transaction.</summary>
     public HashSet<Doc> SubdocsRemoved { get; } = new();
+    /// <summary>Subdocuments that requested to be loaded in this transaction.</summary>
     public HashSet<Doc> SubdocsLoaded { get; } = new();
 
     internal bool NeedFormattingCleanup { get; set; }

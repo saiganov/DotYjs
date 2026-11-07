@@ -5,6 +5,7 @@ namespace DotYjs.Protocols;
 /// <summary>Which clients were added, updated or removed by an awareness update.</summary>
 public sealed class AwarenessChange
 {
+    /// <summary>Creates the change description.</summary>
     public AwarenessChange(IReadOnlyList<long> added, IReadOnlyList<long> updated, IReadOnlyList<long> removed)
     {
         Added = added;
@@ -12,22 +13,28 @@ public sealed class AwarenessChange
         Removed = removed;
     }
 
+    /// <summary>Clients whose state was added.</summary>
     public IReadOnlyList<long> Added { get; }
+    /// <summary>Clients whose state was updated.</summary>
     public IReadOnlyList<long> Updated { get; }
+    /// <summary>Clients whose state was removed.</summary>
     public IReadOnlyList<long> Removed { get; }
 
     /// <summary>All client ids touched by this change (added + updated + removed).</summary>
     public IEnumerable<long> All => Added.Concat(Updated).Concat(Removed);
 }
 
+/// <summary>Bookkeeping for the awareness state of one client.</summary>
 public sealed class MetaClientState
 {
+    /// <summary>Creates the bookkeeping entry.</summary>
     public MetaClientState(long clock, long lastUpdated)
     {
         Clock = clock;
         LastUpdated = lastUpdated;
     }
 
+    /// <summary>The clock of the client's state; it increases with every change, so older updates are ignored.</summary>
     public long Clock { get; }
 
     /// <summary>Unix time in milliseconds.</summary>
@@ -75,7 +82,9 @@ public sealed class Awareness : IDisposable
         SetLocalState(new Dictionary<string, object?>());
     }
 
+    /// <summary>The document this awareness belongs to.</summary>
     public Doc Doc { get; }
+    /// <summary>The client id of the local client (the client id of the document).</summary>
     public long ClientID { get; }
 
     /// <summary>Emitted when a state was added, removed or its content actually changed. Origin is "local" for local changes.</summary>
@@ -84,6 +93,7 @@ public sealed class Awareness : IDisposable
     /// <summary>Emitted for every applied update, even if the content did not change (used to propagate clock renewals).</summary>
     public event Action<AwarenessChange, object?>? Update;
 
+    /// <summary>Emitted when the awareness is destroyed.</summary>
     public event Action<Awareness>? Destroyed;
 
     private static long Now() => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -109,6 +119,7 @@ public sealed class Awareness : IDisposable
         }
     }
 
+    /// <summary>Returns the state of the local client, or null if it is offline (after <see cref="SetLocalState"/> with null).</summary>
     public object? GetLocalState()
     {
         lock (_lock) return _states.TryGetValue(ClientID, out var s) ? s : null;
@@ -317,6 +328,7 @@ public sealed class Awareness : IDisposable
         }
     }
 
+    /// <summary>Marks the local client as offline, stops the outdated-state timer and emits <see cref="Destroyed"/>.</summary>
     public void Destroy()
     {
         lock (_lock)
@@ -333,5 +345,6 @@ public sealed class Awareness : IDisposable
         }
     }
 
+    /// <summary>Same as <see cref="Destroy"/>.</summary>
     public void Dispose() => Destroy();
 }

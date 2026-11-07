@@ -3,8 +3,10 @@ using System.Text;
 
 namespace DotYjs;
 
+/// <summary>Event describing the changes of an XML type in a transaction.</summary>
 public sealed class YXmlEvent : YEvent
 {
+    /// <summary>Creates the event.</summary>
     public YXmlEvent(AbstractType target, HashSet<string?> subs, Transaction transaction) : base(target, transaction)
     {
         foreach (var sub in subs)
@@ -27,6 +29,7 @@ public sealed class YXmlTreeWalker : IEnumerable<AbstractType>
     private readonly YXmlFragment _root;
     private readonly Func<AbstractType, bool> _filter;
 
+    /// <summary>Creates a walker over the descendants of <paramref name="root"/>; with no filter it yields every descendant.</summary>
     public YXmlTreeWalker(YXmlFragment root, Func<AbstractType, bool>? filter = null)
     {
         _root = root;
@@ -34,6 +37,7 @@ public sealed class YXmlTreeWalker : IEnumerable<AbstractType>
         root.EnsureIntegrated();
     }
 
+    /// <summary>Enumerates the matching descendants in document order.</summary>
     public IEnumerator<AbstractType> GetEnumerator()
     {
         Item? n = _root.Start;
@@ -92,8 +96,10 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
 {
     private List<object?>? _prelimContent = new();
 
+    /// <summary>Creates a fragment that is not yet part of a document; insert it into a document type to use it.</summary>
     public YXmlFragment() { }
 
+    /// <summary>The first child, or null if there are no children.</summary>
     public AbstractType? FirstChild
     {
         get
@@ -113,6 +119,7 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
 
     internal override AbstractType InternalCopy() => new YXmlFragment();
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var el = new YXmlFragment();
@@ -120,6 +127,7 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
         return el;
     }
 
+    /// <summary>The number of children.</summary>
     public int Length => _prelimContent?.Count ?? (int)LengthInternal;
 
     /// <summary>Create a subtree of children matching a filter.</summary>
@@ -143,6 +151,7 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
     /// <summary>Get the string representation of all the children of this YXmlFragment.</summary>
     public override string ToString() => string.Concat(TypeListToArray(this).Select(x => x?.ToString()));
 
+    /// <inheritdoc />
     public override object? ToJSON() => ToString();
 
     /// <summary>Inserts new content at an index.</summary>
@@ -152,6 +161,7 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
         else _prelimContent!.InsertRange(index, content);
     }
 
+    /// <summary>Inserts the given children at <paramref name="index"/>.</summary>
     public void Insert(int index, params object?[] content) => Insert(index, (IReadOnlyList<object?>)content);
 
     /// <summary>Inserts new content after a reference element (null to insert at the start).</summary>
@@ -177,16 +187,23 @@ public class YXmlFragment : AbstractType, IEnumerable<object?>
         else _prelimContent!.RemoveRange(index, length);
     }
 
+    /// <summary>Returns the children as a list.</summary>
     public List<object?> ToArray() => _prelimContent != null ? new List<object?>(_prelimContent) : TypeListToArray(this);
 
+    /// <summary>Appends the given children at the end.</summary>
     public void Push(IReadOnlyList<object?> content) => Insert(Length, content);
+    /// <summary>Appends the given children at the end.</summary>
     public void Push(params object?[] content) => Push((IReadOnlyList<object?>)content);
+    /// <summary>Inserts the given children at the start.</summary>
     public void Unshift(IReadOnlyList<object?> content) => Insert(0, content);
 
+    /// <summary>Returns the child at <paramref name="index"/>.</summary>
     public object? Get(int index) => _prelimContent != null ? _prelimContent[index] : TypeListGet(this, index);
 
+    /// <summary>Returns the children from <paramref name="start"/> up to, but not including, <paramref name="end"/> (the end of the list by default).</summary>
     public List<object?> Slice(int start = 0, int? end = null) => TypeListSlice(this, start, end ?? Length);
 
+    /// <summary>Enumerates the children.</summary>
     public IEnumerator<object?> GetEnumerator() => (_prelimContent ?? TypeListEnumerate(this)).GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -198,15 +215,19 @@ public class YXmlElement : YXmlFragment
 {
     private Dictionary<string, object?>? _prelimAttrs = new();
 
+    /// <summary>Creates an element named "UNDEFINED" that is not yet part of a document.</summary>
     public YXmlElement() : this("UNDEFINED") { }
 
+    /// <summary>Creates an element with the given node name that is not yet part of a document; insert it into a document type to use it.</summary>
     public YXmlElement(string nodeName)
     {
         NodeName = nodeName;
     }
 
+    /// <summary>The node name (tag name) of the element.</summary>
     public string NodeName { get; internal set; }
 
+    /// <summary>The next sibling in the parent, or null.</summary>
     public AbstractType? NextSibling
     {
         get
@@ -216,6 +237,7 @@ public class YXmlElement : YXmlFragment
         }
     }
 
+    /// <summary>The previous sibling in the parent, or null.</summary>
     public AbstractType? PrevSibling
     {
         get
@@ -235,6 +257,7 @@ public class YXmlElement : YXmlFragment
 
     internal override AbstractType InternalCopy() => new YXmlElement(NodeName);
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var el = new YXmlElement(NodeName);
@@ -261,18 +284,21 @@ public class YXmlElement : YXmlFragment
         return sb.ToString();
     }
 
+    /// <summary>Removes an attribute.</summary>
     public void RemoveAttribute(string attributeName)
     {
         if (Doc != null) Transaction.Transact(Doc, t => TypeMapDelete(t, this, attributeName));
         else _prelimAttrs!.Remove(attributeName);
     }
 
+    /// <summary>Sets an attribute.</summary>
     public void SetAttribute(string attributeName, object? attributeValue)
     {
         if (Doc != null) Transaction.Transact(Doc, t => TypeMapSet(t, this, attributeName, attributeValue));
         else _prelimAttrs![attributeName] = attributeValue;
     }
 
+    /// <summary>Returns the value of an attribute, or null.</summary>
     public object? GetAttribute(string attributeName)
     {
         if (_prelimAttrs != null) return _prelimAttrs.GetValueOrDefault(attributeName);
@@ -280,8 +306,10 @@ public class YXmlElement : YXmlFragment
         return v is Lib0.Undefined ? null : v;
     }
 
+    /// <summary>Whether the element has the attribute.</summary>
     public bool HasAttribute(string attributeName) => _prelimAttrs?.ContainsKey(attributeName) ?? TypeMapHas(this, attributeName);
 
+    /// <summary>Returns all attributes, optionally as they were at <paramref name="snapshot"/>.</summary>
     public Dictionary<string, object?> GetAttributes(Snapshot? snapshot = null)
     {
         if (_prelimAttrs != null) return new Dictionary<string, object?>(_prelimAttrs);
@@ -298,10 +326,13 @@ public class YXmlElement : YXmlFragment
 /// <summary>Represents text in an XML tree.</summary>
 public class YXmlText : YText
 {
+    /// <summary>Creates an empty XML text that is not yet part of a document.</summary>
     public YXmlText() { }
 
+    /// <summary>Creates an XML text with initial content that is not yet part of a document; insert it into an XML type to use it.</summary>
     public YXmlText(string str) : base(str) { }
 
+    /// <summary>The next sibling in the parent, or null.</summary>
     public AbstractType? NextSibling
     {
         get
@@ -311,6 +342,7 @@ public class YXmlText : YText
         }
     }
 
+    /// <summary>The previous sibling in the parent, or null.</summary>
     public AbstractType? PrevSibling
     {
         get
@@ -322,6 +354,7 @@ public class YXmlText : YText
 
     internal override AbstractType InternalCopy() => new YXmlText();
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var text = new YXmlText();
@@ -329,6 +362,7 @@ public class YXmlText : YText
         return text;
     }
 
+    /// <summary>Returns the text as XML: formatting attributes become nested tags, like yjs YXmlText.toString.</summary>
     public override string ToString()
     {
         var sb = new StringBuilder();
@@ -361,6 +395,7 @@ public class YXmlText : YText
         return sb.ToString();
     }
 
+    /// <inheritdoc />
     public override object? ToJSON() => ToString();
 
     internal override void WriteType(IUpdateEncoder encoder) => encoder.WriteTypeRef(ContentType.YXmlTextRefID);
@@ -369,17 +404,21 @@ public class YXmlText : YText
 /// <summary>You can manage binding to a custom type with YXmlHook.</summary>
 public class YXmlHook : YMap
 {
+    /// <summary>Creates a hook named "UNDEFINED" that is not yet part of a document.</summary>
     public YXmlHook() : this("UNDEFINED") { }
 
+    /// <summary>Creates a hook with the given name that is not yet part of a document; insert it into an XML type to use it.</summary>
     public YXmlHook(string hookName)
     {
         HookName = hookName;
     }
 
+    /// <summary>The name of the hook, used to find the custom binding.</summary>
     public string HookName { get; internal set; }
 
     internal override AbstractType InternalCopy() => new YXmlHook(HookName);
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var el = new YXmlHook(HookName);

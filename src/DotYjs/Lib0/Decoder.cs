@@ -14,8 +14,10 @@ public class Decoder
     private readonly int _end;
     private int _pos;
 
+    /// <summary>Creates a decoder over the whole array.</summary>
     public Decoder(byte[] data) : this(data, 0, data.Length) { }
 
+    /// <summary>Creates a decoder over <paramref name="length"/> bytes of <paramref name="data"/> starting at <paramref name="offset"/>.</summary>
     public Decoder(byte[] data, int offset, int length)
     {
         _arr = data;
@@ -31,22 +33,26 @@ public class Decoder
         set => _pos = _start + value;
     }
 
+    /// <summary>Whether there are bytes left to read.</summary>
     public bool HasContent => _pos < _end;
 
     private static InvalidDataException EndOfArray() => new InvalidDataException("Unexpected end of array");
 
+    /// <summary>Reads one byte.</summary>
     public byte ReadUint8()
     {
         if (_pos >= _end) throw EndOfArray();
         return _arr[_pos++];
     }
 
+    /// <summary>Returns the next byte without consuming it.</summary>
     public byte PeekUint8()
     {
         if (_pos >= _end) throw EndOfArray();
         return _arr[_pos];
     }
 
+    /// <summary>Reads a 16-bit unsigned integer (little endian).</summary>
     public int ReadUint16()
     {
         int v = ReadUint8();
@@ -54,6 +60,7 @@ public class Decoder
         return v;
     }
 
+    /// <summary>Reads a 32-bit unsigned integer (little endian).</summary>
     public uint ReadUint32()
     {
         uint v = 0;
@@ -61,6 +68,7 @@ public class Decoder
         return v;
     }
 
+    /// <summary>Reads a 32-bit unsigned integer (big endian).</summary>
     public uint ReadUint32BigEndian()
     {
         uint v = 0;
@@ -95,10 +103,13 @@ public class Decoder
         return d;
     }
 
+    /// <summary>Reads a byte array prefixed with its length as a var uint.</summary>
     public byte[] ReadVarUint8Array() => ReadUint8Array(checked((int)ReadVarUint()));
 
+    /// <summary>Reads all remaining bytes.</summary>
     public byte[] ReadTailAsUint8Array() => ReadUint8Array(_end - _pos);
 
+    /// <summary>Reads a variable-length unsigned integer (7 bits per byte, lib0 readVarUint).</summary>
     public long ReadVarUint()
     {
         ulong num = 0;
@@ -114,6 +125,7 @@ public class Decoder
         throw EndOfArray();
     }
 
+    /// <summary>Reads a variable-length signed integer (lib0 readVarInt).</summary>
     public long ReadVarInt() => ReadVarInt(out _);
 
     /// <summary>Reads a signed varint; <paramref name="isNegative"/> is true also for an encoded <c>-0</c>.</summary>
@@ -135,6 +147,7 @@ public class Decoder
         throw EndOfArray();
     }
 
+    /// <summary>Returns the next var uint without consuming it.</summary>
     public long PeekVarUint()
     {
         int p = _pos;
@@ -143,6 +156,7 @@ public class Decoder
         return v;
     }
 
+    /// <summary>Reads a UTF-8 string prefixed with its byte length as a var uint.</summary>
     public string ReadVarString()
     {
         int len = checked((int)ReadVarUint());
@@ -152,6 +166,7 @@ public class Decoder
         return s;
     }
 
+    /// <summary>Returns the next var string without consuming it.</summary>
     public string PeekVarString()
     {
         int p = _pos;
@@ -160,6 +175,7 @@ public class Decoder
         return v;
     }
 
+    /// <summary>Reads a byte array written by <see cref="Encoder.WriteTerminatedUint8Array"/>.</summary>
     public byte[] ReadTerminatedUint8Array()
     {
         var e = new Encoder();
@@ -172,14 +188,19 @@ public class Decoder
         }
     }
 
+    /// <summary>Reads a string written by <see cref="Encoder.WriteTerminatedString"/>.</summary>
     public string ReadTerminatedString() => Encoding.UTF8.GetString(ReadTerminatedUint8Array());
 
+    /// <summary>Reads a 32-bit float (big endian).</summary>
     public float ReadFloat32() => BinaryPrimitives.ReadSingleBigEndian(ReadSpan(4));
 
+    /// <summary>Reads a 64-bit float (big endian).</summary>
     public double ReadFloat64() => BinaryPrimitives.ReadDoubleBigEndian(ReadSpan(8));
 
+    /// <summary>Reads a 64-bit signed integer (big endian).</summary>
     public long ReadBigInt64() => BinaryPrimitives.ReadInt64BigEndian(ReadSpan(8));
 
+    /// <summary>Reads a 64-bit unsigned integer (big endian).</summary>
     public ulong ReadBigUint64() => BinaryPrimitives.ReadUInt64BigEndian(ReadSpan(8));
 
     /// <summary>

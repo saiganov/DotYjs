@@ -16,8 +16,11 @@ namespace DotYjs.Protocols;
 /// </summary>
 public static class SyncProtocol
 {
+    /// <summary>Message type of sync step 1: the sender's state vector.</summary>
     public const int MessageYjsSyncStep1 = 0;
+    /// <summary>Message type of sync step 2: the updates the receiver of step 1 is missing.</summary>
     public const int MessageYjsSyncStep2 = 1;
+    /// <summary>Message type of a document update.</summary>
     public const int MessageYjsUpdate = 2;
 
     /// <summary>Create a sync step 1 message based on the state of the current shared document.</summary>
@@ -27,6 +30,7 @@ public static class SyncProtocol
         encoder.WriteVarUint8Array(UpdateCodec.EncodeStateVector(doc));
     }
 
+    /// <summary>Writes sync step 2: everything in <paramref name="doc"/> that a client with the given state vector is missing.</summary>
     public static void WriteSyncStep2(Encoder encoder, Doc doc, byte[]? encodedStateVector = null)
     {
         encoder.WriteVarUint(MessageYjsSyncStep2);
@@ -41,6 +45,7 @@ public static class SyncProtocol
     public static void ReadSyncStep2(Decoder decoder, Doc doc, object? transactionOrigin = null)
         => UpdateCodec.ApplyUpdate(doc, decoder.ReadVarUint8Array(), transactionOrigin);
 
+    /// <summary>Writes an update message.</summary>
     public static void WriteUpdate(Encoder encoder, byte[] update)
     {
         encoder.WriteVarUint(MessageYjsUpdate);
@@ -70,6 +75,7 @@ public static class SyncProtocol
 
     // ---- convenience helpers producing whole messages ----
 
+    /// <summary>Encodes sync step 1 with the state vector of <paramref name="doc"/>.</summary>
     public static byte[] EncodeSyncStep1(Doc doc)
     {
         var e = new Encoder();
@@ -77,6 +83,7 @@ public static class SyncProtocol
         return e.ToArray();
     }
 
+    /// <summary>Encodes sync step 2 for a client with the given state vector.</summary>
     public static byte[] EncodeSyncStep2(Doc doc, byte[]? encodedStateVector = null)
     {
         var e = new Encoder();
@@ -84,6 +91,7 @@ public static class SyncProtocol
         return e.ToArray();
     }
 
+    /// <summary>Encodes an update message.</summary>
     public static byte[] EncodeUpdate(byte[] update)
     {
         var e = new Encoder();

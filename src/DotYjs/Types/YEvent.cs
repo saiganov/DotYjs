@@ -2,22 +2,28 @@ using DotYjs.Lib0;
 
 namespace DotYjs;
 
+/// <summary>How a key of a map-like type changed.</summary>
 public enum ChangeAction
 {
+    /// <summary>The key was added.</summary>
     Add,
+    /// <summary>The value of the key was replaced.</summary>
     Update,
+    /// <summary>The key was deleted.</summary>
     Delete,
 }
 
 /// <summary>Describes how a key of a map-like type changed.</summary>
 public sealed class EntryChange
 {
+    /// <summary>Creates the change description.</summary>
     public EntryChange(ChangeAction action, object? oldValue)
     {
         Action = action;
         OldValue = oldValue;
     }
 
+    /// <summary>What happened to the key.</summary>
     public ChangeAction Action { get; }
 
     /// <summary>The previous value (<see cref="Undefined.Value"/> for <see cref="ChangeAction.Add"/>).</summary>
@@ -32,14 +38,21 @@ public sealed class DeltaOp
 {
     /// <summary>Inserted content: a string (text), a List&lt;object?&gt; (arrays) or an embed / shared type (text).</summary>
     public object? Insert { get; set; }
+    /// <summary>The number of elements to keep (possibly applying <see cref="Attributes"/> to them).</summary>
     public long? Retain { get; set; }
+    /// <summary>The number of elements to delete.</summary>
     public long? Delete { get; set; }
+    /// <summary>Formatting attributes of inserted or retained text.</summary>
     public Dictionary<string, object?>? Attributes { get; set; }
 
+    /// <summary>Whether this op is an insert.</summary>
     public bool IsInsert => Retain == null && Delete == null;
 
+    /// <summary>Creates an insert op.</summary>
     public static DeltaOp Inserting(object? insert, Dictionary<string, object?>? attributes = null) => new() { Insert = insert, Attributes = attributes };
+    /// <summary>Creates a retain op.</summary>
     public static DeltaOp Retaining(long n, Dictionary<string, object?>? attributes = null) => new() { Retain = n, Attributes = attributes };
+    /// <summary>Creates a delete op.</summary>
     public static DeltaOp Deleting(long n) => new() { Delete = n };
 
     /// <summary>Converts the op to a plain dictionary (handy for JSON serialization / comparisons).</summary>
@@ -53,14 +66,20 @@ public sealed class DeltaOp
         return d;
     }
 
+    /// <summary>Returns the op as JSON.</summary>
     public override string ToString() => JsonValues.Stringify(ToDictionary());
 }
 
+/// <summary>The changes of a type in a transaction (see <see cref="YEvent.Changes"/>).</summary>
 public sealed class YChanges
 {
+    /// <summary>Items added in the transaction.</summary>
     public required HashSet<Item> Added { get; init; }
+    /// <summary>Items deleted in the transaction.</summary>
     public required HashSet<Item> Deleted { get; init; }
+    /// <summary>The changes of a list-like type as a delta.</summary>
     public required List<DeltaOp> Delta { get; init; }
+    /// <summary>The changes of a map-like type by key.</summary>
     public required Dictionary<string, EntryChange> Keys { get; init; }
 }
 
@@ -74,6 +93,7 @@ public class YEvent
     private List<object>? _path;
     private protected List<DeltaOp>? DeltaCache;
 
+    /// <summary>Creates the event.</summary>
     public YEvent(AbstractType target, Transaction transaction)
     {
         Target = target;
@@ -103,6 +123,7 @@ public class YEvent
     /// <summary>Check if a struct is added by this event.</summary>
     public bool Adds(AbstractStruct s) => s.Id.Clock >= Transaction.BeforeState.GetValueOrDefault(s.Id.Client);
 
+    /// <summary>The changed keys of a map-like type and how they changed.</summary>
     public Dictionary<string, EntryChange> Keys
     {
         get

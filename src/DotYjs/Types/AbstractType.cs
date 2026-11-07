@@ -98,8 +98,10 @@ public class AbstractType
     /// <summary>Observe all events that are created by this type and its children.</summary>
     public void ObserveDeep(Action<IReadOnlyList<YEvent>, Transaction> f) => _dEH.Add(f);
 
+    /// <summary>Removes an observer added with <see cref="Observe"/>.</summary>
     public void Unobserve(Action<YEvent, Transaction> f) => _eH.Remove(f);
 
+    /// <summary>Removes an observer added with <see cref="ObserveDeep"/>.</summary>
     public void UnobserveDeep(Action<IReadOnlyList<YEvent>, Transaction> f) => _dEH.Remove(f);
 
     internal void CallDeepEventHandlers(IReadOnlyList<YEvent> events, Transaction transaction)

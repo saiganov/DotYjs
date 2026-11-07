@@ -17,8 +17,11 @@ public sealed class YjsConnection
         HttpContext = httpContext;
     }
 
+    /// <summary>Unique id of this connection (used in logs).</summary>
     public string Id { get; } = Guid.NewGuid().ToString("N");
+    /// <summary>The WebSocket of the client.</summary>
     public WebSocket Socket { get; }
+    /// <summary>The document this connection is attached to.</summary>
     public YjsDocument Document { get; }
 
     /// <summary>The HTTP context of the upgrade request (user, headers, query), if any.</summary>
@@ -56,5 +59,6 @@ public sealed class YjsConnection
         }
     }
 
+    /// <inheritdoc />
     public override string ToString() => $"YjsConnection({Id}, {Document.Name})";
 }

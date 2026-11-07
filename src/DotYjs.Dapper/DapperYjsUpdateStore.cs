@@ -67,6 +67,7 @@ public sealed class DapperYjsUpdateStore : IYjsUpdateStore
         };
     }
 
+    /// <inheritdoc />
     public async Task<IReadOnlyList<StoredUpdate>> LoadAsync(string docName, CancellationToken cancellationToken)
     {
         var connection = await OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -79,6 +80,7 @@ public sealed class DapperYjsUpdateStore : IYjsUpdateStore
         }
     }
 
+    /// <inheritdoc />
     public async Task<long> AppendAsync(string docName, byte[] update, CancellationToken cancellationToken)
     {
         var connection = await OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -88,6 +90,7 @@ public sealed class DapperYjsUpdateStore : IYjsUpdateStore
         }
     }
 
+    /// <inheritdoc />
     public async Task<long> CompactAsync(string docName, byte[] state, IReadOnlyCollection<long> replacedIds, CancellationToken cancellationToken)
     {
         var connection = await OpenAsync(cancellationToken).ConfigureAwait(false);
@@ -160,14 +163,20 @@ public sealed class DapperYjsUpdateStore : IYjsUpdateStore
     }
 }
 
+/// <summary>The SQL dialect used by <see cref="DapperYjsUpdateStore"/> for the table definition and for reading the id of an inserted row.</summary>
 public enum DapperYjsDialect
 {
+    /// <summary>SQLite.</summary>
     Sqlite,
+    /// <summary>PostgreSQL.</summary>
     PostgreSql,
+    /// <summary>Microsoft SQL Server.</summary>
     SqlServer,
+    /// <summary>MySQL or MariaDB.</summary>
     MySql,
 }
 
+/// <summary>Registers the Dapper-based document persistence in the service collection.</summary>
 public static class YjsDapperServiceCollectionExtensions
 {
     /// <summary>Persists Yjs documents through Dapper. <paramref name="connectionFactory"/> returns a new connection per operation.</summary>

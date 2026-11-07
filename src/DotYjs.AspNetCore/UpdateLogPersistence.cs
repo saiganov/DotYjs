@@ -33,13 +33,17 @@ public sealed class UpdateLogPersistence : IYjsPersistence
     private readonly ILogger _logger;
     private readonly ConcurrentDictionary<Doc, Binding> _bindings = new();
 
+    /// <summary>Creates the persistence with default options.</summary>
     public UpdateLogPersistence(IYjsUpdateStore store) : this(store, (UpdateLogPersistenceOptions?)null, null) { }
 
+    /// <summary>Creates the persistence with the given options (null means defaults).</summary>
     public UpdateLogPersistence(IYjsUpdateStore store, UpdateLogPersistenceOptions? options) : this(store, options, null) { }
 
+    /// <summary>Creates the persistence with options and a logger from dependency injection.</summary>
     public UpdateLogPersistence(IYjsUpdateStore store, IOptions<UpdateLogPersistenceOptions> options, ILogger<UpdateLogPersistence> logger)
         : this(store, options?.Value, logger) { }
 
+    /// <summary>Creates the persistence with the given options and logger (null means defaults and no logging).</summary>
     public UpdateLogPersistence(IYjsUpdateStore store, UpdateLogPersistenceOptions? options, ILogger? logger)
     {
         _store = store ?? throw new ArgumentNullException(nameof(store));
@@ -50,6 +54,7 @@ public sealed class UpdateLogPersistence : IYjsPersistence
     /// <summary>The store this persistence writes to.</summary>
     public IYjsUpdateStore Store => _store;
 
+    /// <inheritdoc />
     public async Task BindStateAsync(string docName, Doc doc, CancellationToken cancellationToken)
     {
         var stored = await _store.LoadAsync(docName, cancellationToken).ConfigureAwait(false);
@@ -71,6 +76,7 @@ public sealed class UpdateLogPersistence : IYjsPersistence
         binding.Attach(doc);
     }
 
+    /// <inheritdoc />
     public async Task WriteStateAsync(string docName, Doc doc, CancellationToken cancellationToken)
     {
         if (!_bindings.TryRemove(doc, out var binding))
