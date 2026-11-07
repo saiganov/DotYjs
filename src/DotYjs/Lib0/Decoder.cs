@@ -35,6 +35,20 @@ public class Decoder
 
     private static InvalidDataException EndOfArray() => new InvalidDataException("Unexpected end of array");
 
+    /// <summary>Integers are JavaScript numbers in lib0, so larger values cannot come from a valid message (Number.MAX_SAFE_INTEGER).</summary>
+    private const ulong MaxSafeInteger = (1UL << 53) - 1;
+
+    /// <summary>The number of bytes left to read.</summary>
+    internal int Remaining => _end - _pos;
+
+    /// <summary>Reads a var uint that is used as a length or count; it must fit into an <see cref="int"/>.</summary>
+    internal int ReadLength()
+    {
+        long len = ReadVarUint();
+        if (len > int.MaxValue) throw new InvalidDataException("Length out of range");
+        return (int)len;
+    }
+
     public byte ReadUint8()
     {
         if (_pos >= _end) throw EndOfArray();
@@ -71,7 +85,7 @@ public class Decoder
     /// <summary>Returns a copy of the next <paramref name="len"/> bytes.</summary>
     public byte[] ReadUint8Array(int len)
     {
-        if (len < 0 || _pos + len > _end) throw EndOfArray();
+        if (len < 0 || len > _end - _pos) throw EndOfArray();
         var res = _arr.AsSpan(_pos, len).ToArray();
         _pos += len;
         return res;
@@ -80,7 +94,7 @@ public class Decoder
     /// <summary>Returns a view over the next <paramref name="len"/> bytes without copying.</summary>
     public ReadOnlySpan<byte> ReadSpan(int len)
     {
-        if (len < 0 || _pos + len > _end) throw EndOfArray();
+        if (len < 0 || len > _end - _pos) throw EndOfArray();
         var res = _arr.AsSpan(_pos, len);
         _pos += len;
         return res;
@@ -89,13 +103,13 @@ public class Decoder
     /// <summary>Creates a sub-decoder over the next <paramref name="len"/> bytes (no copy).</summary>
     internal Decoder ReadSubDecoder(int len)
     {
-        if (len < 0 || _pos + len > _end) throw EndOfArray();
+        if (len < 0 || len > _end - _pos) throw EndOfArray();
         var d = new Decoder(_arr, _pos, len);
         _pos += len;
         return d;
     }
 
-    public byte[] ReadVarUint8Array() => ReadUint8Array(checked((int)ReadVarUint()));
+    public byte[] ReadVarUint8Array() => ReadUint8Array(ReadLength());
 
     public byte[] ReadTailAsUint8Array() => ReadUint8Array(_end - _pos);
 
@@ -108,7 +122,7 @@ public class Decoder
             byte r = _arr[_pos++];
             num |= (ulong)(r & 0x7f) << shift;
             shift += 7;
-            if (r < 0x80) return (long)num;
+            if (r < 0x80) return num <= MaxSafeInteger ? (long)num : throw new InvalidDataException("Integer out of Range");
             if (shift > 53) throw new InvalidDataException("Integer out of Range");
         }
         throw EndOfArray();
@@ -129,7 +143,11 @@ public class Decoder
             r = _arr[_pos++];
             num |= (ulong)(r & 0x7f) << shift;
             shift += 7;
-            if (r < 0x80) return isNegative ? -(long)num : (long)num;
+            if (r < 0x80)
+            {
+                if (num > MaxSafeInteger) throw new InvalidDataException("Integer out of Range");
+                return isNegative ? -(long)num : (long)num;
+            }
             if (shift > 53) throw new InvalidDataException("Integer out of Range");
         }
         throw EndOfArray();
@@ -145,8 +163,8 @@ public class Decoder
 
     public string ReadVarString()
     {
-        int len = checked((int)ReadVarUint());
-        if (len < 0 || _pos + len > _end) throw EndOfArray();
+        int len = ReadLength();
+        if (len > _end - _pos) throw EndOfArray();
         var s = Encoding.UTF8.GetString(_arr, _pos, len);
         _pos += len;
         return s;
@@ -202,8 +220,9 @@ public class Decoder
             case 119: return ReadVarString();
             case 118:
                 {
-                    int len = checked((int)ReadVarUint());
-                    var obj = new Dictionary<string, object?>(len);
+                    int len = ReadLength();
+                    // every entry takes at least two bytes, so a corrupt length cannot reserve more memory than the input justifies
+                    var obj = new Dictionary<string, object?>(Math.Min(len, Remaining / 2));
                     for (int i = 0; i < len; i++)
                     {
                         var key = ReadVarString();
@@ -213,8 +232,8 @@ public class Decoder
                 }
             case 117:
                 {
-                    int len = checked((int)ReadVarUint());
-                    var arr = new List<object?>(len);
+                    int len = ReadLength();
+                    var arr = new List<object?>(Math.Min(len, Remaining));
                     for (int i = 0; i < len; i++) arr.Add(ReadAny());
                     return arr;
                 }
@@ -333,7 +352,9 @@ internal sealed class StringDecoder
 
     public string Read()
     {
-        int end = _spos + (int)_lens.Read();
+        long len = _lens.Read();
+        if (len < 0 || len > _str.Length - _spos) throw new InvalidDataException("Unexpected end of string");
+        int end = _spos + (int)len;
         var res = _str.Substring(_spos, end - _spos);
         _spos = end;
         return res;

@@ -59,8 +59,8 @@ public static class UpdateCodec
         for (long i = 0; i < numOfStateUpdates; i++)
         {
             long numberOfStructs = decoder.RestDecoder.ReadVarUint();
-            var refs = new List<AbstractStruct>((int)numberOfStructs);
-            long client = decoder.ReadClient();
+            var refs = new List<AbstractStruct>((int)Math.Min(numberOfStructs, 1024)); // the count may be corrupt; the list grows as needed
+            long client = CheckClient(decoder.ReadClient());
             long clock = decoder.RestDecoder.ReadVarUint();
             clientRefs[client] = new StructRefs(refs);
             for (long j = 0; j < numberOfStructs; j++)
@@ -70,23 +70,23 @@ public static class UpdateCodec
                 {
                     case 0:
                         {
-                            long len = decoder.ReadLen();
+                            long len = CheckLength(decoder.ReadLen());
                             refs.Add(new GC(new ID(client, clock), len));
-                            clock += len;
+                            clock = CheckClock(clock + len);
                             break;
                         }
                     case 10:
                         {
-                            long len = decoder.RestDecoder.ReadVarUint();
+                            long len = CheckLength(decoder.RestDecoder.ReadVarUint());
                             refs.Add(new Skip(new ID(client, clock), len));
-                            clock += len;
+                            clock = CheckClock(clock + len);
                             break;
                         }
                     default:
                         {
                             var s = ReadItem(decoder, client, clock, info, doc);
                             refs.Add(s);
-                            clock += s.Length;
+                            clock = CheckClock(clock + s.Length);
                             break;
                         }
                 }
@@ -95,11 +95,32 @@ public static class UpdateCodec
         return clientRefs;
     }
 
+    // Checks of decoded values that valid updates always satisfy. They reject corrupt or malicious input while the
+    // update is decoded, before anything is applied to the document.
+
+    internal static long CheckClient(long client) =>
+        client >= 0 ? client : throw new InvalidDataException("Invalid client id");
+
+    internal static long CheckLength(long len) =>
+        len > 0 ? len : throw new InvalidDataException("Invalid struct length");
+
+    /// <summary>Clocks are JavaScript numbers, so yjs (and the lib0 var uint decoder) cannot go beyond 2^53 - 1.</summary>
+    internal static long CheckClock(long clock) =>
+        clock is >= 0 and <= MaxClock ? clock : throw new InvalidDataException("Clock out of range");
+
+    private const long MaxClock = (1L << 53) - 1;
+
+    /// <summary>An origin or parent of an item must exist before the item: from the same client it has a lower clock.</summary>
+    private static ID CheckReference(ID id, long client, long clock) =>
+        id.Client >= 0 && id.Clock >= 0 && (id.Client != client || id.Clock < clock)
+            ? id
+            : throw new InvalidDataException("Invalid reference to another struct");
+
     internal static Item ReadItem(IUpdateDecoder decoder, long client, long clock, byte info, Doc? doc)
     {
         bool cantCopyParentInfo = (info & (0x40 | 0x80)) == 0;
-        var origin = (info & 0x80) == 0x80 ? decoder.ReadLeftID() : null;
-        var rightOrigin = (info & 0x40) == 0x40 ? decoder.ReadRightID() : null;
+        var origin = (info & 0x80) == 0x80 ? CheckReference(decoder.ReadLeftID(), client, clock) : null;
+        var rightOrigin = (info & 0x40) == 0x40 ? CheckReference(decoder.ReadRightID(), client, clock) : null;
         object? parent = null;
         if (cantCopyParentInfo)
         {
@@ -110,7 +131,7 @@ public static class UpdateCodec
             }
             else
             {
-                parent = decoder.ReadLeftID();
+                parent = CheckReference(decoder.ReadLeftID(), client, clock);
             }
         }
         string? parentSub = cantCopyParentInfo && (info & 0x20) == 0x20 ? decoder.ReadString() : null;

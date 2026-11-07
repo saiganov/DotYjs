@@ -150,6 +150,9 @@ real JS `y-websocket` server.
 replays the same scenarios in .NET and compares the resulting bytes with JS.
 The reverse check (`check-dotnet-updates.mjs`) feeds updates produced by .NET to the JS library.
 The same checks cover the sync/awareness messages of `y-protocols` and `RelativePosition`.
+`FuzzTests` mutate valid messages (bit flips, truncation, huge varints and so on) and feed them to every decoder:
+corrupt input must be rejected with `InvalidDataException`, without hanging or reserving large amounts of memory
+(`DOTYJS_FUZZ_ITERATIONS=5000 dotnet test --filter FuzzTests` for a longer run).
 `check-websocket-server.mjs` connects two real `y-websocket` clients to a running
 `samples/YjsServer` and verifies sync, awareness and server-side edits.
 

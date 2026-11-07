@@ -93,7 +93,8 @@ public sealed class StructStore
             }
             midindex = (left + right) / 2;
         }
-        throw new InvalidOperationException("Unexpected case");
+        // only reachable with an update that references structs that do not exist
+        throw new InvalidDataException("Unexpected case: struct not found");
     }
 
     internal AbstractStruct Find(ID id)

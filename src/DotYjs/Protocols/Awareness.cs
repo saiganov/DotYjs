@@ -241,7 +241,7 @@ public sealed class Awareness : IDisposable
         {
             var clientID = decoder.ReadVarUint();
             var clock = decoder.ReadVarUint();
-            var state = JsonValues.Parse(decoder.ReadVarString());
+            var state = JsonValues.ParseEncoded(decoder.ReadVarString());
             var modified = modify(state);
             encoder.WriteVarUint(clientID);
             encoder.WriteVarUint(clock);
@@ -266,7 +266,7 @@ public sealed class Awareness : IDisposable
             {
                 var clientID = decoder.ReadVarUint();
                 var clock = decoder.ReadVarUint();
-                var state = JsonValues.Parse(decoder.ReadVarString());
+                var state = JsonValues.ParseEncoded(decoder.ReadVarString());
                 var hasMeta = _meta.TryGetValue(clientID, out var clientMeta);
                 _states.TryGetValue(clientID, out var prevState);
                 var currClock = hasMeta ? clientMeta!.Clock : 0;
