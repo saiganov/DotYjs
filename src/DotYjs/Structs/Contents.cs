@@ -5,8 +5,11 @@ namespace DotYjs;
 /// <summary>Base class for the content carried by an <see cref="Item"/>.</summary>
 public abstract class AbstractContent
 {
+    /// <summary>The number of clocks this content covers.</summary>
     public abstract long GetLength();
+    /// <summary>The values of this content as they appear in a type (empty for content that is not countable).</summary>
     public abstract IReadOnlyList<object?> GetContent();
+    /// <summary>Whether this content counts towards the length of the type (formatting and deleted content do not).</summary>
     public abstract bool IsCountable { get; }
     internal abstract AbstractContent Copy();
     internal abstract AbstractContent Splice(long offset);
@@ -32,12 +35,18 @@ public abstract class AbstractContent
     };
 }
 
+/// <summary>Content with JSON-like values (an array or map value).</summary>
 public sealed class ContentAny : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentAny(List<object?> arr) { Arr = arr; }
+    /// <summary>The values.</summary>
     public List<object?> Arr { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => Arr.Count;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => Arr;
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentAny(new List<object?>(Arr));
 
@@ -74,12 +83,18 @@ public sealed class ContentAny : AbstractContent
     }
 }
 
+/// <summary>Content with a byte array.</summary>
 public sealed class ContentBinary : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentBinary(byte[] content) { Content = content; }
+    /// <summary>The bytes.</summary>
     public byte[] Content { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => 1;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => new object?[] { Content };
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentBinary(Content);
     internal override AbstractContent Splice(long offset) => throw new NotSupportedException();
@@ -88,12 +103,18 @@ public sealed class ContentBinary : AbstractContent
     internal override int Ref => 3;
 }
 
+/// <summary>Placeholder for deleted content that has been garbage collected.</summary>
 public sealed class ContentDeleted : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentDeleted(long len) { Len = len; }
+    /// <summary>The number of deleted elements.</summary>
     public long Len { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => Len;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => Array.Empty<object?>();
+    /// <inheritdoc />
     public override bool IsCountable => false;
     internal override AbstractContent Copy() => new ContentDeleted(Len);
 
@@ -123,6 +144,7 @@ public sealed class ContentDeleted : AbstractContent
 /// <summary>Content holding a sub-document.</summary>
 public sealed class ContentDoc : AbstractContent
 {
+    /// <summary>Creates the content for a subdocument.</summary>
     public ContentDoc(Doc doc)
     {
         if (doc.Item != null)
@@ -137,7 +159,9 @@ public sealed class ContentDoc : AbstractContent
         Opts = opts;
     }
 
+    /// <summary>The subdocument.</summary>
     public Doc Doc { get; internal set; }
+    /// <summary>The options of the subdocument that are stored with it (gc, autoLoad, meta).</summary>
     public Dictionary<string, object?> Opts { get; internal set; }
 
     internal static Doc CreateDocFromOpts(string guid, IDictionary<string, object?> opts)
@@ -151,8 +175,11 @@ public sealed class ContentDoc : AbstractContent
         return new Doc(o);
     }
 
+    /// <inheritdoc />
     public override long GetLength() => 1;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => new object?[] { Doc };
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentDoc(CreateDocFromOpts(Doc.Guid, Opts));
     internal override AbstractContent Splice(long offset) => throw new NotSupportedException();
@@ -190,10 +217,15 @@ public sealed class ContentDoc : AbstractContent
 /// <summary>An embedded object in a text (e.g. an image in a rich-text document).</summary>
 public sealed class ContentEmbed : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentEmbed(object? embed) { Embed = embed; }
+    /// <summary>The embedded value.</summary>
     public object? Embed { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => 1;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => new[] { Embed };
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentEmbed(Embed);
     internal override AbstractContent Splice(long offset) => throw new NotSupportedException();
@@ -205,16 +237,22 @@ public sealed class ContentEmbed : AbstractContent
 /// <summary>A formatting marker in a text.</summary>
 public sealed class ContentFormat : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentFormat(string key, object? value)
     {
         Key = key;
         Value = value;
     }
 
+    /// <summary>The attribute name.</summary>
     public string Key { get; internal set; }
+    /// <summary>The attribute value; null ends the formatting.</summary>
     public object? Value { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => 1;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => Array.Empty<object?>();
+    /// <inheritdoc />
     public override bool IsCountable => false;
     internal override AbstractContent Copy() => new ContentFormat(Key, Value);
     internal override AbstractContent Splice(long offset) => throw new NotSupportedException();
@@ -240,10 +278,15 @@ public sealed class ContentFormat : AbstractContent
 /// <summary>Legacy JSON content (ref 2). New documents use <see cref="ContentAny"/>.</summary>
 public sealed class ContentJSON : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentJSON(List<object?> arr) { Arr = arr; }
+    /// <summary>The values.</summary>
     public List<object?> Arr { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => Arr.Count;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => Arr;
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentJSON(new List<object?>(Arr));
 
@@ -287,12 +330,17 @@ public sealed class ContentJSON : AbstractContent
     }
 }
 
+/// <summary>Text content.</summary>
 public sealed class ContentString : AbstractContent
 {
+    /// <summary>Creates the content.</summary>
     public ContentString(string str) { Str = str; }
+    /// <summary>The text. Its length is counted in UTF-16 code units, like in JavaScript.</summary>
     public string Str { get; internal set; }
+    /// <inheritdoc />
     public override long GetLength() => Str.Length;
 
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent()
     {
         var res = new object?[Str.Length];
@@ -300,6 +348,7 @@ public sealed class ContentString : AbstractContent
         return res;
     }
 
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentString(Str);
 
@@ -334,18 +383,30 @@ public sealed class ContentString : AbstractContent
 /// <summary>Content holding a nested shared type.</summary>
 public sealed class ContentType : AbstractContent
 {
+    /// <summary>Type reference of <see cref="YArray"/> in the binary encoding.</summary>
     public const int YArrayRefID = 0;
+    /// <summary>Type reference of <see cref="YMap"/> in the binary encoding.</summary>
     public const int YMapRefID = 1;
+    /// <summary>Type reference of <see cref="YText"/> in the binary encoding.</summary>
     public const int YTextRefID = 2;
+    /// <summary>Type reference of <see cref="YXmlElement"/> in the binary encoding.</summary>
     public const int YXmlElementRefID = 3;
+    /// <summary>Type reference of <see cref="YXmlFragment"/> in the binary encoding.</summary>
     public const int YXmlFragmentRefID = 4;
+    /// <summary>Type reference of <see cref="YXmlHook"/> in the binary encoding.</summary>
     public const int YXmlHookRefID = 5;
+    /// <summary>Type reference of <see cref="YXmlText"/> in the binary encoding.</summary>
     public const int YXmlTextRefID = 6;
 
+    /// <summary>Creates the content.</summary>
     public ContentType(AbstractType type) { Type = type; }
+    /// <summary>The nested shared type.</summary>
     public AbstractType Type { get; }
+    /// <inheritdoc />
     public override long GetLength() => 1;
+    /// <inheritdoc />
     public override IReadOnlyList<object?> GetContent() => new object?[] { Type };
+    /// <inheritdoc />
     public override bool IsCountable => true;
     internal override AbstractContent Copy() => new ContentType(Type.InternalCopy());
     internal override AbstractContent Splice(long offset) => throw new NotSupportedException();

@@ -207,8 +207,15 @@ dotnet test --collect:"XPlat Code Coverage" --settings tests/coverlet.runsetting
 ## Publishing
 
 The `DotYjs`, `DotYjs.AspNetCore`, `DotYjs.AspNetCore.Redis`, `DotYjs.EntityFrameworkCore` and `DotYjs.Dapper`
-packages are built by the [`release.yml`](.github/workflows/release.yml) workflow when a `vX.Y.Z` tag is pushed
-(the version comes from the tag). It needs the `NUGET_API_KEY` repository secret. License: [MIT](LICENSE).
+packages are published by the [`release.yml`](.github/workflows/release.yml) workflow when a GitHub Release is
+published. The release tag must look like `v1.2.3` (or `v1.2.3-preview.1`) and point to a commit on `main`;
+the package version comes from the tag. The workflow builds and tests the code, pushes the packages to NuGet.org
+and attaches them to the release.
+
+NuGet.org authentication uses [Trusted Publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing),
+so no API key is stored in the repository. It needs a Trusted Publishing policy on nuget.org (repository owner
+`saiganov`, repository `DotYjs`, workflow file `release.yml`) and the repository variable `NUGET_USER` with the
+nuget.org profile name that owns the policy. License: [MIT](LICENSE).
 
 ## Roadmap
 

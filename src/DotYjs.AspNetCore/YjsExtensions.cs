@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DotYjs.AspNetCore;
 
+/// <summary>Registers the DotYjs WebSocket server in the service collection.</summary>
 public static class YjsServiceCollectionExtensions
 {
     /// <summary>
@@ -40,6 +41,7 @@ public static class YjsServiceCollectionExtensions
     }
 }
 
+/// <summary>Maps the DotYjs WebSocket endpoint.</summary>
 public static class YjsEndpointRouteBuilderExtensions
 {
     /// <summary>

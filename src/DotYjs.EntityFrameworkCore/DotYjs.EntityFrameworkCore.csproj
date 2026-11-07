@@ -9,7 +9,6 @@
     <PackageId>DotYjs.EntityFrameworkCore</PackageId>
     <Description>Entity Framework Core persistence (IYjsPersistence) for the DotYjs ASP.NET Core server.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

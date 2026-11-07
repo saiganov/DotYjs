@@ -69,8 +69,10 @@ internal sealed class ItemTextListPosition
     }
 }
 
+/// <summary>Event describing the changes of a <see cref="YText"/> in a transaction.</summary>
 public sealed class YTextEvent : YEvent
 {
+    /// <summary>Creates the event.</summary>
     public YTextEvent(YText ytext, Transaction transaction, HashSet<string?> subs) : base(ytext, transaction)
     {
         foreach (var sub in subs)
@@ -86,6 +88,7 @@ public sealed class YTextEvent : YEvent
     /// <summary>Set of all changed attributes.</summary>
     public HashSet<string> KeysChanged { get; } = new();
 
+    /// <inheritdoc />
     public override YChanges Changes
     {
         get
@@ -306,8 +309,10 @@ public class YText : AbstractType
 {
     private List<Action>? _pending;
 
+    /// <summary>Creates an empty text that is not yet part of a document; insert it into a document type to use it.</summary>
     public YText() : this(null) { }
 
+    /// <summary>Creates a text with initial content that is not yet part of a document; insert it into a document type to use it.</summary>
     public YText(string? str)
     {
         _pending = str != null ? new List<Action> { () => Insert(0, str) } : new List<Action>();
@@ -342,6 +347,7 @@ public class YText : AbstractType
 
     internal override AbstractType InternalCopy() => new YText();
 
+    /// <inheritdoc />
     public override AbstractType Clone()
     {
         var text = new YText();
@@ -372,6 +378,7 @@ public class YText : AbstractType
         return sb.ToString();
     }
 
+    /// <inheritdoc />
     public override object? ToJSON() => ToString();
 
     /// <summary>Apply a Quill delta on this shared YText type.</summary>
@@ -627,12 +634,14 @@ public class YText : AbstractType
         else _pending!.Add(() => SetAttribute(attributeName, attributeValue));
     }
 
+    /// <summary>Returns an attribute of the text type itself (not a formatting attribute), or null.</summary>
     public object? GetAttribute(string attributeName)
     {
         var v = TypeMapGet(this, attributeName);
         return v is Undefined ? null : v;
     }
 
+    /// <summary>Returns all attributes of the text type itself (not formatting attributes).</summary>
     public Dictionary<string, object?> GetAttributes() => TypeMapGetAll(this);
 
     internal override void WriteType(IUpdateEncoder encoder) => encoder.WriteTypeRef(ContentType.YTextRefID);

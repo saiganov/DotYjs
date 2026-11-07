@@ -10,6 +10,7 @@ namespace DotYjs;
 /// </summary>
 public sealed class RelativePosition : IEquatable<RelativePosition>
 {
+    /// <summary>Creates a relative position from its parts; use <see cref="Create"/> or <see cref="FromTypeIndex"/> to create one from a type.</summary>
     public RelativePosition(ID? type, string? tname, ID? item, long assoc = 0)
     {
         Type = type;
@@ -78,6 +79,7 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
 
     // ---- encoding ----
 
+    /// <summary>Writes the position in the yjs binary format.</summary>
     public void Write(Encoder encoder)
     {
         if (Item != null)
@@ -104,6 +106,7 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
         encoder.WriteVarInt(Assoc);
     }
 
+    /// <summary>Encodes the position in the yjs binary format (yjs encodeRelativePosition).</summary>
     public byte[] Encode()
     {
         var encoder = new Encoder();
@@ -111,6 +114,7 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
         return encoder.ToArray();
     }
 
+    /// <summary>Reads a position written by <see cref="Write"/>.</summary>
     public static RelativePosition Read(Decoder decoder)
     {
         ID? type = null;
@@ -126,6 +130,7 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
         return new RelativePosition(type, tname, itemId, assoc);
     }
 
+    /// <summary>Decodes a position encoded by <see cref="Encode"/> or by yjs encodeRelativePosition.</summary>
     public static RelativePosition Decode(byte[] data) => Read(new Decoder(data));
 
     /// <summary>JSON-like representation compatible with yjs <c>relativePositionToJSON</c>.</summary>
@@ -139,6 +144,7 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
         return json;
     }
 
+    /// <summary>Creates a position from its JSON form (yjs createRelativePositionFromJSON).</summary>
     public static RelativePosition FromJSON(IReadOnlyDictionary<string, object?> json)
     {
         return new RelativePosition(
@@ -216,17 +222,22 @@ public sealed class RelativePosition : IEquatable<RelativePosition>
         return new AbsolutePosition(type, index, Assoc);
     }
 
+    /// <inheritdoc />
     public bool Equals(RelativePosition? other) =>
         other is not null && TName == other.TName && ID.Compare(Item, other.Item) && ID.Compare(Type, other.Type) && Assoc == other.Assoc;
 
+    /// <inheritdoc />
     public override bool Equals(object? obj) => obj is RelativePosition rp && Equals(rp);
+    /// <inheritdoc />
     public override int GetHashCode() => HashCode.Combine(Type, TName, Item, Assoc);
+    /// <summary>Whether two positions are equal (both may be null).</summary>
     public static bool Compare(RelativePosition? a, RelativePosition? b) => ReferenceEquals(a, b) || (a is not null && a.Equals(b));
 }
 
 /// <summary>An absolute position: a type and an index into it.</summary>
 public sealed class AbsolutePosition
 {
+    /// <summary>Creates an absolute position.</summary>
     public AbsolutePosition(AbstractType type, long index, long assoc = 0)
     {
         Type = type;
@@ -234,7 +245,10 @@ public sealed class AbsolutePosition
         Assoc = assoc;
     }
 
+    /// <summary>The type the position points into.</summary>
     public AbstractType Type { get; }
+    /// <summary>The index in the type.</summary>
     public long Index { get; }
+    /// <summary>The association of the position (see <see cref="RelativePosition.Assoc"/>).</summary>
     public long Assoc { get; }
 }

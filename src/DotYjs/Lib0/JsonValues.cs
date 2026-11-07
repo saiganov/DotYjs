@@ -27,12 +27,14 @@ public static class JsonValues
         }
     }
 
+    /// <summary>Parses JSON into the plain value model.</summary>
     public static object? Parse(string json)
     {
         using var doc = JsonDocument.Parse(json);
         return FromJsonElement(doc.RootElement);
     }
 
+    /// <summary>Converts a <see cref="JsonElement"/> into the plain value model.</summary>
     public static object? FromJsonElement(JsonElement e)
     {
         switch (e.ValueKind)
@@ -67,6 +69,7 @@ public static class JsonValues
         }
     }
 
+    /// <summary>Converts a <see cref="JsonNode"/> into the plain value model.</summary>
     public static object? FromJsonNode(JsonNode? node)
     {
         if (node is null) return null;

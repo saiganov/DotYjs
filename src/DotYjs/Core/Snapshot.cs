@@ -5,6 +5,7 @@ namespace DotYjs;
 /// <summary>A snapshot of a document: its delete set and state vector at some point in time.</summary>
 public sealed class Snapshot
 {
+    /// <summary>Creates a snapshot from a delete set and a state vector.</summary>
     public Snapshot(DeleteSet ds, Dictionary<long, long> sv)
     {
         Ds = ds;
@@ -17,8 +18,10 @@ public sealed class Snapshot
     /// <summary>The state vector.</summary>
     public Dictionary<long, long> Sv { get; }
 
+    /// <summary>A snapshot of an empty document.</summary>
     public static Snapshot Empty => new(new DeleteSet(), new Dictionary<long, long>());
 
+    /// <summary>Whether two snapshots describe the same state.</summary>
     public static bool Equal(Snapshot snap1, Snapshot snap2)
     {
         var sv1 = snap1.Sv;
@@ -31,6 +34,7 @@ public sealed class Snapshot
         return DeleteSet.Equal(snap1.Ds, snap2.Ds);
     }
 
+    /// <summary>Encodes the snapshot with the v2 encoding (yjs encodeSnapshotV2).</summary>
     public byte[] EncodeV2(IDSEncoder? encoder = null)
     {
         encoder ??= new DSEncoderV2();
@@ -39,14 +43,17 @@ public sealed class Snapshot
         return encoder.ToArray();
     }
 
+    /// <summary>Encodes the snapshot with the v1 encoding (yjs encodeSnapshot).</summary>
     public byte[] Encode() => EncodeV2(new DSEncoderV1());
 
+    /// <summary>Decodes a snapshot encoded by <see cref="EncodeV2"/> (yjs decodeSnapshotV2).</summary>
     public static Snapshot DecodeV2(byte[] buf, IDSDecoder? decoder = null)
     {
         decoder ??= new DSDecoderV2(new Decoder(buf));
         return new Snapshot(DeleteSet.Read(decoder), UpdateCodec.ReadStateVector(decoder));
     }
 
+    /// <summary>Decodes a snapshot encoded by <see cref="Encode"/> (yjs decodeSnapshot).</summary>
     public static Snapshot Decode(byte[] buf) => DecodeV2(buf, new DSDecoderV1(new Decoder(buf)));
 
     /// <summary>Creates a snapshot of the current state of a document.</summary>
@@ -110,6 +117,7 @@ public sealed class Snapshot
         return newDoc;
     }
 
+    /// <summary>Whether everything in the v2 <paramref name="update"/> is contained in this snapshot.</summary>
     public bool ContainsUpdateV2(byte[] update, Func<Decoder, IUpdateDecoder>? decoderFactory = null)
     {
         var updateDecoder = (decoderFactory ?? (d => new UpdateDecoderV2(d)))(new Decoder(update));
@@ -122,5 +130,6 @@ public sealed class Snapshot
         return DeleteSet.Equal(Ds, mergedDS);
     }
 
+    /// <summary>Whether everything in the v1 <paramref name="update"/> is contained in this snapshot.</summary>
     public bool ContainsUpdate(byte[] update) => ContainsUpdateV2(update, d => new UpdateDecoderV1(d));
 }

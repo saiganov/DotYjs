@@ -79,13 +79,16 @@ internal sealed class LazyStructWriter
 /// <summary>A decoded update: the list of structs and the delete set.</summary>
 public sealed class DecodedUpdate
 {
+    /// <summary>Creates a decoded update.</summary>
     public DecodedUpdate(List<AbstractStruct> structs, DeleteSet ds)
     {
         Structs = structs;
         Ds = ds;
     }
 
+    /// <summary>The structs of the update, sorted by client and clock.</summary>
     public List<AbstractStruct> Structs { get; }
+    /// <summary>The delete set of the update.</summary>
     public DeleteSet Ds { get; }
 }
 
@@ -97,8 +100,10 @@ public static class Updates
     private static Func<IUpdateEncoder> V1Encoder => () => new UpdateEncoderV1();
     private static Func<IUpdateEncoder> V2Encoder => () => new UpdateEncoderV2();
 
+    /// <summary>Decodes a v1 update into its structs and delete set (yjs decodeUpdate).</summary>
     public static DecodedUpdate DecodeUpdate(byte[] update) => DecodeUpdateV2(update, V1Decoder);
 
+    /// <summary>Decodes an update (v2 by default) into its structs and delete set (yjs decodeUpdateV2).</summary>
     public static DecodedUpdate DecodeUpdateV2(byte[] update, Func<Decoder, IUpdateDecoder>? decoderFactory = null)
     {
         var structs = new List<AbstractStruct>();
@@ -108,8 +113,10 @@ public static class Updates
         return new DecodedUpdate(structs, DeleteSet.Read(updateDecoder));
     }
 
+    /// <summary>Merges v1 updates into one v1 update without loading them into a document (yjs mergeUpdates).</summary>
     public static byte[] MergeUpdates(IReadOnlyList<byte[]> updates) => MergeUpdatesV2(updates, V1Decoder, V1Encoder);
 
+    /// <summary>Computes the state vector of an update (v2 by default) without loading it into a document (yjs encodeStateVectorFromUpdateV2).</summary>
     public static byte[] EncodeStateVectorFromUpdateV2(byte[] update, Func<IDSEncoder>? encoderFactory = null, Func<Decoder, IUpdateDecoder>? decoderFactory = null)
     {
         var encoder = (encoderFactory ?? (() => new DSEncoderV2()))();
@@ -158,6 +165,7 @@ public static class Updates
         return encoder.ToArray();
     }
 
+    /// <summary>Computes the state vector of a v1 update without loading it into a document (yjs encodeStateVectorFromUpdate).</summary>
     public static byte[] EncodeStateVectorFromUpdate(byte[] update) => EncodeStateVectorFromUpdateV2(update, () => new DSEncoderV1(), V1Decoder);
 
     /// <summary>Returns, per client, the clock range (from, to) covered by the update.</summary>
@@ -193,6 +201,7 @@ public static class Updates
         return (from, to);
     }
 
+    /// <summary>Returns the clock range per client that a v1 update covers: the first clock (from) and the next clock after it (to) (yjs parseUpdateMeta).</summary>
     public static (Dictionary<long, long> from, Dictionary<long, long> to) ParseUpdateMeta(byte[] update) => ParseUpdateMetaV2(update, V1Decoder);
 
     /// <summary>This method is intended to slice any kind of struct and retrieve the right part. It does not handle side-effects, so it should only be used by the lazy-encoder.</summary>
@@ -451,6 +460,7 @@ public static class Updates
         return encoder.ToArray();
     }
 
+    /// <summary>Returns the part of a v1 update that a client with the state vector <paramref name="sv"/> is missing (yjs diffUpdate).</summary>
     public static byte[] DiffUpdate(byte[] update, byte[] sv) => DiffUpdateV2(update, sv, V1Decoder, V1Encoder);
 
     private static void FlushLazyStructWriter(LazyStructWriter lazyWriter)
@@ -512,6 +522,7 @@ public static class Updates
         }
     }
 
+    /// <summary>Re-encodes an update, transforming every struct with <paramref name="blockTransformer"/> (yjs convertUpdateFormat).</summary>
     public static byte[] ConvertUpdateFormat(byte[] update, Func<AbstractStruct, AbstractStruct> blockTransformer, Func<Decoder, IUpdateDecoder> decoderFactory, Func<IUpdateEncoder> encoderFactory)
     {
         var updateDecoder = decoderFactory(new Decoder(update));
@@ -528,7 +539,9 @@ public static class Updates
         return updateEncoder.ToArray();
     }
 
+    /// <summary>Converts a v1 update to the v2 format (yjs convertUpdateFormatV1ToV2).</summary>
     public static byte[] ConvertUpdateFormatV1ToV2(byte[] update) => ConvertUpdateFormat(update, s => s, V1Decoder, V2Encoder);
 
+    /// <summary>Converts a v2 update to the v1 format (yjs convertUpdateFormatV2ToV1).</summary>
     public static byte[] ConvertUpdateFormatV2ToV1(byte[] update) => ConvertUpdateFormat(update, s => s, V2Decoder, V1Encoder);
 }

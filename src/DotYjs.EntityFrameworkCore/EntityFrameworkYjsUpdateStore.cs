@@ -13,8 +13,10 @@ public sealed class EntityFrameworkYjsUpdateStore<TContext> : IYjsUpdateStore wh
 {
     private readonly IServiceScopeFactory _scopes;
 
+    /// <summary>Creates the store; every operation runs in its own service scope with its own DbContext.</summary>
     public EntityFrameworkYjsUpdateStore(IServiceScopeFactory scopes) => _scopes = scopes;
 
+    /// <inheritdoc />
     public async Task<IReadOnlyList<StoredUpdate>> LoadAsync(string docName, CancellationToken cancellationToken)
     {
         var scope = _scopes.CreateAsyncScope();
@@ -29,6 +31,7 @@ public sealed class EntityFrameworkYjsUpdateStore<TContext> : IYjsUpdateStore wh
         }
     }
 
+    /// <inheritdoc />
     public async Task<long> AppendAsync(string docName, byte[] update, CancellationToken cancellationToken)
     {
         var scope = _scopes.CreateAsyncScope();
@@ -42,6 +45,7 @@ public sealed class EntityFrameworkYjsUpdateStore<TContext> : IYjsUpdateStore wh
         }
     }
 
+    /// <inheritdoc />
     public async Task<long> CompactAsync(string docName, byte[] state, IReadOnlyCollection<long> replacedIds, CancellationToken cancellationToken)
     {
         var scope = _scopes.CreateAsyncScope();
@@ -70,6 +74,7 @@ public sealed class EntityFrameworkYjsUpdateStore<TContext> : IYjsUpdateStore wh
     }
 }
 
+/// <summary>Registers the Entity Framework Core document persistence in the service collection.</summary>
 public static class YjsEntityFrameworkServiceCollectionExtensions
 {
     /// <summary>

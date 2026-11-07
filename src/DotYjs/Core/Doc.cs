@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 
 namespace DotYjs;
 
+/// <summary>Options for creating a <see cref="Doc"/>.</summary>
 public sealed class DocOptions
 {
     /// <summary>Globally unique identifier for this document. Defaults to a random UUID.</summary>
@@ -26,8 +27,10 @@ public sealed class DocOptions
     public bool ShouldLoad { get; set; } = true;
 }
 
+/// <summary>Arguments of <see cref="Doc.SubdocsChanged"/>: the subdocuments that were loaded, added or removed in a transaction.</summary>
 public sealed class SubdocsEventArgs
 {
+    /// <summary>Creates the event arguments.</summary>
     public SubdocsEventArgs(IReadOnlySet<Doc> loaded, IReadOnlySet<Doc> added, IReadOnlySet<Doc> removed)
     {
         Loaded = loaded;
@@ -35,8 +38,11 @@ public sealed class SubdocsEventArgs
         Removed = removed;
     }
 
+    /// <summary>Subdocuments that requested to be loaded.</summary>
     public IReadOnlySet<Doc> Loaded { get; }
+    /// <summary>Subdocuments that were added to the document.</summary>
     public IReadOnlySet<Doc> Added { get; }
+    /// <summary>Subdocuments that were removed from the document.</summary>
     public IReadOnlySet<Doc> Removed { get; }
 }
 
@@ -46,8 +52,10 @@ public sealed class Doc
     private readonly TaskCompletionSource<Doc> _whenLoaded = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private TaskCompletionSource<bool> _whenSynced = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
+    /// <summary>Creates a document with default options and a random client id.</summary>
     public Doc() : this(new DocOptions()) { }
 
+    /// <summary>Creates a document with the given options and a random client id.</summary>
     public Doc(DocOptions options)
     {
         Gc = options.Gc;
@@ -63,40 +71,61 @@ public sealed class Doc
     /// <summary>Generates a random 32-bit client id (like yjs).</summary>
     public static long GenerateNewClientId() => (long)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue) & 0xffffffffL;
 
+    /// <summary>Whether deleted content is garbage collected. Disable it to keep deleted content, for example for snapshots.</summary>
     public bool Gc { get; set; }
+    /// <summary>Called before an item is garbage collected. Return false to keep the item.</summary>
     public Func<Item, bool> GcFilter { get; set; }
+    /// <summary>The id of this client. It is part of the id of every element this client creates, so two clients must never share it.</summary>
     public long ClientID { get; set; }
+    /// <summary>Globally unique identifier of this document.</summary>
     public string Guid { get; internal set; }
+    /// <summary>The collection this document belongs to (only relevant for subdocuments).</summary>
     public string? CollectionId { get; internal set; }
+    /// <summary>Meta information associated with this document (sent with subdocuments).</summary>
     public object? Meta { get; }
+    /// <summary>Whether a subdocument is loaded automatically.</summary>
     public bool AutoLoad { get; }
+    /// <summary>Whether the document should be loaded and synced by providers.</summary>
     public bool ShouldLoad { get; internal set; }
+    /// <summary>Whether the document has been loaded (see <see cref="Load"/> and <see cref="Loaded"/>).</summary>
     public bool IsLoaded { get; private set; }
+    /// <summary>Whether a provider reported that the document is synced.</summary>
     public bool IsSynced { get; private set; }
+    /// <summary>Whether <see cref="Destroy"/> has been called.</summary>
     public bool IsDestroyed { get; private set; }
 
     /// <summary>The root types of this document by name.</summary>
     public Dictionary<string, AbstractType> Share { get; } = new();
 
+    /// <summary>All structs of this document, grouped by client.</summary>
     public StructStore Store { get; } = new();
 
     internal Transaction? CurrentTransaction { get; set; }
     internal List<Transaction> TransactionCleanups { get; set; } = new();
 
+    /// <summary>The subdocuments of this document.</summary>
     public HashSet<Doc> Subdocs { get; } = new();
 
     /// <summary>If this document is a subdocument, a reference to the item containing it.</summary>
     public Item? Item { get; internal set; }
 
+    /// <summary>Completes when the document is loaded.</summary>
     public Task<Doc> WhenLoaded => _whenLoaded.Task;
+    /// <summary>Completes when a provider reports that the document is synced.</summary>
     public Task WhenSynced => _whenSynced.Task;
 
     // ---- events ----
+    /// <summary>Raised before the first transaction of a batch of nested transactions starts.</summary>
     public event Action<Doc>? BeforeAllTransactions;
+    /// <summary>Raised when a transaction starts.</summary>
     public event Action<Transaction, Doc>? BeforeTransaction;
+    /// <summary>Raised after a transaction, before the observers of the changed types are called.</summary>
     public event Action<Transaction, Doc>? BeforeObserverCalls;
+    /// <summary>Raised after a transaction, after the observers were called.</summary>
     public event Action<Transaction, Doc>? AfterTransaction;
+    /// <summary>Raised after a transaction has been cleaned up (garbage collection, merged structs).</summary>
     public event Action<Transaction, Doc>? AfterTransactionCleanup;
+    /// <summary>Raised after all transactions of a batch have been cleaned up.</summary>
     public event Action<Doc, IReadOnlyList<Transaction>>? AfterAllTransactions;
 
     /// <summary>Emitted with a v1-encoded update after every transaction that changed the document.</summary>
@@ -105,8 +134,11 @@ public sealed class Doc
     /// <summary>Emitted with a v2-encoded update after every transaction that changed the document.</summary>
     public event Action<byte[], object?, Doc, Transaction>? UpdateV2;
 
+    /// <summary>Raised when subdocuments were added, removed or requested to be loaded.</summary>
     public event Action<SubdocsEventArgs, Doc, Transaction>? SubdocsChanged;
+    /// <summary>Raised when the document is destroyed.</summary>
     public event Action<Doc>? Destroyed;
+    /// <summary>Raised when the document is loaded.</summary>
     public event Action<Doc>? Loaded;
 
     internal bool HasUpdateListeners => Update != null;
@@ -156,6 +188,7 @@ public sealed class Doc
         ShouldLoad = true;
     }
 
+    /// <summary>The guids of all subdocuments.</summary>
     public IReadOnlySet<string> GetSubdocGuids() => Subdocs.Select(d => d.Guid).ToHashSet();
 
     /// <summary>
@@ -165,6 +198,7 @@ public sealed class Doc
     /// </summary>
     public void Transact(Action<Transaction> f, object? origin = null) => Transaction.Transact(this, f, origin);
 
+    /// <summary>Runs <paramref name="f"/> in a transaction (see <see cref="Transact(Action{Transaction}, object?)"/>) and returns its result.</summary>
     public T Transact<T>(Func<Transaction, T> f, object? origin = null) => Transaction.Transact(this, f, origin);
 
     /// <summary>Returns the root type with the given name, creating it if necessary (untyped).</summary>
@@ -223,10 +257,15 @@ public sealed class Doc
         throw new InvalidOperationException($"Type with the name {name} has already been defined with a different constructor");
     }
 
+    /// <summary>Returns the root <see cref="YArray"/> with the given name, creating it if necessary.</summary>
     public YArray GetArray(string name = "") => Get<YArray>(name);
+    /// <summary>Returns the root <see cref="YText"/> with the given name, creating it if necessary.</summary>
     public YText GetText(string name = "") => Get<YText>(name);
+    /// <summary>Returns the root <see cref="YMap"/> with the given name, creating it if necessary.</summary>
     public YMap GetMap(string name = "") => Get<YMap>(name);
+    /// <summary>Returns the root <see cref="YXmlElement"/> with the given name, creating it if necessary.</summary>
     public YXmlElement GetXmlElement(string name = "") => Get<YXmlElement>(name);
+    /// <summary>Returns the root <see cref="YXmlFragment"/> with the given name, creating it if necessary.</summary>
     public YXmlFragment GetXmlFragment(string name = "") => Get<YXmlFragment>(name);
 
     /// <summary>Converts the entire document into a JSON-like value (Dictionary of root names to values).</summary>
@@ -273,5 +312,6 @@ public sealed class Doc
         Loaded = null;
     }
 
+    /// <inheritdoc />
     public override string ToString() => $"Doc({Guid})";
 }

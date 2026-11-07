@@ -13,6 +13,7 @@ public sealed class YjsWebSocketHandler
     private readonly YjsOptions _options;
     private readonly ILogger<YjsWebSocketHandler> _logger;
 
+    /// <summary>Creates the handler.</summary>
     public YjsWebSocketHandler(YjsDocumentManager documents, IOptions<YjsOptions> options, ILogger<YjsWebSocketHandler> logger)
     {
         _documents = documents;

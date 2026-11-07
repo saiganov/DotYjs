@@ -13,18 +13,22 @@ public class Encoder
     private byte[] _buf;
     private int _pos;
 
+    /// <summary>Creates an encoder with the given initial buffer size.</summary>
     public Encoder(int initialCapacity = 64)
     {
         _buf = new byte[Math.Max(initialCapacity, 16)];
     }
 
+    /// <summary>Whether anything has been written.</summary>
     public bool HasContent => _pos > 0;
 
     /// <summary>Number of bytes written so far.</summary>
     public int Length => _pos;
 
+    /// <summary>Returns a copy of the written bytes.</summary>
     public byte[] ToArray() => _buf.AsSpan(0, _pos).ToArray();
 
+    /// <summary>Returns the written bytes without copying; valid until the next write.</summary>
     public ReadOnlySpan<byte> AsSpan() => _buf.AsSpan(0, _pos);
 
     private void Ensure(int extra)
@@ -37,20 +41,24 @@ public class Encoder
         }
     }
 
+    /// <summary>Writes one byte.</summary>
     public void Write(byte b)
     {
         if (_pos == _buf.Length) Ensure(1);
         _buf[_pos++] = b;
     }
 
+    /// <summary>Writes the lowest byte of <paramref name="b"/>.</summary>
     public void WriteUint8(int b) => Write((byte)b);
 
+    /// <summary>Writes a 16-bit unsigned integer (little endian).</summary>
     public void WriteUint16(int num)
     {
         Write((byte)(num & 0xff));
         Write((byte)((num >> 8) & 0xff));
     }
 
+    /// <summary>Writes a 32-bit unsigned integer (little endian).</summary>
     public void WriteUint32(uint num)
     {
         for (int i = 0; i < 4; i++)
@@ -60,6 +68,7 @@ public class Encoder
         }
     }
 
+    /// <summary>Writes a 32-bit unsigned integer (big endian).</summary>
     public void WriteUint32BigEndian(uint num)
     {
         for (int i = 3; i >= 0; i--) Write((byte)((num >> (8 * i)) & 0xff));
@@ -95,6 +104,7 @@ public class Encoder
         }
     }
 
+    /// <summary>Writes the bytes as they are.</summary>
     public void WriteUint8Array(ReadOnlySpan<byte> data)
     {
         Ensure(data.Length);
@@ -102,12 +112,14 @@ public class Encoder
         _pos += data.Length;
     }
 
+    /// <summary>Writes a byte array prefixed with its length as a var uint.</summary>
     public void WriteVarUint8Array(ReadOnlySpan<byte> data)
     {
         WriteVarUint(data.Length);
         WriteUint8Array(data);
     }
 
+    /// <summary>Writes a UTF-8 string prefixed with its byte length as a var uint (lib0 writeVarString).</summary>
     public void WriteVarString(string str)
     {
         int max = Encoding.UTF8.GetMaxByteCount(str.Length);
@@ -125,6 +137,7 @@ public class Encoder
         }
     }
 
+    /// <summary>Writes a byte array terminated by 0, escaping the bytes 0 and 1 (lib0 writeTerminatedUint8Array).</summary>
     public void WriteTerminatedUint8Array(ReadOnlySpan<byte> buf)
     {
         foreach (var b in buf)
@@ -135,8 +148,10 @@ public class Encoder
         Write(0);
     }
 
+    /// <summary>Writes a UTF-8 string terminated by 0 (lib0 writeTerminatedString).</summary>
     public void WriteTerminatedString(string str) => WriteTerminatedUint8Array(Encoding.UTF8.GetBytes(str));
 
+    /// <summary>Writes a 32-bit float (big endian).</summary>
     public void WriteFloat32(float num)
     {
         Ensure(4);
@@ -144,6 +159,7 @@ public class Encoder
         _pos += 4;
     }
 
+    /// <summary>Writes a 64-bit float (big endian).</summary>
     public void WriteFloat64(double num)
     {
         Ensure(8);
@@ -151,6 +167,7 @@ public class Encoder
         _pos += 8;
     }
 
+    /// <summary>Writes a 64-bit signed integer (big endian).</summary>
     public void WriteBigInt64(long num)
     {
         Ensure(8);
@@ -158,6 +175,7 @@ public class Encoder
         _pos += 8;
     }
 
+    /// <summary>Writes a 64-bit unsigned integer (big endian).</summary>
     public void WriteBigUint64(ulong num)
     {
         Ensure(8);
@@ -288,8 +306,10 @@ public class Encoder
 /// <summary>Represents JavaScript's <c>undefined</c> value.</summary>
 public sealed class Undefined
 {
+    /// <summary>The single <c>undefined</c> value.</summary>
     public static readonly Undefined Value = new();
     private Undefined() { }
+    /// <inheritdoc />
     public override string ToString() => "undefined";
 }
 
