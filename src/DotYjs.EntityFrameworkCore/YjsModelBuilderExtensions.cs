@@ -1,0 +1,34 @@
+using Microsoft.EntityFrameworkCore;
+
+namespace DotYjs.EntityFrameworkCore;
+
+public static class YjsModelBuilderExtensions
+{
+    /// <summary>
+    /// Adds the <see cref="YjsUpdateEntity"/> table to a model. Call it from <c>OnModelCreating</c> of the
+    /// <see cref="DbContext"/> passed to <see cref="YjsEntityFrameworkServiceCollectionExtensions.AddYjsEntityFrameworkPersistence{TContext}"/>
+    /// (not needed when using <see cref="YjsDbContext"/>).
+    /// </summary>
+    public static ModelBuilder AddYjs(this ModelBuilder modelBuilder, string tableName = "YjsUpdates")
+    {
+        modelBuilder.Entity<YjsUpdateEntity>(e =>
+        {
+            e.ToTable(tableName);
+            e.HasKey(x => x.Id);
+            e.Property(x => x.DocName).HasMaxLength(512).IsRequired();
+            e.Property(x => x.Update).IsRequired();
+            e.HasIndex(x => x.DocName);
+        });
+        return modelBuilder;
+    }
+}
+
+/// <summary>A ready-to-use context holding only the Yjs table, for applications without their own DbContext.</summary>
+public class YjsDbContext : DbContext
+{
+    public YjsDbContext(DbContextOptions<YjsDbContext> options) : base(options) { }
+
+    public DbSet<YjsUpdateEntity> YjsUpdates => Set<YjsUpdateEntity>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.AddYjs();
+}

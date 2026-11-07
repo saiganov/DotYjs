@@ -1,0 +1,810 @@
+#nullable enable
+DotYjs.AbsolutePosition
+DotYjs.AbsolutePosition.AbsolutePosition(DotYjs.AbstractType! type, long index, long assoc = 0) -> void
+DotYjs.AbsolutePosition.Assoc.get -> long
+DotYjs.AbsolutePosition.Index.get -> long
+DotYjs.AbsolutePosition.Type.get -> DotYjs.AbstractType!
+DotYjs.AbstractContent
+DotYjs.AbstractContent.AbstractContent() -> void
+DotYjs.AbstractStruct
+DotYjs.AbstractStruct.AbstractStruct(DotYjs.ID! id, long length) -> void
+DotYjs.AbstractStruct.Id.get -> DotYjs.ID!
+DotYjs.AbstractStruct.Length.get -> long
+DotYjs.AbstractType
+DotYjs.AbstractType.AbstractType() -> void
+DotYjs.AbstractType.Doc.get -> DotYjs.Doc?
+DotYjs.AbstractType.Item.get -> DotYjs.Item?
+DotYjs.AbstractType.Observe(System.Action<DotYjs.YEvent!, DotYjs.Transaction!>! f) -> void
+DotYjs.AbstractType.ObserveDeep(System.Action<System.Collections.Generic.IReadOnlyList<DotYjs.YEvent!>!, DotYjs.Transaction!>! f) -> void
+DotYjs.AbstractType.Parent.get -> DotYjs.AbstractType?
+DotYjs.AbstractType.Unobserve(System.Action<DotYjs.YEvent!, DotYjs.Transaction!>! f) -> void
+DotYjs.AbstractType.UnobserveDeep(System.Action<System.Collections.Generic.IReadOnlyList<DotYjs.YEvent!>!, DotYjs.Transaction!>! f) -> void
+DotYjs.ChangeAction
+DotYjs.ChangeAction.Add = 0 -> DotYjs.ChangeAction
+DotYjs.ChangeAction.Delete = 2 -> DotYjs.ChangeAction
+DotYjs.ChangeAction.Update = 1 -> DotYjs.ChangeAction
+DotYjs.ContentAny
+DotYjs.ContentAny.Arr.get -> System.Collections.Generic.List<object?>!
+DotYjs.ContentAny.ContentAny(System.Collections.Generic.List<object?>! arr) -> void
+DotYjs.ContentBinary
+DotYjs.ContentBinary.Content.get -> byte[]!
+DotYjs.ContentBinary.ContentBinary(byte[]! content) -> void
+DotYjs.ContentDeleted
+DotYjs.ContentDeleted.ContentDeleted(long len) -> void
+DotYjs.ContentDeleted.Len.get -> long
+DotYjs.ContentDoc
+DotYjs.ContentDoc.ContentDoc(DotYjs.Doc! doc) -> void
+DotYjs.ContentDoc.Doc.get -> DotYjs.Doc!
+DotYjs.ContentDoc.Opts.get -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.ContentEmbed
+DotYjs.ContentEmbed.ContentEmbed(object? embed) -> void
+DotYjs.ContentEmbed.Embed.get -> object?
+DotYjs.ContentFormat
+DotYjs.ContentFormat.ContentFormat(string! key, object? value) -> void
+DotYjs.ContentFormat.Key.get -> string!
+DotYjs.ContentFormat.Value.get -> object?
+DotYjs.ContentJSON
+DotYjs.ContentJSON.Arr.get -> System.Collections.Generic.List<object?>!
+DotYjs.ContentJSON.ContentJSON(System.Collections.Generic.List<object?>! arr) -> void
+DotYjs.ContentString
+DotYjs.ContentString.ContentString(string! str) -> void
+DotYjs.ContentString.Str.get -> string!
+DotYjs.ContentType
+DotYjs.ContentType.ContentType(DotYjs.AbstractType! type) -> void
+DotYjs.ContentType.Type.get -> DotYjs.AbstractType!
+DotYjs.DSDecoderV1
+DotYjs.DSDecoderV1.DSDecoderV1(DotYjs.Lib0.Decoder! decoder) -> void
+DotYjs.DSDecoderV1.ReadDsClock() -> long
+DotYjs.DSDecoderV1.ReadDsLen() -> long
+DotYjs.DSDecoderV1.ResetDsCurVal() -> void
+DotYjs.DSDecoderV1.RestDecoder.get -> DotYjs.Lib0.Decoder!
+DotYjs.DSDecoderV2
+DotYjs.DSDecoderV2.DSDecoderV2(DotYjs.Lib0.Decoder! decoder) -> void
+DotYjs.DSDecoderV2.ReadDsClock() -> long
+DotYjs.DSDecoderV2.ReadDsLen() -> long
+DotYjs.DSDecoderV2.ResetDsCurVal() -> void
+DotYjs.DSDecoderV2.RestDecoder.get -> DotYjs.Lib0.Decoder!
+DotYjs.DSEncoderV1
+DotYjs.DSEncoderV1.DSEncoderV1() -> void
+DotYjs.DSEncoderV1.ResetDsCurVal() -> void
+DotYjs.DSEncoderV1.RestEncoder.get -> DotYjs.Lib0.Encoder!
+DotYjs.DSEncoderV1.WriteDsClock(long clock) -> void
+DotYjs.DSEncoderV1.WriteDsLen(long len) -> void
+DotYjs.DSEncoderV2
+DotYjs.DSEncoderV2.DSEncoderV2() -> void
+DotYjs.DSEncoderV2.ResetDsCurVal() -> void
+DotYjs.DSEncoderV2.RestEncoder.get -> DotYjs.Lib0.Encoder!
+DotYjs.DSEncoderV2.WriteDsClock(long clock) -> void
+DotYjs.DSEncoderV2.WriteDsLen(long len) -> void
+DotYjs.DecodedUpdate
+DotYjs.DecodedUpdate.DecodedUpdate(System.Collections.Generic.List<DotYjs.AbstractStruct!>! structs, DotYjs.DeleteSet! ds) -> void
+DotYjs.DecodedUpdate.Ds.get -> DotYjs.DeleteSet!
+DotYjs.DecodedUpdate.Structs.get -> System.Collections.Generic.List<DotYjs.AbstractStruct!>!
+DotYjs.DeleteItem
+DotYjs.DeleteItem.Clock.get -> long
+DotYjs.DeleteItem.DeleteItem(long clock, long len) -> void
+DotYjs.DeleteItem.Len.get -> long
+DotYjs.DeleteSet
+DotYjs.DeleteSet.Clients.get -> System.Collections.Generic.Dictionary<long, System.Collections.Generic.List<DotYjs.DeleteItem!>!>!
+DotYjs.DeleteSet.DeleteSet() -> void
+DotYjs.DeleteSet.IsDeleted(DotYjs.ID! id) -> bool
+DotYjs.DeltaOp
+DotYjs.DeltaOp.Attributes.get -> System.Collections.Generic.Dictionary<string!, object?>?
+DotYjs.DeltaOp.Attributes.set -> void
+DotYjs.DeltaOp.Delete.get -> long?
+DotYjs.DeltaOp.Delete.set -> void
+DotYjs.DeltaOp.DeltaOp() -> void
+DotYjs.DeltaOp.Insert.get -> object?
+DotYjs.DeltaOp.Insert.set -> void
+DotYjs.DeltaOp.IsInsert.get -> bool
+DotYjs.DeltaOp.Retain.get -> long?
+DotYjs.DeltaOp.Retain.set -> void
+DotYjs.DeltaOp.ToDictionary() -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.Doc
+DotYjs.Doc.AfterAllTransactions -> System.Action<DotYjs.Doc!, System.Collections.Generic.IReadOnlyList<DotYjs.Transaction!>!>?
+DotYjs.Doc.AfterTransaction -> System.Action<DotYjs.Transaction!, DotYjs.Doc!>?
+DotYjs.Doc.AfterTransactionCleanup -> System.Action<DotYjs.Transaction!, DotYjs.Doc!>?
+DotYjs.Doc.AutoLoad.get -> bool
+DotYjs.Doc.BeforeAllTransactions -> System.Action<DotYjs.Doc!>?
+DotYjs.Doc.BeforeObserverCalls -> System.Action<DotYjs.Transaction!, DotYjs.Doc!>?
+DotYjs.Doc.BeforeTransaction -> System.Action<DotYjs.Transaction!, DotYjs.Doc!>?
+DotYjs.Doc.ClientID.get -> long
+DotYjs.Doc.ClientID.set -> void
+DotYjs.Doc.CollectionId.get -> string?
+DotYjs.Doc.Destroy() -> void
+DotYjs.Doc.Destroyed -> System.Action<DotYjs.Doc!>?
+DotYjs.Doc.Doc() -> void
+DotYjs.Doc.Doc(DotYjs.DocOptions! options) -> void
+DotYjs.Doc.Gc.get -> bool
+DotYjs.Doc.Gc.set -> void
+DotYjs.Doc.GcFilter.get -> System.Func<DotYjs.Item!, bool>!
+DotYjs.Doc.GcFilter.set -> void
+DotYjs.Doc.Get(string! name) -> DotYjs.AbstractType!
+DotYjs.Doc.Get<T>(string! name) -> T!
+DotYjs.Doc.GetArray(string! name = "") -> DotYjs.YArray!
+DotYjs.Doc.GetMap(string! name = "") -> DotYjs.YMap!
+DotYjs.Doc.GetSubdocGuids() -> System.Collections.Generic.IReadOnlySet<string!>!
+DotYjs.Doc.GetText(string! name = "") -> DotYjs.YText!
+DotYjs.Doc.GetXmlElement(string! name = "") -> DotYjs.YXmlElement!
+DotYjs.Doc.GetXmlFragment(string! name = "") -> DotYjs.YXmlFragment!
+DotYjs.Doc.Guid.get -> string!
+DotYjs.Doc.IsDestroyed.get -> bool
+DotYjs.Doc.IsLoaded.get -> bool
+DotYjs.Doc.IsSynced.get -> bool
+DotYjs.Doc.Item.get -> DotYjs.Item?
+DotYjs.Doc.Load() -> void
+DotYjs.Doc.Loaded -> System.Action<DotYjs.Doc!>?
+DotYjs.Doc.MarkLoaded() -> void
+DotYjs.Doc.Meta.get -> object?
+DotYjs.Doc.SetSynced(bool isSynced = true) -> void
+DotYjs.Doc.Share.get -> System.Collections.Generic.Dictionary<string!, DotYjs.AbstractType!>!
+DotYjs.Doc.ShouldLoad.get -> bool
+DotYjs.Doc.Store.get -> DotYjs.StructStore!
+DotYjs.Doc.Subdocs.get -> System.Collections.Generic.HashSet<DotYjs.Doc!>!
+DotYjs.Doc.SubdocsChanged -> System.Action<DotYjs.SubdocsEventArgs!, DotYjs.Doc!, DotYjs.Transaction!>?
+DotYjs.Doc.ToJSON() -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.Doc.Transact(System.Action<DotYjs.Transaction!>! f, object? origin = null) -> void
+DotYjs.Doc.Transact<T>(System.Func<DotYjs.Transaction!, T>! f, object? origin = null) -> T
+DotYjs.Doc.Update -> System.Action<byte[]!, object?, DotYjs.Doc!, DotYjs.Transaction!>?
+DotYjs.Doc.UpdateV2 -> System.Action<byte[]!, object?, DotYjs.Doc!, DotYjs.Transaction!>?
+DotYjs.Doc.WhenLoaded.get -> System.Threading.Tasks.Task<DotYjs.Doc!>!
+DotYjs.Doc.WhenSynced.get -> System.Threading.Tasks.Task!
+DotYjs.DocOptions
+DotYjs.DocOptions.AutoLoad.get -> bool
+DotYjs.DocOptions.AutoLoad.set -> void
+DotYjs.DocOptions.CollectionId.get -> string?
+DotYjs.DocOptions.CollectionId.set -> void
+DotYjs.DocOptions.DocOptions() -> void
+DotYjs.DocOptions.Gc.get -> bool
+DotYjs.DocOptions.Gc.set -> void
+DotYjs.DocOptions.GcFilter.get -> System.Func<DotYjs.Item!, bool>?
+DotYjs.DocOptions.GcFilter.set -> void
+DotYjs.DocOptions.Guid.get -> string?
+DotYjs.DocOptions.Guid.set -> void
+DotYjs.DocOptions.Meta.get -> object?
+DotYjs.DocOptions.Meta.set -> void
+DotYjs.DocOptions.ShouldLoad.get -> bool
+DotYjs.DocOptions.ShouldLoad.set -> void
+DotYjs.EntryChange
+DotYjs.EntryChange.Action.get -> DotYjs.ChangeAction
+DotYjs.EntryChange.EntryChange(DotYjs.ChangeAction action, object? oldValue) -> void
+DotYjs.EntryChange.OldValue.get -> object?
+DotYjs.GC
+DotYjs.GC.GC(DotYjs.ID! id, long length) -> void
+DotYjs.ID
+DotYjs.ID.Client.get -> long
+DotYjs.ID.Clock.get -> long
+DotYjs.ID.Equals(DotYjs.ID? other) -> bool
+DotYjs.ID.ID(long client, long clock) -> void
+DotYjs.IDSDecoder
+DotYjs.IDSDecoder.ReadDsClock() -> long
+DotYjs.IDSDecoder.ReadDsLen() -> long
+DotYjs.IDSDecoder.ResetDsCurVal() -> void
+DotYjs.IDSDecoder.RestDecoder.get -> DotYjs.Lib0.Decoder!
+DotYjs.IDSEncoder
+DotYjs.IDSEncoder.ResetDsCurVal() -> void
+DotYjs.IDSEncoder.RestEncoder.get -> DotYjs.Lib0.Encoder!
+DotYjs.IDSEncoder.ToArray() -> byte[]!
+DotYjs.IDSEncoder.WriteDsClock(long clock) -> void
+DotYjs.IDSEncoder.WriteDsLen(long len) -> void
+DotYjs.IUpdateDecoder
+DotYjs.IUpdateDecoder.ReadAny() -> object?
+DotYjs.IUpdateDecoder.ReadBuf() -> byte[]!
+DotYjs.IUpdateDecoder.ReadClient() -> long
+DotYjs.IUpdateDecoder.ReadInfo() -> byte
+DotYjs.IUpdateDecoder.ReadJSON() -> object?
+DotYjs.IUpdateDecoder.ReadKey() -> string!
+DotYjs.IUpdateDecoder.ReadLeftID() -> DotYjs.ID!
+DotYjs.IUpdateDecoder.ReadLen() -> long
+DotYjs.IUpdateDecoder.ReadParentInfo() -> bool
+DotYjs.IUpdateDecoder.ReadRightID() -> DotYjs.ID!
+DotYjs.IUpdateDecoder.ReadString() -> string!
+DotYjs.IUpdateDecoder.ReadTypeRef() -> int
+DotYjs.IUpdateEncoder
+DotYjs.IUpdateEncoder.WriteAny(object? any) -> void
+DotYjs.IUpdateEncoder.WriteBuf(byte[]! buf) -> void
+DotYjs.IUpdateEncoder.WriteClient(long client) -> void
+DotYjs.IUpdateEncoder.WriteInfo(byte info) -> void
+DotYjs.IUpdateEncoder.WriteJSON(object? embed) -> void
+DotYjs.IUpdateEncoder.WriteKey(string! key) -> void
+DotYjs.IUpdateEncoder.WriteLeftID(DotYjs.ID! id) -> void
+DotYjs.IUpdateEncoder.WriteLen(long len) -> void
+DotYjs.IUpdateEncoder.WriteParentInfo(bool isYKey) -> void
+DotYjs.IUpdateEncoder.WriteRightID(DotYjs.ID! id) -> void
+DotYjs.IUpdateEncoder.WriteString(string! s) -> void
+DotYjs.IUpdateEncoder.WriteTypeRef(int info) -> void
+DotYjs.Item
+DotYjs.Item.Content.get -> DotYjs.AbstractContent!
+DotYjs.Item.Countable.get -> bool
+DotYjs.Item.Item(DotYjs.ID! id, DotYjs.Item? left, DotYjs.ID? origin, DotYjs.Item? right, DotYjs.ID? rightOrigin, object? parent, string? parentSub, DotYjs.AbstractContent! content) -> void
+DotYjs.Item.Keep.get -> bool
+DotYjs.Item.LastId.get -> DotYjs.ID!
+DotYjs.Item.Left.get -> DotYjs.Item?
+DotYjs.Item.Next.get -> DotYjs.Item?
+DotYjs.Item.Origin.get -> DotYjs.ID?
+DotYjs.Item.Parent.get -> object?
+DotYjs.Item.ParentSub.get -> string?
+DotYjs.Item.Prev.get -> DotYjs.Item?
+DotYjs.Item.Redone.get -> DotYjs.ID?
+DotYjs.Item.Right.get -> DotYjs.Item?
+DotYjs.Item.RightOrigin.get -> DotYjs.ID?
+DotYjs.Lib0.Decoder
+DotYjs.Lib0.Decoder.Decoder(byte[]! data) -> void
+DotYjs.Lib0.Decoder.Decoder(byte[]! data, int offset, int length) -> void
+DotYjs.Lib0.Decoder.HasContent.get -> bool
+DotYjs.Lib0.Decoder.PeekUint8() -> byte
+DotYjs.Lib0.Decoder.PeekVarString() -> string!
+DotYjs.Lib0.Decoder.PeekVarUint() -> long
+DotYjs.Lib0.Decoder.Position.get -> int
+DotYjs.Lib0.Decoder.Position.set -> void
+DotYjs.Lib0.Decoder.ReadAny() -> object?
+DotYjs.Lib0.Decoder.ReadBigInt64() -> long
+DotYjs.Lib0.Decoder.ReadBigUint64() -> ulong
+DotYjs.Lib0.Decoder.ReadFloat32() -> float
+DotYjs.Lib0.Decoder.ReadFloat64() -> double
+DotYjs.Lib0.Decoder.ReadSpan(int len) -> System.ReadOnlySpan<byte>
+DotYjs.Lib0.Decoder.ReadTailAsUint8Array() -> byte[]!
+DotYjs.Lib0.Decoder.ReadTerminatedString() -> string!
+DotYjs.Lib0.Decoder.ReadTerminatedUint8Array() -> byte[]!
+DotYjs.Lib0.Decoder.ReadUint16() -> int
+DotYjs.Lib0.Decoder.ReadUint32() -> uint
+DotYjs.Lib0.Decoder.ReadUint32BigEndian() -> uint
+DotYjs.Lib0.Decoder.ReadUint8() -> byte
+DotYjs.Lib0.Decoder.ReadUint8Array(int len) -> byte[]!
+DotYjs.Lib0.Decoder.ReadVarInt() -> long
+DotYjs.Lib0.Decoder.ReadVarInt(out bool isNegative) -> long
+DotYjs.Lib0.Decoder.ReadVarString() -> string!
+DotYjs.Lib0.Decoder.ReadVarUint() -> long
+DotYjs.Lib0.Decoder.ReadVarUint8Array() -> byte[]!
+DotYjs.Lib0.Encoder
+DotYjs.Lib0.Encoder.AsSpan() -> System.ReadOnlySpan<byte>
+DotYjs.Lib0.Encoder.Encoder(int initialCapacity = 64) -> void
+DotYjs.Lib0.Encoder.HasContent.get -> bool
+DotYjs.Lib0.Encoder.Length.get -> int
+DotYjs.Lib0.Encoder.ToArray() -> byte[]!
+DotYjs.Lib0.Encoder.Write(byte b) -> void
+DotYjs.Lib0.Encoder.WriteAny(object? data) -> void
+DotYjs.Lib0.Encoder.WriteBigInt64(long num) -> void
+DotYjs.Lib0.Encoder.WriteBigUint64(ulong num) -> void
+DotYjs.Lib0.Encoder.WriteFloat32(float num) -> void
+DotYjs.Lib0.Encoder.WriteFloat64(double num) -> void
+DotYjs.Lib0.Encoder.WriteTerminatedString(string! str) -> void
+DotYjs.Lib0.Encoder.WriteTerminatedUint8Array(System.ReadOnlySpan<byte> buf) -> void
+DotYjs.Lib0.Encoder.WriteUint16(int num) -> void
+DotYjs.Lib0.Encoder.WriteUint32(uint num) -> void
+DotYjs.Lib0.Encoder.WriteUint32BigEndian(uint num) -> void
+DotYjs.Lib0.Encoder.WriteUint8(int b) -> void
+DotYjs.Lib0.Encoder.WriteUint8Array(System.ReadOnlySpan<byte> data) -> void
+DotYjs.Lib0.Encoder.WriteVarInt(long num, bool negativeZero = false) -> void
+DotYjs.Lib0.Encoder.WriteVarString(string! str) -> void
+DotYjs.Lib0.Encoder.WriteVarUint(long num) -> void
+DotYjs.Lib0.Encoder.WriteVarUint8Array(System.ReadOnlySpan<byte> data) -> void
+DotYjs.Lib0.JsonValues
+DotYjs.Lib0.Undefined
+DotYjs.OrderedMap<TKey, TValue>
+DotYjs.OrderedMap<TKey, TValue>.Clear() -> void
+DotYjs.OrderedMap<TKey, TValue>.ContainsKey(TKey key) -> bool
+DotYjs.OrderedMap<TKey, TValue>.Count.get -> int
+DotYjs.OrderedMap<TKey, TValue>.GetEnumerator() -> System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>>!
+DotYjs.OrderedMap<TKey, TValue>.Keys.get -> System.Collections.Generic.IEnumerable<TKey>!
+DotYjs.OrderedMap<TKey, TValue>.OrderedMap() -> void
+DotYjs.OrderedMap<TKey, TValue>.OrderedMap(System.Collections.Generic.IEqualityComparer<TKey>! comparer) -> void
+DotYjs.OrderedMap<TKey, TValue>.Remove(TKey key) -> bool
+DotYjs.OrderedMap<TKey, TValue>.TryGetValue(TKey key, out TValue value) -> bool
+DotYjs.OrderedMap<TKey, TValue>.Values.get -> System.Collections.Generic.IEnumerable<TValue>!
+DotYjs.OrderedMap<TKey, TValue>.this[TKey key].get -> TValue
+DotYjs.OrderedMap<TKey, TValue>.this[TKey key].set -> void
+DotYjs.PermanentUserData
+DotYjs.PermanentUserData.Clients.get -> System.Collections.Generic.IReadOnlyDictionary<long, string!>!
+DotYjs.PermanentUserData.DeleteSets.get -> System.Collections.Generic.IReadOnlyDictionary<string!, DotYjs.DeleteSet!>!
+DotYjs.PermanentUserData.Doc.get -> DotYjs.Doc!
+DotYjs.PermanentUserData.GetUserByClientId(long clientId) -> string?
+DotYjs.PermanentUserData.GetUserByDeletedId(DotYjs.ID! id) -> string?
+DotYjs.PermanentUserData.PermanentUserData(DotYjs.Doc! doc, DotYjs.YMap? storeType = null) -> void
+DotYjs.PermanentUserData.SetUserMapping(DotYjs.Doc! doc, long clientId, string! userDescription, System.Func<DotYjs.Transaction!, DotYjs.DeleteSet!, bool>? filter = null) -> void
+DotYjs.PermanentUserData.Users.get -> DotYjs.YMap!
+DotYjs.Protocols.Awareness
+DotYjs.Protocols.Awareness.ApplyUpdate(byte[]! update, object? origin) -> void
+DotYjs.Protocols.Awareness.Awareness(DotYjs.Doc! doc, bool runOutdatedCheck = true) -> void
+DotYjs.Protocols.Awareness.Change -> System.Action<DotYjs.Protocols.AwarenessChange!, object?>?
+DotYjs.Protocols.Awareness.CheckOutdated() -> void
+DotYjs.Protocols.Awareness.ClientID.get -> long
+DotYjs.Protocols.Awareness.Destroy() -> void
+DotYjs.Protocols.Awareness.Destroyed -> System.Action<DotYjs.Protocols.Awareness!>?
+DotYjs.Protocols.Awareness.Dispose() -> void
+DotYjs.Protocols.Awareness.Doc.get -> DotYjs.Doc!
+DotYjs.Protocols.Awareness.EncodeUpdate() -> byte[]!
+DotYjs.Protocols.Awareness.EncodeUpdate(System.Collections.Generic.IReadOnlyList<long>! clients, System.Collections.Generic.IReadOnlyDictionary<long, object?>? states = null) -> byte[]!
+DotYjs.Protocols.Awareness.GetLocalState() -> object?
+DotYjs.Protocols.Awareness.GetMeta() -> System.Collections.Generic.Dictionary<long, DotYjs.Protocols.MetaClientState!>!
+DotYjs.Protocols.Awareness.GetStates() -> System.Collections.Generic.Dictionary<long, object?>!
+DotYjs.Protocols.Awareness.RemoveStates(System.Collections.Generic.IReadOnlyList<long>! clients, object? origin) -> void
+DotYjs.Protocols.Awareness.SetLocalState(object? state) -> void
+DotYjs.Protocols.Awareness.SetLocalStateField(string! field, object? value) -> void
+DotYjs.Protocols.Awareness.Update -> System.Action<DotYjs.Protocols.AwarenessChange!, object?>?
+DotYjs.Protocols.AwarenessChange
+DotYjs.Protocols.AwarenessChange.Added.get -> System.Collections.Generic.IReadOnlyList<long>!
+DotYjs.Protocols.AwarenessChange.All.get -> System.Collections.Generic.IEnumerable<long>!
+DotYjs.Protocols.AwarenessChange.AwarenessChange(System.Collections.Generic.IReadOnlyList<long>! added, System.Collections.Generic.IReadOnlyList<long>! updated, System.Collections.Generic.IReadOnlyList<long>! removed) -> void
+DotYjs.Protocols.AwarenessChange.Removed.get -> System.Collections.Generic.IReadOnlyList<long>!
+DotYjs.Protocols.AwarenessChange.Updated.get -> System.Collections.Generic.IReadOnlyList<long>!
+DotYjs.Protocols.MetaClientState
+DotYjs.Protocols.MetaClientState.Clock.get -> long
+DotYjs.Protocols.MetaClientState.LastUpdated.get -> long
+DotYjs.Protocols.MetaClientState.MetaClientState(long clock, long lastUpdated) -> void
+DotYjs.Protocols.SyncProtocol
+DotYjs.Protocols.YWebSocketProtocol
+DotYjs.Protocols.YjsConnectionStatus
+DotYjs.Protocols.YjsConnectionStatus.Connected = 2 -> DotYjs.Protocols.YjsConnectionStatus
+DotYjs.Protocols.YjsConnectionStatus.Connecting = 1 -> DotYjs.Protocols.YjsConnectionStatus
+DotYjs.Protocols.YjsConnectionStatus.Disconnected = 0 -> DotYjs.Protocols.YjsConnectionStatus
+DotYjs.Protocols.YjsWebSocketProvider
+DotYjs.Protocols.YjsWebSocketProvider.Awareness.get -> DotYjs.Protocols.Awareness!
+DotYjs.Protocols.YjsWebSocketProvider.Connect() -> void
+DotYjs.Protocols.YjsWebSocketProvider.ConnectionError -> System.Action<System.Exception!>?
+DotYjs.Protocols.YjsWebSocketProvider.DisconnectAsync() -> System.Threading.Tasks.Task!
+DotYjs.Protocols.YjsWebSocketProvider.DisposeAsync() -> System.Threading.Tasks.ValueTask
+DotYjs.Protocols.YjsWebSocketProvider.Doc.get -> DotYjs.Doc!
+DotYjs.Protocols.YjsWebSocketProvider.PermissionDenied -> System.Action<string!>?
+DotYjs.Protocols.YjsWebSocketProvider.RoomName.get -> string!
+DotYjs.Protocols.YjsWebSocketProvider.ServerUrl.get -> string!
+DotYjs.Protocols.YjsWebSocketProvider.Status.get -> DotYjs.Protocols.YjsConnectionStatus
+DotYjs.Protocols.YjsWebSocketProvider.StatusChanged -> System.Action<DotYjs.Protocols.YjsConnectionStatus>?
+DotYjs.Protocols.YjsWebSocketProvider.Synced.get -> bool
+DotYjs.Protocols.YjsWebSocketProvider.SyncedChanged -> System.Action<bool>?
+DotYjs.Protocols.YjsWebSocketProvider.Url.get -> System.Uri!
+DotYjs.Protocols.YjsWebSocketProvider.WhenSynced.get -> System.Threading.Tasks.Task!
+DotYjs.Protocols.YjsWebSocketProvider.YjsWebSocketProvider(string! serverUrl, string! roomName, DotYjs.Doc! doc, DotYjs.Protocols.YjsWebSocketProviderOptions? options = null) -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions
+DotYjs.Protocols.YjsWebSocketProviderOptions.Awareness.get -> DotYjs.Protocols.Awareness?
+DotYjs.Protocols.YjsWebSocketProviderOptions.Awareness.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.ConfigureClientWebSocket.get -> System.Action<System.Net.WebSockets.ClientWebSocketOptions!>?
+DotYjs.Protocols.YjsWebSocketProviderOptions.ConfigureClientWebSocket.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.Connect.get -> bool
+DotYjs.Protocols.YjsWebSocketProviderOptions.Connect.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.MaxBackoffTime.get -> System.TimeSpan
+DotYjs.Protocols.YjsWebSocketProviderOptions.MaxBackoffTime.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.MaxMessageSize.get -> int
+DotYjs.Protocols.YjsWebSocketProviderOptions.MaxMessageSize.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.Params.get -> System.Collections.Generic.IDictionary<string!, string!>!
+DotYjs.Protocols.YjsWebSocketProviderOptions.ResyncInterval.get -> System.TimeSpan
+DotYjs.Protocols.YjsWebSocketProviderOptions.ResyncInterval.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.WebSocketFactory.get -> System.Func<System.Uri!, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Net.WebSockets.WebSocket!>!>?
+DotYjs.Protocols.YjsWebSocketProviderOptions.WebSocketFactory.set -> void
+DotYjs.Protocols.YjsWebSocketProviderOptions.YjsWebSocketProviderOptions() -> void
+DotYjs.RelativePosition
+DotYjs.RelativePosition.Assoc.get -> long
+DotYjs.RelativePosition.Encode() -> byte[]!
+DotYjs.RelativePosition.Equals(DotYjs.RelativePosition? other) -> bool
+DotYjs.RelativePosition.Item.get -> DotYjs.ID?
+DotYjs.RelativePosition.RelativePosition(DotYjs.ID? type, string? tname, DotYjs.ID? item, long assoc = 0) -> void
+DotYjs.RelativePosition.TName.get -> string?
+DotYjs.RelativePosition.ToAbsolutePosition(DotYjs.Doc! doc, bool followUndoneDeletions = true) -> DotYjs.AbsolutePosition?
+DotYjs.RelativePosition.ToJSON() -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.RelativePosition.Type.get -> DotYjs.ID?
+DotYjs.RelativePosition.Write(DotYjs.Lib0.Encoder! encoder) -> void
+DotYjs.Skip
+DotYjs.Skip.Skip(DotYjs.ID! id, long length) -> void
+DotYjs.Snapshot
+DotYjs.Snapshot.ContainsUpdate(byte[]! update) -> bool
+DotYjs.Snapshot.ContainsUpdateV2(byte[]! update, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null) -> bool
+DotYjs.Snapshot.Ds.get -> DotYjs.DeleteSet!
+DotYjs.Snapshot.Encode() -> byte[]!
+DotYjs.Snapshot.EncodeV2(DotYjs.IDSEncoder? encoder = null) -> byte[]!
+DotYjs.Snapshot.Snapshot(DotYjs.DeleteSet! ds, System.Collections.Generic.Dictionary<long, long>! sv) -> void
+DotYjs.Snapshot.Sv.get -> System.Collections.Generic.Dictionary<long, long>!
+DotYjs.StackClearedEvent
+DotYjs.StackClearedEvent.RedoStackCleared.get -> bool
+DotYjs.StackClearedEvent.StackClearedEvent(bool undoStackCleared, bool redoStackCleared) -> void
+DotYjs.StackClearedEvent.UndoStackCleared.get -> bool
+DotYjs.StackItem
+DotYjs.StackItem.Deletions.get -> DotYjs.DeleteSet!
+DotYjs.StackItem.Insertions.get -> DotYjs.DeleteSet!
+DotYjs.StackItem.Meta.get -> System.Collections.Generic.Dictionary<object!, object?>!
+DotYjs.StackItem.StackItem(DotYjs.DeleteSet! deletions, DotYjs.DeleteSet! insertions) -> void
+DotYjs.StackItemEvent
+DotYjs.StackItemEvent.ChangedParentTypes.get -> DotYjs.OrderedMap<DotYjs.AbstractType!, System.Collections.Generic.List<DotYjs.YEvent!>!>!
+DotYjs.StackItemEvent.Origin.get -> object?
+DotYjs.StackItemEvent.StackItem.get -> DotYjs.StackItem!
+DotYjs.StackItemEvent.StackItemEvent(DotYjs.StackItem! stackItem, object? origin, DotYjs.UndoRedoType type, DotYjs.OrderedMap<DotYjs.AbstractType!, System.Collections.Generic.List<DotYjs.YEvent!>!>! changedParentTypes) -> void
+DotYjs.StackItemEvent.Type.get -> DotYjs.UndoRedoType
+DotYjs.StructStore
+DotYjs.StructStore.Clients.get -> System.Collections.Generic.Dictionary<long, System.Collections.Generic.List<DotYjs.AbstractStruct!>!>!
+DotYjs.StructStore.GetState(long client) -> long
+DotYjs.StructStore.GetStateVector() -> System.Collections.Generic.Dictionary<long, long>!
+DotYjs.StructStore.StructStore() -> void
+DotYjs.SubdocsEventArgs
+DotYjs.SubdocsEventArgs.Added.get -> System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>!
+DotYjs.SubdocsEventArgs.Loaded.get -> System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>!
+DotYjs.SubdocsEventArgs.Removed.get -> System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>!
+DotYjs.SubdocsEventArgs.SubdocsEventArgs(System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>! loaded, System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>! added, System.Collections.Generic.IReadOnlySet<DotYjs.Doc!>! removed) -> void
+DotYjs.Transaction
+DotYjs.Transaction.AfterState.get -> System.Collections.Generic.Dictionary<long, long>!
+DotYjs.Transaction.BeforeState.get -> System.Collections.Generic.Dictionary<long, long>!
+DotYjs.Transaction.Changed.get -> DotYjs.OrderedMap<DotYjs.AbstractType!, System.Collections.Generic.HashSet<string?>!>!
+DotYjs.Transaction.ChangedParentTypes.get -> DotYjs.OrderedMap<DotYjs.AbstractType!, System.Collections.Generic.List<DotYjs.YEvent!>!>!
+DotYjs.Transaction.DeleteSet.get -> DotYjs.DeleteSet!
+DotYjs.Transaction.Doc.get -> DotYjs.Doc!
+DotYjs.Transaction.Local.get -> bool
+DotYjs.Transaction.Meta.get -> System.Collections.Generic.Dictionary<object!, object?>!
+DotYjs.Transaction.Origin.get -> object?
+DotYjs.Transaction.SubdocsAdded.get -> System.Collections.Generic.HashSet<DotYjs.Doc!>!
+DotYjs.Transaction.SubdocsLoaded.get -> System.Collections.Generic.HashSet<DotYjs.Doc!>!
+DotYjs.Transaction.SubdocsRemoved.get -> System.Collections.Generic.HashSet<DotYjs.Doc!>!
+DotYjs.UndoManager
+DotYjs.UndoManager.AddToScope(DotYjs.AbstractType! type) -> void
+DotYjs.UndoManager.AddToScope(System.Collections.Generic.IEnumerable<object!>! ytypes) -> void
+DotYjs.UndoManager.AddTrackedOrigin(object? origin) -> void
+DotYjs.UndoManager.CanRedo.get -> bool
+DotYjs.UndoManager.CanUndo.get -> bool
+DotYjs.UndoManager.CaptureTimeout.get -> int
+DotYjs.UndoManager.CaptureTimeout.set -> void
+DotYjs.UndoManager.CaptureTransaction.get -> System.Func<DotYjs.Transaction!, bool>!
+DotYjs.UndoManager.Clear(bool clearUndoStack = true, bool clearRedoStack = true) -> void
+DotYjs.UndoManager.CurrStackItem.get -> DotYjs.StackItem?
+DotYjs.UndoManager.DeleteFilter.get -> System.Func<DotYjs.Item!, bool>!
+DotYjs.UndoManager.Destroy() -> void
+DotYjs.UndoManager.Dispose() -> void
+DotYjs.UndoManager.Doc.get -> DotYjs.Doc!
+DotYjs.UndoManager.IgnoreRemoteMapChanges.get -> bool
+DotYjs.UndoManager.Redo() -> DotYjs.StackItem?
+DotYjs.UndoManager.RedoStack.get -> System.Collections.Generic.List<DotYjs.StackItem!>!
+DotYjs.UndoManager.Redoing.get -> bool
+DotYjs.UndoManager.RemoveTrackedOrigin(object? origin) -> void
+DotYjs.UndoManager.Scope.get -> System.Collections.Generic.List<object!>!
+DotYjs.UndoManager.StackCleared -> System.Action<DotYjs.StackClearedEvent!, DotYjs.UndoManager!>?
+DotYjs.UndoManager.StackItemAdded -> System.Action<DotYjs.StackItemEvent!, DotYjs.UndoManager!>?
+DotYjs.UndoManager.StackItemPopped -> System.Action<DotYjs.StackItemEvent!, DotYjs.UndoManager!>?
+DotYjs.UndoManager.StackItemUpdated -> System.Action<DotYjs.StackItemEvent!, DotYjs.UndoManager!>?
+DotYjs.UndoManager.StopCapturing() -> void
+DotYjs.UndoManager.TrackedOrigins.get -> System.Collections.Generic.HashSet<object?>!
+DotYjs.UndoManager.Undo() -> DotYjs.StackItem?
+DotYjs.UndoManager.UndoManager(DotYjs.AbstractType! type, DotYjs.UndoManagerOptions? options = null) -> void
+DotYjs.UndoManager.UndoManager(DotYjs.Doc! doc, DotYjs.UndoManagerOptions? options = null) -> void
+DotYjs.UndoManager.UndoManager(System.Collections.Generic.IEnumerable<DotYjs.AbstractType!>! types, DotYjs.UndoManagerOptions? options = null) -> void
+DotYjs.UndoManager.UndoManager(System.Collections.Generic.IReadOnlyList<object!>! typeScope, DotYjs.UndoManagerOptions? options = null) -> void
+DotYjs.UndoManager.UndoStack.get -> System.Collections.Generic.List<DotYjs.StackItem!>!
+DotYjs.UndoManager.Undoing.get -> bool
+DotYjs.UndoManagerOptions
+DotYjs.UndoManagerOptions.CaptureTimeout.get -> int
+DotYjs.UndoManagerOptions.CaptureTimeout.set -> void
+DotYjs.UndoManagerOptions.CaptureTransaction.get -> System.Func<DotYjs.Transaction!, bool>?
+DotYjs.UndoManagerOptions.CaptureTransaction.set -> void
+DotYjs.UndoManagerOptions.DeleteFilter.get -> System.Func<DotYjs.Item!, bool>?
+DotYjs.UndoManagerOptions.DeleteFilter.set -> void
+DotYjs.UndoManagerOptions.Doc.get -> DotYjs.Doc?
+DotYjs.UndoManagerOptions.Doc.set -> void
+DotYjs.UndoManagerOptions.IgnoreRemoteMapChanges.get -> bool
+DotYjs.UndoManagerOptions.IgnoreRemoteMapChanges.set -> void
+DotYjs.UndoManagerOptions.TrackedOrigins.get -> System.Collections.Generic.HashSet<object?>?
+DotYjs.UndoManagerOptions.TrackedOrigins.set -> void
+DotYjs.UndoManagerOptions.UndoManagerOptions() -> void
+DotYjs.UndoRedoType
+DotYjs.UndoRedoType.Redo = 1 -> DotYjs.UndoRedoType
+DotYjs.UndoRedoType.Undo = 0 -> DotYjs.UndoRedoType
+DotYjs.UpdateCodec
+DotYjs.UpdateDecoderV1
+DotYjs.UpdateDecoderV1.ReadAny() -> object?
+DotYjs.UpdateDecoderV1.ReadBuf() -> byte[]!
+DotYjs.UpdateDecoderV1.ReadClient() -> long
+DotYjs.UpdateDecoderV1.ReadInfo() -> byte
+DotYjs.UpdateDecoderV1.ReadJSON() -> object?
+DotYjs.UpdateDecoderV1.ReadKey() -> string!
+DotYjs.UpdateDecoderV1.ReadLeftID() -> DotYjs.ID!
+DotYjs.UpdateDecoderV1.ReadLen() -> long
+DotYjs.UpdateDecoderV1.ReadParentInfo() -> bool
+DotYjs.UpdateDecoderV1.ReadRightID() -> DotYjs.ID!
+DotYjs.UpdateDecoderV1.ReadString() -> string!
+DotYjs.UpdateDecoderV1.ReadTypeRef() -> int
+DotYjs.UpdateDecoderV1.UpdateDecoderV1(DotYjs.Lib0.Decoder! decoder) -> void
+DotYjs.UpdateDecoderV2
+DotYjs.UpdateDecoderV2.ReadAny() -> object?
+DotYjs.UpdateDecoderV2.ReadBuf() -> byte[]!
+DotYjs.UpdateDecoderV2.ReadClient() -> long
+DotYjs.UpdateDecoderV2.ReadInfo() -> byte
+DotYjs.UpdateDecoderV2.ReadJSON() -> object?
+DotYjs.UpdateDecoderV2.ReadKey() -> string!
+DotYjs.UpdateDecoderV2.ReadLeftID() -> DotYjs.ID!
+DotYjs.UpdateDecoderV2.ReadLen() -> long
+DotYjs.UpdateDecoderV2.ReadParentInfo() -> bool
+DotYjs.UpdateDecoderV2.ReadRightID() -> DotYjs.ID!
+DotYjs.UpdateDecoderV2.ReadString() -> string!
+DotYjs.UpdateDecoderV2.ReadTypeRef() -> int
+DotYjs.UpdateDecoderV2.UpdateDecoderV2(DotYjs.Lib0.Decoder! decoder) -> void
+DotYjs.UpdateEncoderV1
+DotYjs.UpdateEncoderV1.UpdateEncoderV1() -> void
+DotYjs.UpdateEncoderV1.WriteAny(object? any) -> void
+DotYjs.UpdateEncoderV1.WriteBuf(byte[]! buf) -> void
+DotYjs.UpdateEncoderV1.WriteClient(long client) -> void
+DotYjs.UpdateEncoderV1.WriteInfo(byte info) -> void
+DotYjs.UpdateEncoderV1.WriteJSON(object? embed) -> void
+DotYjs.UpdateEncoderV1.WriteKey(string! key) -> void
+DotYjs.UpdateEncoderV1.WriteLeftID(DotYjs.ID! id) -> void
+DotYjs.UpdateEncoderV1.WriteLen(long len) -> void
+DotYjs.UpdateEncoderV1.WriteParentInfo(bool isYKey) -> void
+DotYjs.UpdateEncoderV1.WriteRightID(DotYjs.ID! id) -> void
+DotYjs.UpdateEncoderV1.WriteString(string! s) -> void
+DotYjs.UpdateEncoderV1.WriteTypeRef(int info) -> void
+DotYjs.UpdateEncoderV2
+DotYjs.UpdateEncoderV2.UpdateEncoderV2() -> void
+DotYjs.UpdateEncoderV2.WriteAny(object? any) -> void
+DotYjs.UpdateEncoderV2.WriteBuf(byte[]! buf) -> void
+DotYjs.UpdateEncoderV2.WriteClient(long client) -> void
+DotYjs.UpdateEncoderV2.WriteInfo(byte info) -> void
+DotYjs.UpdateEncoderV2.WriteJSON(object? embed) -> void
+DotYjs.UpdateEncoderV2.WriteKey(string! key) -> void
+DotYjs.UpdateEncoderV2.WriteLeftID(DotYjs.ID! id) -> void
+DotYjs.UpdateEncoderV2.WriteLen(long len) -> void
+DotYjs.UpdateEncoderV2.WriteParentInfo(bool isYKey) -> void
+DotYjs.UpdateEncoderV2.WriteRightID(DotYjs.ID! id) -> void
+DotYjs.UpdateEncoderV2.WriteString(string! s) -> void
+DotYjs.UpdateEncoderV2.WriteTypeRef(int info) -> void
+DotYjs.Updates
+DotYjs.YArray
+DotYjs.YArray.Delete(int index, int length = 1) -> void
+DotYjs.YArray.Get(int index) -> object?
+DotYjs.YArray.GetEnumerator() -> System.Collections.Generic.IEnumerator<object?>!
+DotYjs.YArray.Insert(int index, System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YArray.Insert(int index, params object?[]! content) -> void
+DotYjs.YArray.Length.get -> int
+DotYjs.YArray.Push(System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YArray.Push(params object?[]! content) -> void
+DotYjs.YArray.Slice(int start = 0, int? end = null) -> System.Collections.Generic.List<object?>!
+DotYjs.YArray.ToArray() -> System.Collections.Generic.List<object?>!
+DotYjs.YArray.Unshift(System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YArray.YArray() -> void
+DotYjs.YArray.this[int index].get -> object?
+DotYjs.YArrayEvent
+DotYjs.YArrayEvent.YArrayEvent(DotYjs.YArray! target, DotYjs.Transaction! transaction) -> void
+DotYjs.YChanges
+DotYjs.YChanges.Added.get -> System.Collections.Generic.HashSet<DotYjs.Item!>!
+DotYjs.YChanges.Added.init -> void
+DotYjs.YChanges.Deleted.get -> System.Collections.Generic.HashSet<DotYjs.Item!>!
+DotYjs.YChanges.Deleted.init -> void
+DotYjs.YChanges.Delta.get -> System.Collections.Generic.List<DotYjs.DeltaOp!>!
+DotYjs.YChanges.Delta.init -> void
+DotYjs.YChanges.Keys.get -> System.Collections.Generic.Dictionary<string!, DotYjs.EntryChange!>!
+DotYjs.YChanges.Keys.init -> void
+DotYjs.YChanges.YChanges() -> void
+DotYjs.YEvent
+DotYjs.YEvent.Adds(DotYjs.AbstractStruct! s) -> bool
+DotYjs.YEvent.CurrentTarget.get -> DotYjs.AbstractType!
+DotYjs.YEvent.Deletes(DotYjs.AbstractStruct! s) -> bool
+DotYjs.YEvent.Keys.get -> System.Collections.Generic.Dictionary<string!, DotYjs.EntryChange!>!
+DotYjs.YEvent.Path.get -> System.Collections.Generic.IReadOnlyList<object!>!
+DotYjs.YEvent.Target.get -> DotYjs.AbstractType!
+DotYjs.YEvent.Transaction.get -> DotYjs.Transaction!
+DotYjs.YEvent.YEvent(DotYjs.AbstractType! target, DotYjs.Transaction! transaction) -> void
+DotYjs.YMap
+DotYjs.YMap.Clear() -> void
+DotYjs.YMap.Delete(string! key) -> void
+DotYjs.YMap.Get(string! key) -> object?
+DotYjs.YMap.GetEnumerator() -> System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<string!, object?>>!
+DotYjs.YMap.Has(string! key) -> bool
+DotYjs.YMap.Keys.get -> System.Collections.Generic.IEnumerable<string!>!
+DotYjs.YMap.Set<T>(string! key, T value) -> T
+DotYjs.YMap.Size.get -> int
+DotYjs.YMap.TryGet(string! key, out object? value) -> bool
+DotYjs.YMap.Values.get -> System.Collections.Generic.IEnumerable<object?>!
+DotYjs.YMap.YMap() -> void
+DotYjs.YMap.YMap(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string!, object?>>? entries) -> void
+DotYjs.YMap.this[string! key].get -> object?
+DotYjs.YMap.this[string! key].set -> void
+DotYjs.YMapEvent
+DotYjs.YMapEvent.KeysChanged.get -> System.Collections.Generic.HashSet<string?>!
+DotYjs.YMapEvent.YMapEvent(DotYjs.YMap! target, DotYjs.Transaction! transaction, System.Collections.Generic.HashSet<string?>! subs) -> void
+DotYjs.YText
+DotYjs.YText.ApplyDelta(System.Collections.Generic.IReadOnlyList<DotYjs.DeltaOp!>! delta, bool sanitize = true) -> void
+DotYjs.YText.Delete(int index, int length) -> void
+DotYjs.YText.Format(int index, int length, System.Collections.Generic.IDictionary<string!, object?>! attributes) -> void
+DotYjs.YText.GetAttribute(string! attributeName) -> object?
+DotYjs.YText.GetAttributes() -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.YText.Insert(int index, string! text, System.Collections.Generic.IDictionary<string!, object?>? attributes = null) -> void
+DotYjs.YText.InsertEmbed(int index, object! embed, System.Collections.Generic.IDictionary<string!, object?>? attributes = null) -> void
+DotYjs.YText.Length.get -> int
+DotYjs.YText.RemoveAttribute(string! attributeName) -> void
+DotYjs.YText.SetAttribute(string! attributeName, object? attributeValue) -> void
+DotYjs.YText.ToDelta(DotYjs.Snapshot? snapshot = null, DotYjs.Snapshot? prevSnapshot = null, System.Func<string!, DotYjs.ID!, object?>? computeYChange = null) -> System.Collections.Generic.List<DotYjs.DeltaOp!>!
+DotYjs.YText.YText() -> void
+DotYjs.YText.YText(string? str) -> void
+DotYjs.YTextEvent
+DotYjs.YTextEvent.ChildListChanged.get -> bool
+DotYjs.YTextEvent.KeysChanged.get -> System.Collections.Generic.HashSet<string!>!
+DotYjs.YTextEvent.YTextEvent(DotYjs.YText! ytext, DotYjs.Transaction! transaction, System.Collections.Generic.HashSet<string?>! subs) -> void
+DotYjs.YXmlElement
+DotYjs.YXmlElement.GetAttribute(string! attributeName) -> object?
+DotYjs.YXmlElement.GetAttributes(DotYjs.Snapshot? snapshot = null) -> System.Collections.Generic.Dictionary<string!, object?>!
+DotYjs.YXmlElement.HasAttribute(string! attributeName) -> bool
+DotYjs.YXmlElement.NextSibling.get -> DotYjs.AbstractType?
+DotYjs.YXmlElement.NodeName.get -> string!
+DotYjs.YXmlElement.PrevSibling.get -> DotYjs.AbstractType?
+DotYjs.YXmlElement.RemoveAttribute(string! attributeName) -> void
+DotYjs.YXmlElement.SetAttribute(string! attributeName, object? attributeValue) -> void
+DotYjs.YXmlElement.YXmlElement() -> void
+DotYjs.YXmlElement.YXmlElement(string! nodeName) -> void
+DotYjs.YXmlEvent
+DotYjs.YXmlEvent.AttributesChanged.get -> System.Collections.Generic.HashSet<string!>!
+DotYjs.YXmlEvent.ChildListChanged.get -> bool
+DotYjs.YXmlEvent.YXmlEvent(DotYjs.AbstractType! target, System.Collections.Generic.HashSet<string?>! subs, DotYjs.Transaction! transaction) -> void
+DotYjs.YXmlFragment
+DotYjs.YXmlFragment.CreateTreeWalker(System.Func<DotYjs.AbstractType!, bool>! filter) -> DotYjs.YXmlTreeWalker!
+DotYjs.YXmlFragment.Delete(int index, int length = 1) -> void
+DotYjs.YXmlFragment.FirstChild.get -> DotYjs.AbstractType?
+DotYjs.YXmlFragment.Get(int index) -> object?
+DotYjs.YXmlFragment.GetEnumerator() -> System.Collections.Generic.IEnumerator<object?>!
+DotYjs.YXmlFragment.Insert(int index, System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YXmlFragment.Insert(int index, params object?[]! content) -> void
+DotYjs.YXmlFragment.InsertAfter(DotYjs.AbstractType? reference, System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YXmlFragment.Length.get -> int
+DotYjs.YXmlFragment.Push(System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YXmlFragment.Push(params object?[]! content) -> void
+DotYjs.YXmlFragment.QuerySelector(string! query) -> DotYjs.AbstractType?
+DotYjs.YXmlFragment.QuerySelectorAll(string! query) -> System.Collections.Generic.List<DotYjs.AbstractType!>!
+DotYjs.YXmlFragment.Slice(int start = 0, int? end = null) -> System.Collections.Generic.List<object?>!
+DotYjs.YXmlFragment.ToArray() -> System.Collections.Generic.List<object?>!
+DotYjs.YXmlFragment.Unshift(System.Collections.Generic.IReadOnlyList<object?>! content) -> void
+DotYjs.YXmlFragment.YXmlFragment() -> void
+DotYjs.YXmlHook
+DotYjs.YXmlHook.HookName.get -> string!
+DotYjs.YXmlHook.YXmlHook() -> void
+DotYjs.YXmlHook.YXmlHook(string! hookName) -> void
+DotYjs.YXmlText
+DotYjs.YXmlText.NextSibling.get -> DotYjs.AbstractType?
+DotYjs.YXmlText.PrevSibling.get -> DotYjs.AbstractType?
+DotYjs.YXmlText.YXmlText() -> void
+DotYjs.YXmlText.YXmlText(string! str) -> void
+DotYjs.YXmlTreeWalker
+DotYjs.YXmlTreeWalker.GetEnumerator() -> System.Collections.Generic.IEnumerator<DotYjs.AbstractType!>!
+DotYjs.YXmlTreeWalker.YXmlTreeWalker(DotYjs.YXmlFragment! root, System.Func<DotYjs.AbstractType!, bool>? filter = null) -> void
+abstract DotYjs.AbstractContent.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+abstract DotYjs.AbstractContent.GetLength() -> long
+abstract DotYjs.AbstractContent.IsCountable.get -> bool
+abstract DotYjs.AbstractStruct.Deleted.get -> bool
+const DotYjs.ContentType.YArrayRefID = 0 -> int
+const DotYjs.ContentType.YMapRefID = 1 -> int
+const DotYjs.ContentType.YTextRefID = 2 -> int
+const DotYjs.ContentType.YXmlElementRefID = 3 -> int
+const DotYjs.ContentType.YXmlFragmentRefID = 4 -> int
+const DotYjs.ContentType.YXmlHookRefID = 5 -> int
+const DotYjs.ContentType.YXmlTextRefID = 6 -> int
+const DotYjs.Protocols.Awareness.OutdatedTimeout = 30000 -> int
+const DotYjs.Protocols.SyncProtocol.MessageYjsSyncStep1 = 0 -> int
+const DotYjs.Protocols.SyncProtocol.MessageYjsSyncStep2 = 1 -> int
+const DotYjs.Protocols.SyncProtocol.MessageYjsUpdate = 2 -> int
+const DotYjs.Protocols.YWebSocketProtocol.MessageAuth = 2 -> int
+const DotYjs.Protocols.YWebSocketProtocol.MessageAwareness = 1 -> int
+const DotYjs.Protocols.YWebSocketProtocol.MessageQueryAwareness = 3 -> int
+const DotYjs.Protocols.YWebSocketProtocol.MessageSync = 0 -> int
+override DotYjs.ContentAny.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentAny.GetLength() -> long
+override DotYjs.ContentAny.IsCountable.get -> bool
+override DotYjs.ContentBinary.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentBinary.GetLength() -> long
+override DotYjs.ContentBinary.IsCountable.get -> bool
+override DotYjs.ContentDeleted.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentDeleted.GetLength() -> long
+override DotYjs.ContentDeleted.IsCountable.get -> bool
+override DotYjs.ContentDoc.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentDoc.GetLength() -> long
+override DotYjs.ContentDoc.IsCountable.get -> bool
+override DotYjs.ContentEmbed.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentEmbed.GetLength() -> long
+override DotYjs.ContentEmbed.IsCountable.get -> bool
+override DotYjs.ContentFormat.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentFormat.GetLength() -> long
+override DotYjs.ContentFormat.IsCountable.get -> bool
+override DotYjs.ContentJSON.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentJSON.GetLength() -> long
+override DotYjs.ContentJSON.IsCountable.get -> bool
+override DotYjs.ContentString.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentString.GetLength() -> long
+override DotYjs.ContentString.IsCountable.get -> bool
+override DotYjs.ContentType.GetContent() -> System.Collections.Generic.IReadOnlyList<object?>!
+override DotYjs.ContentType.GetLength() -> long
+override DotYjs.ContentType.IsCountable.get -> bool
+override DotYjs.DeleteItem.ToString() -> string!
+override DotYjs.DeltaOp.ToString() -> string!
+override DotYjs.Doc.ToString() -> string!
+override DotYjs.GC.Deleted.get -> bool
+override DotYjs.ID.Equals(object? obj) -> bool
+override DotYjs.ID.GetHashCode() -> int
+override DotYjs.ID.ToString() -> string!
+override DotYjs.Item.Deleted.get -> bool
+override DotYjs.Item.ToString() -> string!
+override DotYjs.Lib0.Undefined.ToString() -> string!
+override DotYjs.RelativePosition.Equals(object? obj) -> bool
+override DotYjs.RelativePosition.GetHashCode() -> int
+override DotYjs.Skip.Deleted.get -> bool
+override DotYjs.UpdateEncoderV2.ToArray() -> byte[]!
+override DotYjs.YArray.Clone() -> DotYjs.AbstractType!
+override DotYjs.YArray.ToJSON() -> object?
+override DotYjs.YMap.Clone() -> DotYjs.AbstractType!
+override DotYjs.YMap.ToJSON() -> object?
+override DotYjs.YText.Clone() -> DotYjs.AbstractType!
+override DotYjs.YText.ToJSON() -> object?
+override DotYjs.YText.ToString() -> string!
+override DotYjs.YTextEvent.Changes.get -> DotYjs.YChanges!
+override DotYjs.YTextEvent.Delta.get -> System.Collections.Generic.List<DotYjs.DeltaOp!>!
+override DotYjs.YXmlElement.Clone() -> DotYjs.AbstractType!
+override DotYjs.YXmlElement.ToString() -> string!
+override DotYjs.YXmlFragment.Clone() -> DotYjs.AbstractType!
+override DotYjs.YXmlFragment.ToJSON() -> object?
+override DotYjs.YXmlFragment.ToString() -> string!
+override DotYjs.YXmlHook.Clone() -> DotYjs.AbstractType!
+override DotYjs.YXmlText.Clone() -> DotYjs.AbstractType!
+override DotYjs.YXmlText.ToJSON() -> object?
+override DotYjs.YXmlText.ToString() -> string!
+static DotYjs.DeltaOp.Deleting(long n) -> DotYjs.DeltaOp!
+static DotYjs.DeltaOp.Inserting(object? insert, System.Collections.Generic.Dictionary<string!, object?>? attributes = null) -> DotYjs.DeltaOp!
+static DotYjs.DeltaOp.Retaining(long n, System.Collections.Generic.Dictionary<string!, object?>? attributes = null) -> DotYjs.DeltaOp!
+static DotYjs.Doc.GenerateNewClientId() -> long
+static DotYjs.ID.Compare(DotYjs.ID? a, DotYjs.ID? b) -> bool
+static DotYjs.Lib0.JsonValues.DeepEquals(object? a, object? b) -> bool
+static DotYjs.Lib0.JsonValues.FormatNumber(double d) -> string!
+static DotYjs.Lib0.JsonValues.FromJsonElement(System.Text.Json.JsonElement e) -> object?
+static DotYjs.Lib0.JsonValues.FromJsonNode(System.Text.Json.Nodes.JsonNode? node) -> object?
+static DotYjs.Lib0.JsonValues.Parse(string! json) -> object?
+static DotYjs.Lib0.JsonValues.Stringify(object? value) -> string!
+static DotYjs.Protocols.Awareness.ModifyUpdate(byte[]! update, System.Func<object?, object?>! modify) -> byte[]!
+static DotYjs.Protocols.SyncProtocol.EncodeSyncStep1(DotYjs.Doc! doc) -> byte[]!
+static DotYjs.Protocols.SyncProtocol.EncodeSyncStep2(DotYjs.Doc! doc, byte[]? encodedStateVector = null) -> byte[]!
+static DotYjs.Protocols.SyncProtocol.EncodeUpdate(byte[]! update) -> byte[]!
+static DotYjs.Protocols.SyncProtocol.ReadSyncMessage(DotYjs.Lib0.Decoder! decoder, DotYjs.Lib0.Encoder! encoder, DotYjs.Doc! doc, object? transactionOrigin = null) -> int
+static DotYjs.Protocols.SyncProtocol.ReadSyncStep1(DotYjs.Lib0.Decoder! decoder, DotYjs.Lib0.Encoder! encoder, DotYjs.Doc! doc) -> void
+static DotYjs.Protocols.SyncProtocol.ReadSyncStep2(DotYjs.Lib0.Decoder! decoder, DotYjs.Doc! doc, object? transactionOrigin = null) -> void
+static DotYjs.Protocols.SyncProtocol.ReadUpdate(DotYjs.Lib0.Decoder! decoder, DotYjs.Doc! doc, object? transactionOrigin = null) -> void
+static DotYjs.Protocols.SyncProtocol.WriteSyncStep1(DotYjs.Lib0.Encoder! encoder, DotYjs.Doc! doc) -> void
+static DotYjs.Protocols.SyncProtocol.WriteSyncStep2(DotYjs.Lib0.Encoder! encoder, DotYjs.Doc! doc, byte[]? encodedStateVector = null) -> void
+static DotYjs.Protocols.SyncProtocol.WriteUpdate(DotYjs.Lib0.Encoder! encoder, byte[]! update) -> void
+static DotYjs.Protocols.YWebSocketProtocol.EncodeAwareness(byte[]! awarenessUpdate) -> byte[]!
+static DotYjs.Protocols.YWebSocketProtocol.EncodePermissionDenied(string! reason) -> byte[]!
+static DotYjs.Protocols.YWebSocketProtocol.EncodeQueryAwareness() -> byte[]!
+static DotYjs.Protocols.YWebSocketProtocol.EncodeSyncStep1(DotYjs.Doc! doc) -> byte[]!
+static DotYjs.Protocols.YWebSocketProtocol.EncodeSyncStep2(DotYjs.Doc! doc, byte[]? encodedStateVector = null) -> byte[]!
+static DotYjs.Protocols.YWebSocketProtocol.EncodeUpdate(byte[]! update) -> byte[]!
+static DotYjs.RelativePosition.Compare(DotYjs.RelativePosition? a, DotYjs.RelativePosition? b) -> bool
+static DotYjs.RelativePosition.Create(DotYjs.AbstractType! type, DotYjs.ID? item, long assoc = 0) -> DotYjs.RelativePosition!
+static DotYjs.RelativePosition.Decode(byte[]! data) -> DotYjs.RelativePosition!
+static DotYjs.RelativePosition.FromJSON(System.Collections.Generic.IReadOnlyDictionary<string!, object?>! json) -> DotYjs.RelativePosition!
+static DotYjs.RelativePosition.FromTypeIndex(DotYjs.AbstractType! type, long index, long assoc = 0) -> DotYjs.RelativePosition!
+static DotYjs.RelativePosition.Read(DotYjs.Lib0.Decoder! decoder) -> DotYjs.RelativePosition!
+static DotYjs.Snapshot.CreateDocFromSnapshot(DotYjs.Doc! originDoc, DotYjs.Snapshot! snapshot, DotYjs.Doc? newDoc = null) -> DotYjs.Doc!
+static DotYjs.Snapshot.Decode(byte[]! buf) -> DotYjs.Snapshot!
+static DotYjs.Snapshot.DecodeV2(byte[]! buf, DotYjs.IDSDecoder? decoder = null) -> DotYjs.Snapshot!
+static DotYjs.Snapshot.Empty.get -> DotYjs.Snapshot!
+static DotYjs.Snapshot.Equal(DotYjs.Snapshot! snap1, DotYjs.Snapshot! snap2) -> bool
+static DotYjs.Snapshot.FromDoc(DotYjs.Doc! doc) -> DotYjs.Snapshot!
+static DotYjs.UpdateCodec.ApplyUpdate(DotYjs.Doc! ydoc, byte[]! update, object? transactionOrigin = null) -> void
+static DotYjs.UpdateCodec.ApplyUpdateV2(DotYjs.Doc! ydoc, byte[]! update, object? transactionOrigin = null, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null) -> void
+static DotYjs.UpdateCodec.DecodeStateVector(byte[]! decodedState) -> System.Collections.Generic.Dictionary<long, long>!
+static DotYjs.UpdateCodec.EncodeStateAsUpdate(DotYjs.Doc! doc, byte[]? encodedTargetStateVector = null) -> byte[]!
+static DotYjs.UpdateCodec.EncodeStateAsUpdateV2(DotYjs.Doc! doc, byte[]? encodedTargetStateVector = null, DotYjs.IUpdateEncoder? encoder = null) -> byte[]!
+static DotYjs.UpdateCodec.EncodeStateVector(DotYjs.Doc! doc) -> byte[]!
+static DotYjs.UpdateCodec.EncodeStateVector(System.Collections.Generic.Dictionary<long, long>! sv) -> byte[]!
+static DotYjs.UpdateCodec.EncodeStateVectorV2(DotYjs.Doc! doc, DotYjs.IDSEncoder? encoder = null) -> byte[]!
+static DotYjs.UpdateCodec.EncodeStateVectorV2(System.Collections.Generic.Dictionary<long, long>! sv, DotYjs.IDSEncoder? encoder = null) -> byte[]!
+static DotYjs.UpdateCodec.ReadStateVector(DotYjs.IDSDecoder! decoder) -> System.Collections.Generic.Dictionary<long, long>!
+static DotYjs.UpdateCodec.ReadUpdate(DotYjs.Lib0.Decoder! decoder, DotYjs.Doc! ydoc, object? transactionOrigin = null) -> void
+static DotYjs.UpdateCodec.ReadUpdateV2(DotYjs.Lib0.Decoder! decoder, DotYjs.Doc! ydoc, object? transactionOrigin = null, DotYjs.IUpdateDecoder? structDecoder = null) -> void
+static DotYjs.Updates.ConvertUpdateFormat(byte[]! update, System.Func<DotYjs.AbstractStruct!, DotYjs.AbstractStruct!>! blockTransformer, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>! decoderFactory, System.Func<DotYjs.IUpdateEncoder!>! encoderFactory) -> byte[]!
+static DotYjs.Updates.ConvertUpdateFormatV1ToV2(byte[]! update) -> byte[]!
+static DotYjs.Updates.ConvertUpdateFormatV2ToV1(byte[]! update) -> byte[]!
+static DotYjs.Updates.DecodeUpdate(byte[]! update) -> DotYjs.DecodedUpdate!
+static DotYjs.Updates.DecodeUpdateV2(byte[]! update, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null) -> DotYjs.DecodedUpdate!
+static DotYjs.Updates.DiffUpdate(byte[]! update, byte[]! sv) -> byte[]!
+static DotYjs.Updates.DiffUpdateV2(byte[]! update, byte[]! sv, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null, System.Func<DotYjs.IUpdateEncoder!>? encoderFactory = null) -> byte[]!
+static DotYjs.Updates.EncodeStateVectorFromUpdate(byte[]! update) -> byte[]!
+static DotYjs.Updates.EncodeStateVectorFromUpdateV2(byte[]! update, System.Func<DotYjs.IDSEncoder!>? encoderFactory = null, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null) -> byte[]!
+static DotYjs.Updates.MergeUpdates(System.Collections.Generic.IReadOnlyList<byte[]!>! updates) -> byte[]!
+static DotYjs.Updates.MergeUpdatesV2(System.Collections.Generic.IReadOnlyList<byte[]!>! updates, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null, System.Func<DotYjs.IUpdateEncoder!>? encoderFactory = null) -> byte[]!
+static DotYjs.Updates.ParseUpdateMeta(byte[]! update) -> (System.Collections.Generic.Dictionary<long, long>! from, System.Collections.Generic.Dictionary<long, long>! to)
+static DotYjs.Updates.ParseUpdateMetaV2(byte[]! update, System.Func<DotYjs.Lib0.Decoder!, DotYjs.IUpdateDecoder!>? decoderFactory = null) -> (System.Collections.Generic.Dictionary<long, long>! from, System.Collections.Generic.Dictionary<long, long>! to)
+static DotYjs.YArray.From(System.Collections.Generic.IEnumerable<object?>! items) -> DotYjs.YArray!
+static DotYjs.YText.CleanupYTextFormatting(DotYjs.YText! type) -> int
+static readonly DotYjs.Lib0.Undefined.Value -> DotYjs.Lib0.Undefined!
+virtual DotYjs.AbstractType.Clone() -> DotYjs.AbstractType!
+virtual DotYjs.AbstractType.ToJSON() -> object?
+virtual DotYjs.DSEncoderV1.ToArray() -> byte[]!
+virtual DotYjs.DSEncoderV2.ToArray() -> byte[]!
+virtual DotYjs.YEvent.Changes.get -> DotYjs.YChanges!
+virtual DotYjs.YEvent.Delta.get -> System.Collections.Generic.List<DotYjs.DeltaOp!>!

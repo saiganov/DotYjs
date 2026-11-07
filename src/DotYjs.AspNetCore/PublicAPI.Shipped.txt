@@ -1,0 +1,115 @@
+#nullable enable
+DotYjs.AspNetCore.IYjsBackplane
+DotYjs.AspNetCore.IYjsBackplane.PublishAsync(string! docName, DotYjs.AspNetCore.YjsBackplaneMessage! message, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.IYjsBackplane.SubscribeAsync(string! docName, System.Func<DotYjs.AspNetCore.YjsBackplaneMessage!, System.Threading.Tasks.Task!>! handler, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.IAsyncDisposable!>!
+DotYjs.AspNetCore.IYjsPersistence
+DotYjs.AspNetCore.IYjsPersistence.BindStateAsync(string! docName, DotYjs.Doc! doc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.IYjsPersistence.WriteStateAsync(string! docName, DotYjs.Doc! doc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.IYjsUpdateStore
+DotYjs.AspNetCore.IYjsUpdateStore.AppendAsync(string! docName, byte[]! update, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.AspNetCore.IYjsUpdateStore.CompactAsync(string! docName, byte[]! state, System.Collections.Generic.IReadOnlyCollection<long>! replacedIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.AspNetCore.IYjsUpdateStore.LoadAsync(string! docName, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<DotYjs.AspNetCore.StoredUpdate>!>!
+DotYjs.AspNetCore.InMemoryYjsBackplane
+DotYjs.AspNetCore.InMemoryYjsBackplane.InMemoryYjsBackplane() -> void
+DotYjs.AspNetCore.InMemoryYjsBackplane.PublishAsync(string! docName, DotYjs.AspNetCore.YjsBackplaneMessage! message, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.InMemoryYjsBackplane.SubscribeAsync(string! docName, System.Func<DotYjs.AspNetCore.YjsBackplaneMessage!, System.Threading.Tasks.Task!>! handler, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.IAsyncDisposable!>!
+DotYjs.AspNetCore.StoredUpdate
+DotYjs.AspNetCore.StoredUpdate.Deconstruct(out long Id, out byte[]! Update) -> void
+DotYjs.AspNetCore.StoredUpdate.Equals(DotYjs.AspNetCore.StoredUpdate other) -> bool
+DotYjs.AspNetCore.StoredUpdate.Id.get -> long
+DotYjs.AspNetCore.StoredUpdate.Id.init -> void
+DotYjs.AspNetCore.StoredUpdate.StoredUpdate() -> void
+DotYjs.AspNetCore.StoredUpdate.StoredUpdate(long Id, byte[]! Update) -> void
+DotYjs.AspNetCore.StoredUpdate.Update.get -> byte[]!
+DotYjs.AspNetCore.StoredUpdate.Update.init -> void
+DotYjs.AspNetCore.UpdateLogPersistence
+DotYjs.AspNetCore.UpdateLogPersistence.BindStateAsync(string! docName, DotYjs.Doc! doc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.UpdateLogPersistence.FlushAsync(DotYjs.Doc! doc) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.UpdateLogPersistence.Store.get -> DotYjs.AspNetCore.IYjsUpdateStore!
+DotYjs.AspNetCore.UpdateLogPersistence.UpdateLogPersistence(DotYjs.AspNetCore.IYjsUpdateStore! store) -> void
+DotYjs.AspNetCore.UpdateLogPersistence.UpdateLogPersistence(DotYjs.AspNetCore.IYjsUpdateStore! store, DotYjs.AspNetCore.UpdateLogPersistenceOptions? options) -> void
+DotYjs.AspNetCore.UpdateLogPersistence.UpdateLogPersistence(DotYjs.AspNetCore.IYjsUpdateStore! store, DotYjs.AspNetCore.UpdateLogPersistenceOptions? options, Microsoft.Extensions.Logging.ILogger? logger) -> void
+DotYjs.AspNetCore.UpdateLogPersistence.UpdateLogPersistence(DotYjs.AspNetCore.IYjsUpdateStore! store, Microsoft.Extensions.Options.IOptions<DotYjs.AspNetCore.UpdateLogPersistenceOptions!>! options, Microsoft.Extensions.Logging.ILogger<DotYjs.AspNetCore.UpdateLogPersistence!>! logger) -> void
+DotYjs.AspNetCore.UpdateLogPersistence.WriteStateAsync(string! docName, DotYjs.Doc! doc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.UpdateLogPersistenceOptions
+DotYjs.AspNetCore.UpdateLogPersistenceOptions.CompactAfterUpdates.get -> int
+DotYjs.AspNetCore.UpdateLogPersistenceOptions.CompactAfterUpdates.set -> void
+DotYjs.AspNetCore.UpdateLogPersistenceOptions.CompactOnUnload.get -> bool
+DotYjs.AspNetCore.UpdateLogPersistenceOptions.CompactOnUnload.set -> void
+DotYjs.AspNetCore.UpdateLogPersistenceOptions.UpdateLogPersistenceOptions() -> void
+DotYjs.AspNetCore.YjsBackplaneMessage
+DotYjs.AspNetCore.YjsBackplaneMessage.Encode() -> byte[]!
+DotYjs.AspNetCore.YjsBackplaneMessage.Kind.get -> DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsBackplaneMessage.NodeId.get -> string!
+DotYjs.AspNetCore.YjsBackplaneMessage.Payload.get -> byte[]!
+DotYjs.AspNetCore.YjsBackplaneMessage.YjsBackplaneMessage(DotYjs.AspNetCore.YjsBackplaneMessageKind kind, byte[]! payload, string! nodeId) -> void
+DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsBackplaneMessageKind.AwarenessUpdate = 1 -> DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsBackplaneMessageKind.DocumentUpdate = 0 -> DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsBackplaneMessageKind.SyncRequest = 2 -> DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsBackplaneMessageKind.SyncResponse = 3 -> DotYjs.AspNetCore.YjsBackplaneMessageKind
+DotYjs.AspNetCore.YjsConnection
+DotYjs.AspNetCore.YjsConnection.ControlledIds.get -> System.Collections.Generic.IReadOnlyCollection<long>!
+DotYjs.AspNetCore.YjsConnection.Document.get -> DotYjs.AspNetCore.YjsDocument!
+DotYjs.AspNetCore.YjsConnection.HttpContext.get -> Microsoft.AspNetCore.Http.HttpContext?
+DotYjs.AspNetCore.YjsConnection.Id.get -> string!
+DotYjs.AspNetCore.YjsConnection.Items.get -> System.Collections.Generic.IDictionary<object!, object?>!
+DotYjs.AspNetCore.YjsConnection.Send(byte[]! message) -> bool
+DotYjs.AspNetCore.YjsConnection.Socket.get -> System.Net.WebSockets.WebSocket!
+DotYjs.AspNetCore.YjsDocument
+DotYjs.AspNetCore.YjsDocument.ApplyUpdate(byte[]! update, object? origin = null) -> void
+DotYjs.AspNetCore.YjsDocument.Awareness.get -> DotYjs.Protocols.Awareness!
+DotYjs.AspNetCore.YjsDocument.BackplaneOrigin.get -> object!
+DotYjs.AspNetCore.YjsDocument.Broadcast(byte[]! message, DotYjs.AspNetCore.YjsConnection? except = null) -> void
+DotYjs.AspNetCore.YjsDocument.ConnectionAdded -> System.Action<DotYjs.AspNetCore.YjsConnection!>?
+DotYjs.AspNetCore.YjsDocument.ConnectionCount.get -> int
+DotYjs.AspNetCore.YjsDocument.ConnectionRemoved -> System.Action<DotYjs.AspNetCore.YjsConnection!>?
+DotYjs.AspNetCore.YjsDocument.Connections.get -> System.Collections.Generic.IReadOnlyCollection<DotYjs.AspNetCore.YjsConnection!>!
+DotYjs.AspNetCore.YjsDocument.Doc.get -> DotYjs.Doc!
+DotYjs.AspNetCore.YjsDocument.EncodeStateAsUpdate() -> byte[]!
+DotYjs.AspNetCore.YjsDocument.IsUnloaded.get -> bool
+DotYjs.AspNetCore.YjsDocument.IsUnloading.get -> bool
+DotYjs.AspNetCore.YjsDocument.Name.get -> string!
+DotYjs.AspNetCore.YjsDocument.Read<T>(System.Func<DotYjs.Doc!, T>! f) -> T
+DotYjs.AspNetCore.YjsDocument.SyncRoot.get -> object!
+DotYjs.AspNetCore.YjsDocument.Transact(System.Action<DotYjs.Doc!>! f, object? origin = null) -> void
+DotYjs.AspNetCore.YjsDocumentManager
+DotYjs.AspNetCore.YjsDocumentManager.DocumentLoaded -> System.Action<DotYjs.AspNetCore.YjsDocument!>?
+DotYjs.AspNetCore.YjsDocumentManager.DocumentNames.get -> System.Collections.Generic.IReadOnlyCollection<string!>!
+DotYjs.AspNetCore.YjsDocumentManager.DocumentUnloaded -> System.Action<DotYjs.AspNetCore.YjsDocument!>?
+DotYjs.AspNetCore.YjsDocumentManager.GetOrCreateAsync(string! name, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<DotYjs.AspNetCore.YjsDocument!>!
+DotYjs.AspNetCore.YjsDocumentManager.NodeId.get -> string!
+DotYjs.AspNetCore.YjsDocumentManager.TryGet(string! name) -> DotYjs.AspNetCore.YjsDocument?
+DotYjs.AspNetCore.YjsDocumentManager.YjsDocumentManager(Microsoft.Extensions.Options.IOptions<DotYjs.AspNetCore.YjsOptions!>! options, Microsoft.Extensions.Logging.ILogger<DotYjs.AspNetCore.YjsDocumentManager!>! logger, DotYjs.AspNetCore.IYjsPersistence? persistence = null, DotYjs.AspNetCore.IYjsBackplane? backplane = null) -> void
+DotYjs.AspNetCore.YjsEndpointRouteBuilderExtensions
+DotYjs.AspNetCore.YjsOptions
+DotYjs.AspNetCore.YjsOptions.Authorize.get -> System.Func<Microsoft.AspNetCore.Http.HttpContext!, string!, System.Threading.Tasks.ValueTask<bool>>?
+DotYjs.AspNetCore.YjsOptions.Authorize.set -> void
+DotYjs.AspNetCore.YjsOptions.DocumentNameSelector.get -> System.Func<Microsoft.AspNetCore.Http.HttpContext!, string!>?
+DotYjs.AspNetCore.YjsOptions.DocumentNameSelector.set -> void
+DotYjs.AspNetCore.YjsOptions.Gc.get -> bool
+DotYjs.AspNetCore.YjsOptions.Gc.set -> void
+DotYjs.AspNetCore.YjsOptions.KeepAliveInterval.get -> System.TimeSpan
+DotYjs.AspNetCore.YjsOptions.KeepAliveInterval.set -> void
+DotYjs.AspNetCore.YjsOptions.MaxMessageSize.get -> int
+DotYjs.AspNetCore.YjsOptions.MaxMessageSize.set -> void
+DotYjs.AspNetCore.YjsOptions.UnloadWhenIdle.get -> bool
+DotYjs.AspNetCore.YjsOptions.UnloadWhenIdle.set -> void
+DotYjs.AspNetCore.YjsOptions.YjsOptions() -> void
+DotYjs.AspNetCore.YjsServiceCollectionExtensions
+DotYjs.AspNetCore.YjsWebSocketHandler
+DotYjs.AspNetCore.YjsWebSocketHandler.GetDocumentName(Microsoft.AspNetCore.Http.HttpContext! context) -> string!
+DotYjs.AspNetCore.YjsWebSocketHandler.HandleAsync(Microsoft.AspNetCore.Http.HttpContext! context) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.YjsWebSocketHandler.ServeAsync(System.Net.WebSockets.WebSocket! socket, string! docName, Microsoft.AspNetCore.Http.HttpContext? httpContext, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.YjsWebSocketHandler.YjsWebSocketHandler(DotYjs.AspNetCore.YjsDocumentManager! documents, Microsoft.Extensions.Options.IOptions<DotYjs.AspNetCore.YjsOptions!>! options, Microsoft.Extensions.Logging.ILogger<DotYjs.AspNetCore.YjsWebSocketHandler!>! logger) -> void
+override DotYjs.AspNetCore.StoredUpdate.GetHashCode() -> int
+override DotYjs.AspNetCore.YjsConnection.ToString() -> string!
+override DotYjs.AspNetCore.YjsDocument.ToString() -> string!
+static DotYjs.AspNetCore.StoredUpdate.operator !=(DotYjs.AspNetCore.StoredUpdate left, DotYjs.AspNetCore.StoredUpdate right) -> bool
+static DotYjs.AspNetCore.StoredUpdate.operator ==(DotYjs.AspNetCore.StoredUpdate left, DotYjs.AspNetCore.StoredUpdate right) -> bool
+static DotYjs.AspNetCore.YjsBackplaneMessage.Decode(byte[]! data) -> DotYjs.AspNetCore.YjsBackplaneMessage!
+static DotYjs.AspNetCore.YjsEndpointRouteBuilderExtensions.MapYjs(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder! endpoints, string! pattern = "/{docName}") -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder!
+static DotYjs.AspNetCore.YjsServiceCollectionExtensions.AddYjs(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, System.Action<DotYjs.AspNetCore.YjsOptions!>? configure = null) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
+static DotYjs.AspNetCore.YjsServiceCollectionExtensions.AddYjsUpdateLogPersistence<TStore>(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, System.Action<DotYjs.AspNetCore.UpdateLogPersistenceOptions!>? configure = null) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
+~override DotYjs.AspNetCore.StoredUpdate.Equals(object obj) -> bool
+~override DotYjs.AspNetCore.StoredUpdate.ToString() -> string

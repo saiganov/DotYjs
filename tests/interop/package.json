@@ -1,0 +1,16 @@
+{
+  "name": "dotyjs-interop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "gen": "node gen-fixtures.mjs",
+    "check": "node check-dotnet-updates.mjs",
+    "check-ws": "node check-websocket-server.mjs",
+    "check-client": "node check-dotnet-client.mjs"
+  },
+  "dependencies": {
+    "y-protocols": "1.0.6",
+    "y-websocket": "2.0.4",
+    "yjs": "13.6.27"
+  }
+}

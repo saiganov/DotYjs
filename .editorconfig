@@ -1,0 +1,124 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,mjs,js,props,targets,csproj,slnx}]
+indent_size = 2
+
+[*.cs]
+# Style (IDE) rules enforced in build
+dotnet_sort_system_directives_first = true
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:suggestion
+dotnet_diagnostic.IDE0005.severity = warning   # unnecessary using
+
+# --- SDK analyzers: deliberate deviations from the recommended set --------------------------------------------------
+# The public API mirrors the JS yjs API (events as Action<...>, names like Doc/ID/Item/Snapshot), so naming rules
+# that would force .NET conventions on it are off.
+dotnet_diagnostic.CA1003.severity = none   # use generic EventHandler
+dotnet_diagnostic.CA1711.severity = none   # identifier suffixes (…Delegate/…Collection)
+dotnet_diagnostic.CA1720.severity = none   # identifiers contain type names
+dotnet_diagnostic.CA1716.severity = none   # identifiers matching keywords
+dotnet_diagnostic.CA1724.severity = none   # type names conflicting with namespaces
+dotnet_diagnostic.CA1848.severity = none   # LoggerMessage delegates: logging here is rare and off the hot path
+dotnet_diagnostic.CA1873.severity = none   # log argument evaluation (same reason)
+dotnet_diagnostic.CA1031.severity = none   # catching general exceptions: network loops must survive any failure
+dotnet_diagnostic.CA1819.severity = none   # properties returning arrays: byte[] payloads are the wire format
+
+# --- Meziantou.Analyzer ----------------------------------------------------------------------------------------------
+dotnet_diagnostic.MA0048.severity = none   # file name must match type name: small related types share a file
+dotnet_diagnostic.MA0016.severity = none   # prefer collection abstractions in signatures
+dotnet_diagnostic.MA0002.severity = none   # IEqualityComparer for string keys: ordinal comparison is the default
+dotnet_diagnostic.MA0006.severity = none   # string.Equals instead of ==
+dotnet_diagnostic.MA0046.severity = none   # EventHandler<T> for events (mirrors yjs)
+dotnet_diagnostic.MA0051.severity = none   # method too long (CRDT integration code is long by nature)
+dotnet_diagnostic.MA0026.severity = none   # TODO comments
+dotnet_diagnostic.MA0049.severity = none   # type name matching namespace
+
+dotnet_diagnostic.MA0158.severity = none   # System.Threading.Lock is not available on net8.0
+
+# --- Microsoft.VisualStudio.Threading.Analyzers -------------------------------------------------------------------------
+dotnet_diagnostic.VSTHRD003.severity = none # awaiting foreign tasks: only matters with a JoinableTaskContext (Visual Studio)
+
+# --- SonarAnalyzer.CSharp: rules that fight the 1:1 port of the yjs algorithms or JS semantics ---------------------------
+dotnet_diagnostic.S101.severity = none     # PascalCase names: ContentJSON, ID etc. mirror yjs
+dotnet_diagnostic.S927.severity = none     # parameter names mirror yjs
+dotnet_diagnostic.S1135.severity = none    # TODO comments
+dotnet_diagnostic.S125.severity = none     # commented-out code (kept as reference to the JS original)
+dotnet_diagnostic.S1244.severity = none    # exact floating point comparison: JS number semantics are exact here
+dotnet_diagnostic.S127.severity = none     # loop variable updated in the body: ported JS loops
+dotnet_diagnostic.S1066.severity = none    # merge nested ifs
+dotnet_diagnostic.S3358.severity = none    # nested ternaries
+dotnet_diagnostic.S3267.severity = none    # LINQ instead of loops (hot paths)
+dotnet_diagnostic.S4144.severity = none    # identical method bodies (wire format writers are intentionally separate)
+dotnet_diagnostic.S8969.severity = none    # redundant null-forgiving operators
+dotnet_diagnostic.S1854.severity = none    # useless assignments (false positives on discards)
+dotnet_diagnostic.S1075.severity = none    # hardcoded "/" is a URL separator, not a path
+dotnet_diagnostic.S2696.severity = none    # static state set from instance methods: globalSearchMarkerTimestamp as in yjs
+dotnet_diagnostic.S3010.severity = none
+dotnet_diagnostic.S1121.severity = none    # assignments inside expressions (ported code)
+dotnet_diagnostic.S1199.severity = none    # nested code blocks
+dotnet_diagnostic.S3776.severity = none    # cognitive complexity
+dotnet_diagnostic.S107.severity = none     # too many parameters (struct constructors mirror yjs)
+dotnet_diagnostic.S1104.severity = none    # public fields (hot structs)
+dotnet_diagnostic.S2325.severity = none    # make static (mirrors yjs instance API)
+dotnet_diagnostic.S2365.severity = none    # properties returning snapshots of collections are the intended API
+dotnet_diagnostic.S2234.severity = none
+dotnet_diagnostic.S4035.severity = none
+
+# --- Roslynator.Analyzers ----------------------------------------------------------------------------------------------------
+# Roslynator ships mostly as refactorings; the analyzers run at their defaults.
+
+# --- IDisposableAnalyzers ----------------------------------------------------------------------------------------------
+dotnet_diagnostic.IDISP001.severity = none  # dispose created: many Docs/CTS are intentionally long-lived
+dotnet_diagnostic.IDISP007.severity = none  # don't dispose injected: Doc owned by the user is destroyed deliberately
+dotnet_diagnostic.IDISP025.severity = none  # class with no virtual Dispose
+
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none   # underscores in test names
+dotnet_diagnostic.CA1861.severity = none   # inline arrays in assertions
+dotnet_diagnostic.CA1305.severity = none   # IFormatProvider in test helpers
+dotnet_diagnostic.CA1515.severity = none   # make test types internal
+dotnet_diagnostic.CA2007.severity = none   # ConfigureAwait in tests
+dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA1849.severity = none
+dotnet_diagnostic.CA2000.severity = none
+dotnet_diagnostic.CA5394.severity = none   # Random in tests
+dotnet_diagnostic.MA0004.severity = none   # ConfigureAwait
+dotnet_diagnostic.MA0011.severity = none
+dotnet_diagnostic.MA0015.severity = none
+dotnet_diagnostic.MA0040.severity = none
+dotnet_diagnostic.MA0032.severity = none
+dotnet_diagnostic.MA0045.severity = none
+dotnet_diagnostic.MA0042.severity = none
+dotnet_diagnostic.MA0075.severity = none
+dotnet_diagnostic.MA0076.severity = none
+dotnet_diagnostic.IDISP002.severity = none
+dotnet_diagnostic.IDISP003.severity = none
+dotnet_diagnostic.IDISP004.severity = none
+dotnet_diagnostic.IDISP005.severity = none
+dotnet_diagnostic.IDISP006.severity = none
+dotnet_diagnostic.IDISP008.severity = none
+dotnet_diagnostic.IDISP014.severity = none
+dotnet_diagnostic.IDISP017.severity = none
+dotnet_diagnostic.VSTHRD002.severity = none # sync waits in tests
+dotnet_diagnostic.VSTHRD003.severity = none
+dotnet_diagnostic.VSTHRD103.severity = none
+dotnet_diagnostic.VSTHRD110.severity = none
+dotnet_diagnostic.VSTHRD200.severity = none
+dotnet_diagnostic.CS1591.severity = none
+
+[samples/**.cs]
+dotnet_diagnostic.CA1305.severity = none
+dotnet_diagnostic.MA0011.severity = none
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.MA0004.severity = none
+dotnet_diagnostic.VSTHRD200.severity = none

@@ -1,0 +1,16 @@
+#nullable enable
+DotYjs.AspNetCore.Redis.RedisYjsBackplane
+DotYjs.AspNetCore.Redis.RedisYjsBackplane.DisposeAsync() -> System.Threading.Tasks.ValueTask
+DotYjs.AspNetCore.Redis.RedisYjsBackplane.PublishAsync(string! docName, DotYjs.AspNetCore.YjsBackplaneMessage! message, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+DotYjs.AspNetCore.Redis.RedisYjsBackplane.RedisYjsBackplane(DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions! options) -> void
+DotYjs.AspNetCore.Redis.RedisYjsBackplane.RedisYjsBackplane(StackExchange.Redis.IConnectionMultiplexer! connection, string! channelPrefix = "dotyjs:") -> void
+DotYjs.AspNetCore.Redis.RedisYjsBackplane.SubscribeAsync(string! docName, System.Func<DotYjs.AspNetCore.YjsBackplaneMessage!, System.Threading.Tasks.Task!>! handler, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<System.IAsyncDisposable!>!
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions.ChannelPrefix.get -> string!
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions.ChannelPrefix.set -> void
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions.Configuration.get -> string?
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions.Configuration.set -> void
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneOptions.RedisYjsBackplaneOptions() -> void
+DotYjs.AspNetCore.Redis.RedisYjsBackplaneServiceCollectionExtensions
+static DotYjs.AspNetCore.Redis.RedisYjsBackplaneServiceCollectionExtensions.AddYjsRedisBackplane(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, string! configuration, string! channelPrefix = "dotyjs:") -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
+static DotYjs.AspNetCore.Redis.RedisYjsBackplaneServiceCollectionExtensions.AddYjsRedisBackplaneFromMultiplexer(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, string! channelPrefix = "dotyjs:") -> Microsoft.Extensions.DependencyInjection.IServiceCollection!

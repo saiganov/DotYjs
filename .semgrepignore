@@ -1,0 +1,4 @@
+# Semgrep's defaults already skip tests/ and node_modules/; these are generated or vendored files
+tests/interop/fixtures/
+**/bin/
+**/obj/

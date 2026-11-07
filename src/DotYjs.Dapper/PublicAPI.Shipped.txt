@@ -1,0 +1,20 @@
+#nullable enable
+DotYjs.Dapper.DapperYjsDialect
+DotYjs.Dapper.DapperYjsDialect.MySql = 3 -> DotYjs.Dapper.DapperYjsDialect
+DotYjs.Dapper.DapperYjsDialect.PostgreSql = 1 -> DotYjs.Dapper.DapperYjsDialect
+DotYjs.Dapper.DapperYjsDialect.SqlServer = 2 -> DotYjs.Dapper.DapperYjsDialect
+DotYjs.Dapper.DapperYjsDialect.Sqlite = 0 -> DotYjs.Dapper.DapperYjsDialect
+DotYjs.Dapper.DapperYjsUpdateStore
+DotYjs.Dapper.DapperYjsUpdateStore.AppendAsync(string! docName, byte[]! update, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.Dapper.DapperYjsUpdateStore.CompactAsync(string! docName, byte[]! state, System.Collections.Generic.IReadOnlyCollection<long>! replacedIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.Dapper.DapperYjsUpdateStore.DapperYjsUpdateStore(System.Func<System.Data.Common.DbConnection!>! connectionFactory) -> void
+DotYjs.Dapper.DapperYjsUpdateStore.DapperYjsUpdateStore(System.Func<System.Data.Common.DbConnection!>! connectionFactory, DotYjs.Dapper.DapperYjsUpdateStoreOptions? options) -> void
+DotYjs.Dapper.DapperYjsUpdateStore.DapperYjsUpdateStore(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Data.Common.DbConnection!>!>! connectionFactory, DotYjs.Dapper.DapperYjsUpdateStoreOptions? options) -> void
+DotYjs.Dapper.DapperYjsUpdateStore.LoadAsync(string! docName, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<DotYjs.AspNetCore.StoredUpdate>!>!
+DotYjs.Dapper.DapperYjsUpdateStoreOptions
+DotYjs.Dapper.DapperYjsUpdateStoreOptions.DapperYjsUpdateStoreOptions() -> void
+DotYjs.Dapper.DapperYjsUpdateStoreOptions.TableName.get -> string!
+DotYjs.Dapper.DapperYjsUpdateStoreOptions.TableName.set -> void
+DotYjs.Dapper.YjsDapperServiceCollectionExtensions
+static DotYjs.Dapper.DapperYjsUpdateStore.CreateTableSql(DotYjs.Dapper.DapperYjsDialect dialect, string! tableName = "yjs_updates") -> string!
+static DotYjs.Dapper.YjsDapperServiceCollectionExtensions.AddYjsDapperPersistence(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, System.Func<System.IServiceProvider!, System.Data.Common.DbConnection!>! connectionFactory, System.Action<DotYjs.Dapper.DapperYjsUpdateStoreOptions!>? configureStore = null, System.Action<DotYjs.AspNetCore.UpdateLogPersistenceOptions!>? configurePersistence = null) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!

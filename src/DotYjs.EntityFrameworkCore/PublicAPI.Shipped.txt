@@ -1,0 +1,24 @@
+#nullable enable
+DotYjs.EntityFrameworkCore.EntityFrameworkYjsUpdateStore<TContext>
+DotYjs.EntityFrameworkCore.EntityFrameworkYjsUpdateStore<TContext>.AppendAsync(string! docName, byte[]! update, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.EntityFrameworkCore.EntityFrameworkYjsUpdateStore<TContext>.CompactAsync(string! docName, byte[]! state, System.Collections.Generic.IReadOnlyCollection<long>! replacedIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<long>!
+DotYjs.EntityFrameworkCore.EntityFrameworkYjsUpdateStore<TContext>.EntityFrameworkYjsUpdateStore(Microsoft.Extensions.DependencyInjection.IServiceScopeFactory! scopes) -> void
+DotYjs.EntityFrameworkCore.EntityFrameworkYjsUpdateStore<TContext>.LoadAsync(string! docName, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<DotYjs.AspNetCore.StoredUpdate>!>!
+DotYjs.EntityFrameworkCore.YjsDbContext
+DotYjs.EntityFrameworkCore.YjsDbContext.YjsDbContext(Microsoft.EntityFrameworkCore.DbContextOptions<DotYjs.EntityFrameworkCore.YjsDbContext!>! options) -> void
+DotYjs.EntityFrameworkCore.YjsDbContext.YjsUpdates.get -> Microsoft.EntityFrameworkCore.DbSet<DotYjs.EntityFrameworkCore.YjsUpdateEntity!>!
+DotYjs.EntityFrameworkCore.YjsEntityFrameworkServiceCollectionExtensions
+DotYjs.EntityFrameworkCore.YjsModelBuilderExtensions
+DotYjs.EntityFrameworkCore.YjsUpdateEntity
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.CreatedUtc.get -> System.DateTime
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.CreatedUtc.set -> void
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.DocName.get -> string!
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.DocName.set -> void
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.Id.get -> long
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.Id.set -> void
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.Update.get -> byte[]!
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.Update.set -> void
+DotYjs.EntityFrameworkCore.YjsUpdateEntity.YjsUpdateEntity() -> void
+override DotYjs.EntityFrameworkCore.YjsDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder! modelBuilder) -> void
+static DotYjs.EntityFrameworkCore.YjsEntityFrameworkServiceCollectionExtensions.AddYjsEntityFrameworkPersistence<TContext>(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, System.Action<DotYjs.AspNetCore.UpdateLogPersistenceOptions!>? configure = null) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
+static DotYjs.EntityFrameworkCore.YjsModelBuilderExtensions.AddYjs(this Microsoft.EntityFrameworkCore.ModelBuilder! modelBuilder, string! tableName = "YjsUpdates") -> Microsoft.EntityFrameworkCore.ModelBuilder!

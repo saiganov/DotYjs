@@ -1,0 +1,12 @@
+bin/
+obj/
+node_modules/
+*.user
+.vs/
+.idea/
+TestResults/
+tests/interop/fixtures/dotnet-fixtures.json
+tests/interop/fixtures/dotnet-protocol-fixtures.json
+packages/
+TestResults/
+coveragereport/
