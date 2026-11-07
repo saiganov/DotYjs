@@ -38,8 +38,7 @@ jobs:
       - name: Build (.NET)
         run: dotnet build --configuration Release
       - name: Test (.NET) with coverage
-        # net8.0 and net10.0 run one after the other: both write the .NET fixtures that the JS checks read later
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --settings tests/coverlet.runsettings -p:TestTfmsInParallel=false
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --settings tests/coverlet.runsettings
       - name: Coverage report
         uses: danielpalme/ReportGenerator-GitHub-Action@72f809aeb50e264d112d87766b105f6e1acb1eb6 # 5.4.11
         with:

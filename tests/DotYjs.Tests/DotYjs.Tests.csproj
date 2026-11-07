@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <!-- both target frameworks write the same .NET fixtures for the JS checks, so they must not run at the same time -->
+    <TestTfmsInParallel>false</TestTfmsInParallel>
     <IsTestProject>true</IsTestProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
