@@ -150,6 +150,35 @@ for (const [name, fn] of Object.entries(scenarios)) {
   }
 }
 
+// mergeUpdates of many updates in mixed order, including the full (garbage-collected) state of the document:
+// the order of equal structs depends on yjs sorting its decoders with a stable sort
+{
+  let seed = 7
+  const rnd = n => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n }
+  const docs = [1, 2, 3].map(clientID => { const d = new Y.Doc(); d.clientID = clientID; return d })
+  const updates = []
+  docs.forEach(d => d.on('update', (u, origin) => {
+    updates.push(u)
+    if (!docs.includes(origin)) docs.forEach(other => { if (other !== d) Y.applyUpdate(other, u, d) })
+  }))
+  for (let i = 0; i < 200; i++) {
+    const d = docs[i % 3]
+    if (i % 7 === 3) { const a = d.getArray('a'); a.insert(rnd(a.length + 1), [i]); continue }
+    const t = d.getText('t'); const len = t.length
+    if (i % 5 === 4 && len > 0) { const idx = rnd(len); t.delete(idx, Math.min(1 + rnd(4), len - idx)) } else t.insert(rnd(len + 1), String.fromCharCode(97 + rnd(26)))
+  }
+  const state = Y.encodeStateAsUpdate(docs[0])
+  out.mergeOrder = Object.fromEntries(Object.entries({
+    stateFirst: [state, ...updates],
+    stateMiddle: [...updates.slice(0, 100), state, ...updates.slice(100)],
+    stateLast: [...updates, state]
+  }).map(([name, list]) => [name, {
+    updates: list.map(b64),
+    merged: b64(Y.mergeUpdates(list)),
+    mergedV2: b64(Y.mergeUpdatesV2(list.map(u => Y.convertUpdateFormatV1ToV2(u))))
+  }]))
+}
+
 // y-protocols: sync messages, awareness updates, relative positions
 {
   const doc = new Y.Doc(); doc.clientID = 7

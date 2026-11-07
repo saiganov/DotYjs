@@ -130,6 +130,18 @@ public class InteropTests
         Assert.Equal(B64(f, "merged"), Updates.MergeUpdates(new[] { u1, u2 }));
     }
 
+    [Theory]
+    [InlineData("stateFirst")]
+    [InlineData("stateMiddle")]
+    [InlineData("stateLast")]
+    public void MergeUpdates_Of_Many_Updates_Matches_Js(string variant)
+    {
+        var f = Fixtures.RootElement.GetProperty("mergeOrder").GetProperty(variant);
+        var updates = f.GetProperty("updates").EnumerateArray().Select(u => Convert.FromBase64String(u.GetString()!)).ToList();
+        Assert.Equal(B64(f, "merged"), Updates.MergeUpdates(updates));
+        Assert.Equal(B64(f, "mergedV2"), Updates.MergeUpdatesV2(updates.Select(Updates.ConvertUpdateFormatV1ToV2).ToList()));
+    }
+
     [Fact]
     public void Write_DotNet_Fixtures_For_Js_Verification()
     {

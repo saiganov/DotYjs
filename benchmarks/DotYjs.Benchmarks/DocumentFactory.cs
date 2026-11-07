@@ -19,15 +19,18 @@ public static class DocumentFactory
         var random = new Random(seed);
         var a = new Doc { ClientID = 1 };
         var b = new Doc { ClientID = 2 };
+        // collect only the local updates of each client, not the copies the other client re-emits when applying them
         a.Update += (update, origin, _, _) =>
         {
+            if (origin == b) return;
             updates?.Add(update);
-            if (origin != b) UpdateCodec.ApplyUpdate(b, update, a);
+            UpdateCodec.ApplyUpdate(b, update, a);
         };
         b.Update += (update, origin, _, _) =>
         {
+            if (origin == a) return;
             updates?.Add(update);
-            if (origin != a) UpdateCodec.ApplyUpdate(a, update, b);
+            UpdateCodec.ApplyUpdate(a, update, b);
         };
 
         for (var i = 0; i < edits; i++)
