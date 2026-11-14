@@ -55,7 +55,11 @@ public sealed class Awareness : IDisposable
     /// <summary>Remote clients are removed if they did not update their state for this many milliseconds.</summary>
     public const int OutdatedTimeout = 30000;
 
+#if NET9_0_OR_GREATER
+    private readonly Lock _lock = new();
+#else
     private readonly object _lock = new();
+#endif
     private readonly Dictionary<long, object?> _states = new();
     private readonly Dictionary<long, MetaClientState> _meta = new();
     private readonly Timer? _checkTimer;
