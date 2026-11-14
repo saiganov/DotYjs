@@ -16,6 +16,9 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "Microsoft.AspNetCore.TestHost"
         update-types: ["version-update:semver-major"]
+      # StackExchange.Redis 3.x pulls Microsoft.Extensions.* 10.x into net8.0 consumers; the package only sets a minimum version
+      - dependency-name: "StackExchange.Redis"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: npm
     directory: /tests/interop
     schedule:
