@@ -11,6 +11,11 @@ minor versions.
 - Samples: `GettingStarted` (core API tour), `CollaborativeEditor` (browser editor with presence),
   `PersistentServer` (EF Core / Dapper storage and authorization) and `ScaleOut` (Redis backplane).
 
+### Changed
+
+- `DotYjs.AspNetCore.Redis` now depends on StackExchange.Redis 2.13.23 (was 2.8.16), which is the new minimum
+  version for consumers. On net8.0 this also brings in `System.IO.Hashing` 10.0.2.
+
 ## [0.1.0-preview.1]
 
 First public preview.
